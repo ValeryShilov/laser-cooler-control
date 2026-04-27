@@ -1,0 +1,84 @@
+components:
+  - id: comp_1
+    type: Compressor
+    name: "Компрессор"
+  - id: cond_1
+    type: Condenser
+    name: "Конденсатор"
+  - id: fan_1
+    type: Fan
+    name: "Вент."
+  - id: throttle_1
+    type: Throttle
+    name: "Дроссель"
+  - id: valve_bp
+    type: Valve
+    name: "Клапан Байпаса"
+  - id: tank_1
+    type: Tank
+    name: "Бак и Испаритель"
+  - id: pump_1
+    type: Pump
+    name: "Насос"
+  - id: heater_1
+    type: Heater
+    name: "ТЭН"
+  - id: ext_laser_in
+    type: ExternalPort
+    name: "Вход L (Лазер)"
+  - id: ext_optics_in
+    type: ExternalPort
+    name: "Вход H (Оптика)"
+  - id: ext_optics_out
+    type: ExternalPort
+    name: "Выход H (Оптика)"
+  - id: ext_laser_out
+    type: ExternalPort
+    name: "Выход L (Лазер)"
+  - id: ext_drain
+    type: ExternalPort
+    name: "Слив"
+
+connections:
+  - source: comp_1.out
+    target: cond_1.in
+    type: freon
+  - source: cond_1.out
+    target: throttle_1.in
+    type: freon
+  - source: throttle_1.out
+    target: tank_1.freon_in
+    type: freon
+  - source: tank_1.freon_out
+    target: comp_1.in
+    type: freon
+  - source: comp_1.out
+    target: valve_bp.in
+    type: freon_bypass
+  - source: valve_bp.out
+    target: comp_1.in
+    type: freon_bypass
+  - source: ext_laser_in.out
+    target: tank_1.water_lt_in
+    type: water_lt
+  - source: tank_1.water_out
+    target: pump_1.in
+    type: water_lt
+  - source: pump_1.out
+    target: ext_laser_out.in
+    type: water_lt
+  - source: ext_optics_in.out
+    target: tank_1.water_ht_in
+    type: water_ht
+  - source: pump_1.out
+    target: heater_1.in
+    type: water_ht
+  - source: heater_1.out
+    target: ext_optics_out.in
+    type: water_ht
+  - source: tank_1.drain
+    target: ext_drain.in
+    type: drain
+  - source: fan_1
+    target: cond_1
+    type: mechanical

@@ -1,216 +1,24 @@
-import sys
 from PySide6.QtWidgets import (
-    QApplication, QMainWindow, QWidget, QVBoxLayout, QHBoxLayout,
+    QMainWindow, QWidget, QVBoxLayout, QHBoxLayout,
     QLabel, QPushButton, QDoubleSpinBox, QGroupBox,
     QGridLayout, QTabWidget, QComboBox, QCheckBox
 )
-from PySide6.QtCore import Qt, QRectF, QPointF
-from PySide6.QtGui import QFont, QColor, QPainter, QBrush, QPen, QPainterPath, QPolygonF
+from PySide6.QtCore import Qt
 
-class CustomChillerMnemonic(QWidget):
-    def __init__(self, parent=None):
-        super().__init__(parent)
-        self.setMinimumHeight(450) 
-        
-        self.is_running = False
-        self.heater_on = False
-        self.solenoid_open = False
-        self.tank_level = 0.85
-
-    def set_states(self, running, heater, solenoid):
-        self.is_running = running
-        self.heater_on = heater
-        self.solenoid_open = solenoid
-        self.update()
-
-    def paintEvent(self, event):
-        painter = QPainter(self)
-        painter.setRenderHint(QPainter.Antialiasing)
-
-        bg_color = QColor(245, 247, 250)
-        water_cold = QColor(33, 150, 243)
-        water_hot = QColor(255, 152, 0)
-        freon = QColor(0, 188, 212)
-        active = QColor(76, 175, 80)
-        idle = QColor(180, 180, 180)
-        heater_color = QColor(244, 67, 54)
-
-        painter.fillRect(self.rect(), bg_color)
-        painter.setPen(QPen(QColor(200, 200, 200), 1))
-        painter.drawRoundedRect(self.rect().adjusted(1, 1, -2, -2), 6, 6)
-
-        painter.translate(120, 0) 
-
-        pen_freon = QPen(freon if self.is_running else idle, 3, Qt.SolidLine)
-        pen_lt = QPen(water_cold if self.is_running else idle, 4, Qt.SolidLine, Qt.RoundCap, Qt.RoundJoin)
-        pen_ht = QPen(water_hot if self.is_running else idle, 4, Qt.SolidLine, Qt.RoundCap, Qt.RoundJoin)
-        pen_drain = QPen(idle, 3, Qt.DashLine)
-
-        # ФРЕОН
-        painter.setPen(pen_freon)
-        painter.drawLine(90, 280, 90, 230) 
-        painter.drawLine(90, 230, 90, 210)
-        painter.drawLine(90, 50, 90, 30)
-        painter.drawLine(90, 30, 210, 30)
-        painter.drawLine(250, 30, 300, 30)
-        painter.drawLine(300, 30, 300, 180)
-        painter.drawLine(300, 180, 340, 180)
-        
-        # ФРЕОН: Байпас
-        painter.setPen(QPen(freon if self.solenoid_open else idle, 3, Qt.SolidLine))
-        painter.drawLine(90, 230, 180, 230) 
-        painter.drawLine(220, 230, 300, 230) 
-
-        # ФРЕОН: Обратка
-        painter.setPen(pen_freon)
-        painter.drawLine(340, 350, 130, 350)
-        painter.drawLine(130, 350, 130, 320)
-
-        # ВОДА: Насос и выходы
-        painter.setPen(pen_lt)
-        painter.drawLine(440, 320, 500, 320)
-        painter.drawLine(560, 320, 580, 320)
-        painter.drawLine(580, 320, 750, 320)
-        
-        painter.setPen(pen_ht)
-        painter.drawLine(580, 320, 580, 200)
-        painter.drawLine(580, 200, 610, 200) 
-        painter.drawLine(650, 200, 750, 200) 
-
-        # ВОДА: Возвраты
-        painter.setPen(pen_lt)
-        painter.drawLine(750, 60, 420, 60)
-        painter.drawLine(420, 60, 420, 160) 
-        
-        painter.setPen(pen_ht)
-        painter.drawLine(750, 120, 380, 120)
-        painter.drawLine(380, 120, 380, 160) 
-
-        # Слив
-        painter.setPen(pen_drain)
-        painter.drawLine(400, 360, 400, 400)
-        painter.drawLine(400, 400, 750, 400)
-
-        # 2. ОТРИСОВКА КОМПОНЕНТОВ
-        painter.setPen(QPen(QColor(60, 60, 60), 2))
-        painter.setFont(QFont("Arial", 8, QFont.Bold))
-
-        # БАК
-        tank = QRectF(340, 160, 100, 200)
-        painter.setBrush(QBrush(QColor(230, 235, 240)))
-        painter.drawRoundedRect(tank, 4, 4)
-        water_h = tank.height() * self.tank_level
-        painter.setBrush(QBrush(water_cold))
-        painter.setPen(Qt.NoPen)
-        painter.drawRoundedRect(QRectF(tank.x(), tank.bottom() - water_h, tank.width(), water_h), 4, 4)
-        
-        # Испаритель
-        painter.setPen(QPen(freon if self.is_running else idle, 3))
-        evap_path = QPainterPath()
-        evap_path.moveTo(340, 180)
-        for y in range(190, 350, 30):
-            evap_path.lineTo(430, y)
-            evap_path.lineTo(350, y + 15)
-        evap_path.lineTo(340, 350)
-        painter.drawPath(evap_path)
-        painter.setPen(Qt.black)
-        painter.drawText(tank.adjusted(0,5,0,0), Qt.AlignHCenter | Qt.AlignTop, "Бак и\nИспаритель")
-
-        # Компрессор
-        comp = QRectF(60, 280, 60, 80)
-        painter.setPen(QPen(QColor(60, 60, 60), 2))
-        painter.setBrush(QBrush(active if self.is_running else idle))
-        painter.drawRoundedRect(comp, 10, 10)
-        painter.drawRect(70, 270, 15, 10)
-        painter.drawRect(95, 270, 15, 10)
-        painter.setPen(Qt.white if self.is_running else Qt.black)
-        painter.drawText(comp, Qt.AlignCenter, "Комп.")
-
-        # Конденсатор
-        cond = QRectF(70, 50, 40, 160)
-        painter.setPen(QPen(QColor(60, 60, 60), 2))
-        painter.setBrush(QBrush(QColor(210, 220, 230)))
-        painter.drawRect(cond)
-        for y in range(60, 210, 10):
-            painter.drawLine(65, y, 115, y)
-        painter.setPen(Qt.black)
-        painter.drawText(QRectF(30, 215, 120, 20), Qt.AlignCenter, "Конденсатор")
-
-        # Вентилятор
-        painter.setPen(QPen(QColor(60, 60, 60), 2))
-        painter.setBrush(QBrush(active if self.is_running else idle))
-        painter.drawEllipse(15, 110, 40, 40)
-        painter.drawLine(35, 130, 25, 120); painter.drawLine(35, 130, 45, 120); painter.drawLine(35, 130, 35, 145)
-        painter.setPen(Qt.black)
-        painter.drawText(QRectF(-20, 155, 100, 20), Qt.AlignCenter, "Вентилятор")
-
-        # Дроссель
-        painter.setPen(QPen(freon if self.is_running else idle, 3))
-        for x in range(210, 250, 5):
-            painter.drawLine(x, 20, x+5, 40)
-        painter.setPen(Qt.black)
-        painter.drawText(QRectF(190, 0, 80, 20), Qt.AlignCenter, "Дроссель")
-
-        # Электромагнитный клапан
-        painter.setPen(QPen(QColor(60, 60, 60), 2))
-        painter.setBrush(QBrush(active if self.solenoid_open else idle))
-        sol_poly = QPolygonF([QPointF(180, 220), QPointF(220, 240), QPointF(220, 220), QPointF(180, 240)])
-        painter.drawPolygon(sol_poly)
-        painter.drawRect(190, 210, 20, 15)
-        painter.setPen(Qt.black)
-        painter.drawText(QRectF(160, 245, 80, 30), Qt.AlignCenter, "Клапан\nБайпаса")
-
-        # Насос
-        pump = QPointF(530, 320)
-        painter.setPen(QPen(QColor(60, 60, 60), 2))
-        painter.setBrush(QBrush(active if self.is_running else idle))
-        painter.drawEllipse(pump, 30, 30)
-        painter.drawRect(495, 305, 10, 30) 
-        painter.setBrush(QBrush(Qt.white))
-        painter.drawPolygon(QPolygonF([pump+QPointF(-10,-12), pump+QPointF(-10,12), pump+QPointF(15,0)]))
-        painter.setPen(Qt.black)
-        painter.drawText(QRectF(pump.x()-40, pump.y()+35, 80, 20), Qt.AlignCenter, "Насос")
-
-        # Нагреватель
-        heater_rect = QRectF(610, 160, 40, 80)
-        painter.setPen(QPen(QColor(60, 60, 60), 2))
-        painter.setBrush(QBrush(heater_color if self.heater_on else QColor(220,220,220)))
-        painter.drawRect(heater_rect)
-        painter.setPen(QPen(Qt.white if self.heater_on else Qt.darkGray, 2))
-        for y in range(170, 230, 10):
-            painter.drawLine(615, y, 645, y+5)
-            painter.drawLine(645, y+5, 615, y+10)
-        painter.setPen(Qt.black)
-        painter.drawText(QRectF(600, 135, 60, 20), Qt.AlignCenter, "ТЭН")
-
-        # 3. ПОДПИСИ ШТУЦЕРОВ
-        painter.setFont(QFont("Arial", 9, QFont.Bold))
-        painter.setPen(Qt.black)
-        painter.drawText(QRectF(765, 50, 200, 20), Qt.AlignLeft | Qt.AlignVCenter, "Вход L (Лазер)")
-        painter.drawText(QRectF(765, 110, 200, 20), Qt.AlignLeft | Qt.AlignVCenter, "Вход H (Оптика)")
-        painter.drawText(QRectF(755, 190, 200, 20), Qt.AlignLeft | Qt.AlignVCenter, "Выход H (Оптика)")
-        painter.drawText(QRectF(755, 310, 200, 20), Qt.AlignLeft | Qt.AlignVCenter, "Выход L (Лазер)")
-        painter.drawText(QRectF(755, 390, 200, 20), Qt.AlignLeft | Qt.AlignVCenter, "Слив")
-
-        # Стрелочки
-        painter.setBrush(Qt.black)
-        painter.drawPolygon(QPolygonF([QPointF(750, 60), QPointF(760, 55), QPointF(760, 65)])) 
-        painter.drawPolygon(QPolygonF([QPointF(750, 120), QPointF(760, 115), QPointF(760, 125)])) 
-        painter.drawPolygon(QPolygonF([QPointF(750, 200), QPointF(740, 195), QPointF(740, 205)])) 
-        painter.drawPolygon(QPolygonF([QPointF(750, 320), QPointF(740, 315), QPointF(740, 325)])) 
-        painter.drawPolygon(QPolygonF([QPointF(750, 400), QPointF(740, 395), QPointF(740, 405)])) 
-
-        painter.end()
-
+# Импортируем нашу умную мнемосхему из отдельного модуля
+from mnemonic import ChillerMnemonic
 
 class ChillerPanel(QMainWindow):
     def __init__(self):
         super().__init__()
         self.setWindowTitle("Интерфейс чиллера")
         self.setMinimumSize(1200, 850)
+        
         self.init_ui()
         self.apply_styles()
         self.connect_signals()
+        
+        # Инициализируем состояния полей ввода
         self.toggle_mode_settings(0)
 
     def init_ui(self):
@@ -230,7 +38,10 @@ class ChillerPanel(QMainWindow):
         self.tabs.addTab(tab, "Мониторинг (Главная)")
         layout = QVBoxLayout(tab)
         
-        self.mnemonic = CustomChillerMnemonic()
+        # ==========================================
+        # ВСТРАИВАЕМ УМНУЮ МНЕМОСХЕМУ
+        # ==========================================
+        self.mnemonic = ChillerMnemonic()
         layout.addWidget(self.mnemonic)
 
         mid_panel = QHBoxLayout()
@@ -285,7 +96,7 @@ class ChillerPanel(QMainWindow):
         temp_group.setLayout(temp_layout)
         mid_panel.addWidget(temp_group)
 
-        # Гидравлика
+        # ГИДРАВЛИКА
         hydr_group = QGroupBox("Гидравлика")
         hydr_layout = QGridLayout()
         hydr_layout.setSpacing(5)
@@ -313,7 +124,7 @@ class ChillerPanel(QMainWindow):
         hydr_group.setLayout(hydr_layout)
         mid_panel.addWidget(hydr_group)
 
-        # Состояние агрегатов
+        # СОСТОЯНИЕ АГРЕГАТОВ
         status_group = QGroupBox("Агрегаты")
         status_layout = QVBoxLayout()
         status_layout.setSpacing(2)
@@ -330,7 +141,7 @@ class ChillerPanel(QMainWindow):
         status_group.setLayout(status_layout)
         mid_panel.addWidget(status_group)
 
-        # Управление
+        # УПРАВЛЕНИЕ
         ctrl_group = QGroupBox("Управление")
         ctrl_layout = QVBoxLayout()
         
@@ -364,13 +175,11 @@ class ChillerPanel(QMainWindow):
         sp_layout = QGridLayout()
         sp_layout.setSpacing(10)
         
-        # Строка 1: Режим
         sp_layout.addWidget(QLabel("Режим работы:"), 0, 0)
         self.cb_mode_srv = QComboBox()
         self.cb_mode_srv.addItems(["Интеллектуальный (Авто)", "Постоянный (Ручной)"])
         sp_layout.addWidget(self.cb_mode_srv, 0, 1, 1, 3)
         
-        # Строка 2: LT Контур
         sp_layout.addWidget(QLabel("Уставка Лазер (LT):"), 1, 0)
         self.sp_lt = QDoubleSpinBox(); self.sp_lt.setRange(15.0, 35.0); self.sp_lt.setValue(25.0)
         sp_layout.addWidget(self.sp_lt, 1, 1)
@@ -379,7 +188,6 @@ class ChillerPanel(QMainWindow):
         self.sp_hyst_lt = QDoubleSpinBox(); self.sp_hyst_lt.setRange(0.1, 5.0); self.sp_hyst_lt.setSingleStep(0.1); self.sp_hyst_lt.setValue(0.5)
         sp_layout.addWidget(self.sp_hyst_lt, 1, 3)
 
-        # Строка 3: HT Контур
         sp_layout.addWidget(QLabel("Уставка Оптика (HT):"), 2, 0)
         self.sp_ht = QDoubleSpinBox(); self.sp_ht.setRange(20.0, 40.0); self.sp_ht.setValue(30.0)
         sp_layout.addWidget(self.sp_ht, 2, 1)
@@ -388,12 +196,10 @@ class ChillerPanel(QMainWindow):
         self.sp_hyst_ht = QDoubleSpinBox(); self.sp_hyst_ht.setRange(0.1, 5.0); self.sp_hyst_ht.setSingleStep(0.1); self.sp_hyst_ht.setValue(1.0)
         sp_layout.addWidget(self.sp_hyst_ht, 2, 3)
 
-        # Строка 4: Интеллектуальный режим
         sp_layout.addWidget(QLabel("Дельта Интеллект. (ΔT):"), 3, 0)
         self.sp_delta = QDoubleSpinBox(); self.sp_delta.setRange(-10.0, 10.0); self.sp_delta.setSingleStep(0.1); self.sp_delta.setValue(-2.0)
         sp_layout.addWidget(self.sp_delta, 3, 1)
 
-        # Строка 5: Пороги аварий
         sp_layout.addWidget(QLabel("Доп. перегрев (+°C):"), 4, 0)
         self.sp_alm_high = QDoubleSpinBox(); self.sp_alm_high.setRange(1.0, 15.0); self.sp_alm_high.setSingleStep(0.1); self.sp_alm_high.setValue(3.0)
         sp_layout.addWidget(self.sp_alm_high, 4, 1)
@@ -405,7 +211,6 @@ class ChillerPanel(QMainWindow):
         sp_group.setLayout(sp_layout)
         col_left.addWidget(sp_group)
 
-        # Индикаторы Аварий
         alarm_group = QGroupBox("Статус защит и аварий")
         alarm_layout = QVBoxLayout()
         alarm_layout.setSpacing(10)
@@ -441,7 +246,6 @@ class ChillerPanel(QMainWindow):
         col_left.addWidget(alarm_group)
         col_left.addStretch()
 
-        # ПИД-регулятор
         pid_group = QGroupBox("ПИД-регулятор (ТЭН Оптики)")
         pid_layout = QGridLayout()
         pid_layout.setSpacing(10)
@@ -468,7 +272,6 @@ class ChillerPanel(QMainWindow):
         pid_group.setLayout(pid_layout)
         col_right.addWidget(pid_group)
 
-        # Ручное управление
         man_group = QGroupBox("Ручное тестирование выходов")
         man_layout = QVBoxLayout()
         self.cb_debug = QCheckBox("Включить режим наладки (Блокирует автомат)")
@@ -499,14 +302,12 @@ class ChillerPanel(QMainWindow):
         layout.addLayout(col_right)
 
     def connect_signals(self):
-        # Синхронизация уставок между вкладками
         self.sp_main_lt.valueChanged.connect(self.sp_lt.setValue)
         self.sp_lt.valueChanged.connect(self.sp_main_lt.setValue)
         
         self.sp_main_ht.valueChanged.connect(self.sp_ht.setValue)
         self.sp_ht.valueChanged.connect(self.sp_main_ht.setValue)
         
-        # Привязка логики смены режима
         self.cb_mode_main.currentIndexChanged.connect(self.cb_mode_srv.setCurrentIndex)
         self.cb_mode_srv.currentIndexChanged.connect(self.cb_mode_main.setCurrentIndex)
         self.cb_mode_main.currentIndexChanged.connect(self.toggle_mode_settings)
@@ -521,19 +322,17 @@ class ChillerPanel(QMainWindow):
         self.btn_man_valve.toggled.connect(self.update_manual_state)
 
     def toggle_mode_settings(self, index):
-        """ Блокирует/разблокирует поля в зависимости от режима (0:Авто, 1:Ручной) """
         is_manual = (index == 1)
-        
         self.sp_lt.setEnabled(is_manual)
         self.sp_ht.setEnabled(is_manual)
         self.sp_main_lt.setEnabled(is_manual)
         self.sp_main_ht.setEnabled(is_manual)
-        
         self.sp_delta.setEnabled(not is_manual)
 
     def update_manual_state(self):
         if self.cb_debug.isChecked():
             is_run = self.btn_man_pump.isChecked() or self.btn_man_comp.isChecked()
+            # Обновляем визуальное состояние компонентов в зависимости от нажатых реле
             self.mnemonic.set_states(
                 running=is_run,
                 heater=self.btn_man_heater.isChecked(),
@@ -550,9 +349,9 @@ class ChillerPanel(QMainWindow):
         self.lbl_pump.setStyleSheet("color: #2E7D32; font-weight: bold; font-size: 13px;")
         self.lbl_comp.setText("Компрессор: РАБОТА")
         self.lbl_comp.setStyleSheet("color: #1976D2; font-weight: bold; font-size: 13px;")
-        
         self.lbl_heater.setText("ТЭН: НАГРЕВ")
         self.lbl_heater.setStyleSheet("color: #D32F2F; font-weight: bold; font-size: 13px;")
+        self.lbl_valve.setText("Байпас: ЗАКРЫТ")
         
         self.lbl_flow_lt.setText("14.5 л/м")
         self.lbl_flow_ht.setText("2.8 л/м")
@@ -561,6 +360,7 @@ class ChillerPanel(QMainWindow):
         self.lbl_level.setText("Норма (85%)")
         self.lbl_level.setStyleSheet("font-size: 18px; font-weight: bold; color: #2E7D32;")
         
+        # Передаем команду мнемосхеме изменить визуал (Запуск компрессора, насоса, ТЭНа)
         self.mnemonic.set_states(running=True, heater=True, solenoid=False)
 
     def stop_system(self):
@@ -577,6 +377,7 @@ class ChillerPanel(QMainWindow):
         self.lbl_flow_ht.setText("0.0 л/м")
         self.lbl_press.setText("0.0 бар")
             
+        # Останавливаем мнемосхему (трубы сереют)
         self.mnemonic.set_states(running=False, heater=False, solenoid=False)
 
     def toggle_debug(self, checked):

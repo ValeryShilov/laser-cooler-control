@@ -1,0 +1,320 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg width="352.778mm" height="176.389mm"
+ viewBox="0 0 1000 500"
+ xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.2" baseProfile="tiny">
+<title>Chiller Mimic Panel</title>
+<desc>Exported from PySide6</desc>
+<defs>
+</defs>
+<g fill="none" stroke="black" stroke-width="1" fill-rule="evenodd" stroke-linecap="square" stroke-linejoin="bevel" >
+
+<g fill="none" stroke="#000000" stroke-opacity="1" stroke-width="1" stroke-linecap="square" stroke-linejoin="bevel" transform="matrix(1,0,0,1,0,0)"
+font-family="Segoe UI" font-size="9" font-weight="400" font-style="normal" 
+>
+</g>
+
+<g fill="#f0f0f0" fill-opacity="1" stroke="none" transform="matrix(1,0,0,1,0,0)"
+font-family="Segoe UI" font-size="9" font-weight="400" font-style="normal" 
+>
+<rect x="0" y="0" width="1000" height="500"/>
+</g>
+
+<g fill="none" stroke="#000000" stroke-opacity="1" stroke-width="1" stroke-linecap="square" stroke-linejoin="bevel" transform="matrix(1,0,0,1,0,0)"
+font-family="Segoe UI" font-size="9" font-weight="400" font-style="normal" 
+>
+</g>
+
+<g fill="#f5f7fa" fill-opacity="1" stroke="none" transform="matrix(1,0,0,1,0,0)"
+font-family="Segoe UI" font-size="9" font-weight="400" font-style="normal" 
+>
+<rect x="0" y="0" width="1000" height="500"/>
+</g>
+
+<g fill="none" stroke="#c8c8c8" stroke-opacity="1" stroke-width="1" stroke-linecap="square" stroke-linejoin="bevel" transform="matrix(1,0,0,1,0,0)"
+font-family="Segoe UI" font-size="9" font-weight="400" font-style="normal" 
+>
+<path vector-effect="none" fill-rule="evenodd" d="M1,7 C1,3.68629 3.68629,1 7,1 L992,1 C995.314,1 998,3.68629 998,7 L998,492 C998,495.314 995.314,498 992,498 L7,498 C3.68629,498 1,495.314 1,492 L1,7 Z "/>
+</g>
+
+<g fill="none" stroke="#00bcd4" stroke-opacity="1" stroke-width="3" stroke-linecap="square" stroke-linejoin="bevel" transform="matrix(1,0,0,1,120,0)"
+font-family="Segoe UI" font-size="9" font-weight="400" font-style="normal" 
+>
+<polyline fill="none" vector-effect="none" points="90,280 90,230 " />
+<polyline fill="none" vector-effect="none" points="90,230 90,210 " />
+<polyline fill="none" vector-effect="none" points="90,50 90,30 " />
+<polyline fill="none" vector-effect="none" points="90,30 210,30 " />
+<polyline fill="none" vector-effect="none" points="250,30 300,30 " />
+<polyline fill="none" vector-effect="none" points="300,30 300,180 " />
+<polyline fill="none" vector-effect="none" points="300,180 340,180 " />
+</g>
+
+<g fill="none" stroke="#b4b4b4" stroke-opacity="1" stroke-width="3" stroke-linecap="square" stroke-linejoin="bevel" transform="matrix(1,0,0,1,120,0)"
+font-family="Segoe UI" font-size="9" font-weight="400" font-style="normal" 
+>
+<polyline fill="none" vector-effect="none" points="90,230 180,230 " />
+<polyline fill="none" vector-effect="none" points="220,230 300,230 " />
+</g>
+
+<g fill="none" stroke="#00bcd4" stroke-opacity="1" stroke-width="3" stroke-linecap="square" stroke-linejoin="bevel" transform="matrix(1,0,0,1,120,0)"
+font-family="Segoe UI" font-size="9" font-weight="400" font-style="normal" 
+>
+<polyline fill="none" vector-effect="none" points="340,350 130,350 " />
+<polyline fill="none" vector-effect="none" points="130,350 130,320 " />
+</g>
+
+<g fill="none" stroke="#2196f3" stroke-opacity="1" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" transform="matrix(1,0,0,1,120,0)"
+font-family="Segoe UI" font-size="9" font-weight="400" font-style="normal" 
+>
+<polyline fill="none" vector-effect="none" points="440,320 500,320 " />
+<polyline fill="none" vector-effect="none" points="560,320 580,320 " />
+<polyline fill="none" vector-effect="none" points="580,320 750,320 " />
+</g>
+
+<g fill="none" stroke="#ff9800" stroke-opacity="1" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" transform="matrix(1,0,0,1,120,0)"
+font-family="Segoe UI" font-size="9" font-weight="400" font-style="normal" 
+>
+<polyline fill="none" vector-effect="none" points="580,320 580,200 " />
+<polyline fill="none" vector-effect="none" points="580,200 610,200 " />
+<polyline fill="none" vector-effect="none" points="650,200 750,200 " />
+</g>
+
+<g fill="none" stroke="#2196f3" stroke-opacity="1" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" transform="matrix(1,0,0,1,120,0)"
+font-family="Segoe UI" font-size="9" font-weight="400" font-style="normal" 
+>
+<polyline fill="none" vector-effect="none" points="750,60 420,60 " />
+<polyline fill="none" vector-effect="none" points="420,60 420,160 " />
+</g>
+
+<g fill="none" stroke="#ff9800" stroke-opacity="1" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" transform="matrix(1,0,0,1,120,0)"
+font-family="Segoe UI" font-size="9" font-weight="400" font-style="normal" 
+>
+<polyline fill="none" vector-effect="none" points="750,120 380,120 " />
+<polyline fill="none" vector-effect="none" points="380,120 380,160 " />
+</g>
+
+<g fill="none" stroke="#b4b4b4" stroke-opacity="1" stroke-dasharray="12,6" stroke-dashoffset="0" stroke-width="3" stroke-linecap="square" stroke-linejoin="bevel" transform="matrix(1,0,0,1,120,0)"
+font-family="Segoe UI" font-size="9" font-weight="400" font-style="normal" 
+>
+<polyline fill="none" vector-effect="none" points="400,360 400,400 " />
+<polyline fill="none" vector-effect="none" points="400,400 750,400 " />
+</g>
+
+<g fill="#e6ebf0" fill-opacity="1" stroke="#3c3c3c" stroke-opacity="1" stroke-width="2" stroke-linecap="square" stroke-linejoin="bevel" transform="matrix(1,0,0,1,120,0)"
+font-family="Arial" font-size="8" font-weight="700" font-style="normal" 
+>
+<path vector-effect="none" fill-rule="evenodd" d="M340,164 C340,161.791 341.791,160 344,160 L436,160 C438.209,160 440,161.791 440,164 L440,356 C440,358.209 438.209,360 436,360 L344,360 C341.791,360 340,358.209 340,356 L340,164 Z "/>
+</g>
+
+<g fill="#2196f3" fill-opacity="1" stroke="none" transform="matrix(1,0,0,1,120,0)"
+font-family="Arial" font-size="8" font-weight="700" font-style="normal" 
+>
+<path vector-effect="none" fill-rule="evenodd" d="M340,194 C340,191.791 341.791,190 344,190 L436,190 C438.209,190 440,191.791 440,194 L440,356 C440,358.209 438.209,360 436,360 L344,360 C341.791,360 340,358.209 340,356 L340,194 Z "/>
+</g>
+
+<g fill="#2196f3" fill-opacity="1" stroke="#00bcd4" stroke-opacity="1" stroke-width="3" stroke-linecap="square" stroke-linejoin="bevel" transform="matrix(1,0,0,1,120,0)"
+font-family="Arial" font-size="8" font-weight="700" font-style="normal" 
+>
+<path vector-effect="none" fill-rule="evenodd" d="M340,180 L430,190 L350,205 L430,220 L350,235 L430,250 L350,265 L430,280 L350,295 L430,310 L350,325 L430,340 L350,355 L340,350 "/>
+</g>
+
+<g fill="#2196f3" fill-opacity="1" stroke="#000000" stroke-opacity="1" stroke-width="1" stroke-linecap="square" stroke-linejoin="bevel" transform="matrix(1,0,0,1,120,0)"
+font-family="Arial" font-size="8" font-weight="700" font-style="normal" 
+>
+<text fill="#000000" fill-opacity="1" stroke="none" xml:space="preserve" x="375.344" y="174.953" font-family="Arial" font-size="8" font-weight="700" font-style="normal" 
+ >Бак и</text>
+<text fill="#000000" fill-opacity="1" stroke="none" xml:space="preserve" x="357.266" y="187.953" font-family="Arial" font-size="8" font-weight="700" font-style="normal" 
+ >Испаритель</text>
+</g>
+
+<g fill="#4caf50" fill-opacity="1" stroke="#3c3c3c" stroke-opacity="1" stroke-width="2" stroke-linecap="square" stroke-linejoin="bevel" transform="matrix(1,0,0,1,120,0)"
+font-family="Arial" font-size="8" font-weight="700" font-style="normal" 
+>
+<path vector-effect="none" fill-rule="evenodd" d="M60,290 C60,284.477 64.4772,280 70,280 L110,280 C115.523,280 120,284.477 120,290 L120,350 C120,355.523 115.523,360 110,360 L70,360 C64.4772,360 60,355.523 60,350 L60,290 Z "/>
+<rect x="70" y="270" width="15" height="10"/>
+<rect x="95" y="270" width="15" height="10"/>
+</g>
+
+<g fill="#4caf50" fill-opacity="1" stroke="#ffffff" stroke-opacity="1" stroke-width="1" stroke-linecap="square" stroke-linejoin="bevel" transform="matrix(1,0,0,1,120,0)"
+font-family="Arial" font-size="8" font-weight="700" font-style="normal" 
+>
+<text fill="#ffffff" fill-opacity="1" stroke="none" xml:space="preserve" x="74.4531" y="323.813" font-family="Arial" font-size="8" font-weight="700" font-style="normal" 
+ >Комп.</text>
+</g>
+
+<g fill="#d2dce6" fill-opacity="1" stroke="#3c3c3c" stroke-opacity="1" stroke-width="2" stroke-linecap="square" stroke-linejoin="bevel" transform="matrix(1,0,0,1,120,0)"
+font-family="Arial" font-size="8" font-weight="700" font-style="normal" 
+>
+<rect x="70" y="50" width="40" height="160"/>
+<polyline fill="none" vector-effect="none" points="65,60 115,60 " />
+<polyline fill="none" vector-effect="none" points="65,70 115,70 " />
+<polyline fill="none" vector-effect="none" points="65,80 115,80 " />
+<polyline fill="none" vector-effect="none" points="65,90 115,90 " />
+<polyline fill="none" vector-effect="none" points="65,100 115,100 " />
+<polyline fill="none" vector-effect="none" points="65,110 115,110 " />
+<polyline fill="none" vector-effect="none" points="65,120 115,120 " />
+<polyline fill="none" vector-effect="none" points="65,130 115,130 " />
+<polyline fill="none" vector-effect="none" points="65,140 115,140 " />
+<polyline fill="none" vector-effect="none" points="65,150 115,150 " />
+<polyline fill="none" vector-effect="none" points="65,160 115,160 " />
+<polyline fill="none" vector-effect="none" points="65,170 115,170 " />
+<polyline fill="none" vector-effect="none" points="65,180 115,180 " />
+<polyline fill="none" vector-effect="none" points="65,190 115,190 " />
+<polyline fill="none" vector-effect="none" points="65,200 115,200 " />
+</g>
+
+<g fill="#d2dce6" fill-opacity="1" stroke="#000000" stroke-opacity="1" stroke-width="1" stroke-linecap="square" stroke-linejoin="bevel" transform="matrix(1,0,0,1,120,0)"
+font-family="Arial" font-size="8" font-weight="700" font-style="normal" 
+>
+<text fill="#000000" fill-opacity="1" stroke="none" xml:space="preserve" x="54.5938" y="228.813" font-family="Arial" font-size="8" font-weight="700" font-style="normal" 
+ >Конденсатор</text>
+</g>
+
+<g fill="#4caf50" fill-opacity="1" stroke="#3c3c3c" stroke-opacity="1" stroke-width="2" stroke-linecap="square" stroke-linejoin="bevel" transform="matrix(1,0,0,1,120,0)"
+font-family="Arial" font-size="8" font-weight="700" font-style="normal" 
+>
+<circle cx="35" cy="130" r="20"/>
+<polyline fill="none" vector-effect="none" points="35,130 25,120 " />
+<polyline fill="none" vector-effect="none" points="35,130 45,120 " />
+<polyline fill="none" vector-effect="none" points="35,130 35,145 " />
+</g>
+
+<g fill="#4caf50" fill-opacity="1" stroke="#000000" stroke-opacity="1" stroke-width="1" stroke-linecap="square" stroke-linejoin="bevel" transform="matrix(1,0,0,1,120,0)"
+font-family="Arial" font-size="8" font-weight="700" font-style="normal" 
+>
+<text fill="#000000" fill-opacity="1" stroke="none" xml:space="preserve" x="-2.4375" y="168.813" font-family="Arial" font-size="8" font-weight="700" font-style="normal" 
+ >Вентилятор</text>
+</g>
+
+<g fill="#4caf50" fill-opacity="1" stroke="#00bcd4" stroke-opacity="1" stroke-width="3" stroke-linecap="square" stroke-linejoin="bevel" transform="matrix(1,0,0,1,120,0)"
+font-family="Arial" font-size="8" font-weight="700" font-style="normal" 
+>
+<polyline fill="none" vector-effect="none" points="210,20 215,40 " />
+<polyline fill="none" vector-effect="none" points="215,20 220,40 " />
+<polyline fill="none" vector-effect="none" points="220,20 225,40 " />
+<polyline fill="none" vector-effect="none" points="225,20 230,40 " />
+<polyline fill="none" vector-effect="none" points="230,20 235,40 " />
+<polyline fill="none" vector-effect="none" points="235,20 240,40 " />
+<polyline fill="none" vector-effect="none" points="240,20 245,40 " />
+<polyline fill="none" vector-effect="none" points="245,20 250,40 " />
+</g>
+
+<g fill="#4caf50" fill-opacity="1" stroke="#000000" stroke-opacity="1" stroke-width="1" stroke-linecap="square" stroke-linejoin="bevel" transform="matrix(1,0,0,1,120,0)"
+font-family="Arial" font-size="8" font-weight="700" font-style="normal" 
+>
+<text fill="#000000" fill-opacity="1" stroke="none" xml:space="preserve" x="203.406" y="13.8125" font-family="Arial" font-size="8" font-weight="700" font-style="normal" 
+ >Дроссель</text>
+</g>
+
+<g fill="#b4b4b4" fill-opacity="1" stroke="#3c3c3c" stroke-opacity="1" stroke-width="2" stroke-linecap="square" stroke-linejoin="bevel" transform="matrix(1,0,0,1,120,0)"
+font-family="Arial" font-size="8" font-weight="700" font-style="normal" 
+>
+<polygon fill-rule="evenodd" vector-effect="none" points="180,220 220,240 220,220 180,240 " />
+<rect x="190" y="210" width="20" height="15"/>
+</g>
+
+<g fill="#b4b4b4" fill-opacity="1" stroke="#000000" stroke-opacity="1" stroke-width="1" stroke-linecap="square" stroke-linejoin="bevel" transform="matrix(1,0,0,1,120,0)"
+font-family="Arial" font-size="8" font-weight="700" font-style="normal" 
+>
+<text fill="#000000" fill-opacity="1" stroke="none" xml:space="preserve" x="180.406" y="257.313" font-family="Arial" font-size="8" font-weight="700" font-style="normal" 
+ >Клапан</text>
+<text fill="#000000" fill-opacity="1" stroke="none" xml:space="preserve" x="177.063" y="270.313" font-family="Arial" font-size="8" font-weight="700" font-style="normal" 
+ >Байпаса</text>
+</g>
+
+<g fill="#4caf50" fill-opacity="1" stroke="#3c3c3c" stroke-opacity="1" stroke-width="2" stroke-linecap="square" stroke-linejoin="bevel" transform="matrix(1,0,0,1,120,0)"
+font-family="Arial" font-size="8" font-weight="700" font-style="normal" 
+>
+<circle cx="530" cy="320" r="30"/>
+<rect x="495" y="305" width="10" height="30"/>
+</g>
+
+<g fill="#ffffff" fill-opacity="1" stroke="#3c3c3c" stroke-opacity="1" stroke-width="2" stroke-linecap="square" stroke-linejoin="bevel" transform="matrix(1,0,0,1,120,0)"
+font-family="Arial" font-size="8" font-weight="700" font-style="normal" 
+>
+<polygon fill-rule="evenodd" vector-effect="none" points="520,308 520,332 545,320 " />
+</g>
+
+<g fill="#ffffff" fill-opacity="1" stroke="#000000" stroke-opacity="1" stroke-width="1" stroke-linecap="square" stroke-linejoin="bevel" transform="matrix(1,0,0,1,120,0)"
+font-family="Arial" font-size="8" font-weight="700" font-style="normal" 
+>
+<text fill="#000000" fill-opacity="1" stroke="none" xml:space="preserve" x="513.578" y="368.813" font-family="Arial" font-size="8" font-weight="700" font-style="normal" 
+ >Насос</text>
+</g>
+
+<g fill="#f44336" fill-opacity="1" stroke="#3c3c3c" stroke-opacity="1" stroke-width="2" stroke-linecap="square" stroke-linejoin="bevel" transform="matrix(1,0,0,1,120,0)"
+font-family="Arial" font-size="8" font-weight="700" font-style="normal" 
+>
+<rect x="610" y="160" width="40" height="80"/>
+</g>
+
+<g fill="#f44336" fill-opacity="1" stroke="#ffffff" stroke-opacity="1" stroke-width="2" stroke-linecap="square" stroke-linejoin="bevel" transform="matrix(1,0,0,1,120,0)"
+font-family="Arial" font-size="8" font-weight="700" font-style="normal" 
+>
+<polyline fill="none" vector-effect="none" points="615,170 645,175 " />
+<polyline fill="none" vector-effect="none" points="645,175 615,180 " />
+<polyline fill="none" vector-effect="none" points="615,180 645,185 " />
+<polyline fill="none" vector-effect="none" points="645,185 615,190 " />
+<polyline fill="none" vector-effect="none" points="615,190 645,195 " />
+<polyline fill="none" vector-effect="none" points="645,195 615,200 " />
+<polyline fill="none" vector-effect="none" points="615,200 645,205 " />
+<polyline fill="none" vector-effect="none" points="645,205 615,210 " />
+<polyline fill="none" vector-effect="none" points="615,210 645,215 " />
+<polyline fill="none" vector-effect="none" points="645,215 615,220 " />
+<polyline fill="none" vector-effect="none" points="615,220 645,225 " />
+<polyline fill="none" vector-effect="none" points="645,225 615,230 " />
+</g>
+
+<g fill="#f44336" fill-opacity="1" stroke="#000000" stroke-opacity="1" stroke-width="1" stroke-linecap="square" stroke-linejoin="bevel" transform="matrix(1,0,0,1,120,0)"
+font-family="Arial" font-size="8" font-weight="700" font-style="normal" 
+>
+<text fill="#000000" fill-opacity="1" stroke="none" xml:space="preserve" x="618.766" y="148.813" font-family="Arial" font-size="8" font-weight="700" font-style="normal" 
+ >ТЭН</text>
+</g>
+
+<g fill="#f44336" fill-opacity="1" stroke="#000000" stroke-opacity="1" stroke-width="1" stroke-linecap="square" stroke-linejoin="bevel" transform="matrix(1,0,0,1,120,0)"
+font-family="Arial" font-size="9" font-weight="700" font-style="normal" 
+>
+<text fill="#000000" fill-opacity="1" stroke="none" xml:space="preserve" x="765" y="64.1563" font-family="Arial" font-size="9" font-weight="700" font-style="normal" 
+ >Вход </text>
+<text fill="#000000" fill-opacity="1" stroke="none" xml:space="preserve" x="797.984" y="64.1563" font-family="Arial" font-size="9" font-weight="700" font-style="normal" 
+ >L (</text>
+<text fill="#000000" fill-opacity="1" stroke="none" xml:space="preserve" x="812.406" y="64.1563" font-family="Arial" font-size="9" font-weight="700" font-style="normal" 
+ >Лазер)</text>
+<text fill="#000000" fill-opacity="1" stroke="none" xml:space="preserve" x="765" y="124.156" font-family="Arial" font-size="9" font-weight="700" font-style="normal" 
+ >Вход </text>
+<text fill="#000000" fill-opacity="1" stroke="none" xml:space="preserve" x="797.984" y="124.156" font-family="Arial" font-size="9" font-weight="700" font-style="normal" 
+ >H (</text>
+<text fill="#000000" fill-opacity="1" stroke="none" xml:space="preserve" x="813.953" y="124.156" font-family="Arial" font-size="9" font-weight="700" font-style="normal" 
+ >Оптика)</text>
+<text fill="#000000" fill-opacity="1" stroke="none" xml:space="preserve" x="755" y="204.156" font-family="Arial" font-size="9" font-weight="700" font-style="normal" 
+ >Выход </text>
+<text fill="#000000" fill-opacity="1" stroke="none" xml:space="preserve" x="798.375" y="204.156" font-family="Arial" font-size="9" font-weight="700" font-style="normal" 
+ >H (</text>
+<text fill="#000000" fill-opacity="1" stroke="none" xml:space="preserve" x="814.344" y="204.156" font-family="Arial" font-size="9" font-weight="700" font-style="normal" 
+ >Оптика)</text>
+<text fill="#000000" fill-opacity="1" stroke="none" xml:space="preserve" x="755" y="324.156" font-family="Arial" font-size="9" font-weight="700" font-style="normal" 
+ >Выход </text>
+<text fill="#000000" fill-opacity="1" stroke="none" xml:space="preserve" x="798.375" y="324.156" font-family="Arial" font-size="9" font-weight="700" font-style="normal" 
+ >L (</text>
+<text fill="#000000" fill-opacity="1" stroke="none" xml:space="preserve" x="812.797" y="324.156" font-family="Arial" font-size="9" font-weight="700" font-style="normal" 
+ >Лазер)</text>
+<text fill="#000000" fill-opacity="1" stroke="none" xml:space="preserve" x="755" y="404.156" font-family="Arial" font-size="9" font-weight="700" font-style="normal" 
+ >Слив</text>
+</g>
+
+<g fill="#000000" fill-opacity="1" stroke="#000000" stroke-opacity="1" stroke-width="1" stroke-linecap="square" stroke-linejoin="bevel" transform="matrix(1,0,0,1,120,0)"
+font-family="Arial" font-size="9" font-weight="700" font-style="normal" 
+>
+<polygon fill-rule="evenodd" vector-effect="none" points="750,60 760,55 760,65 " />
+<polygon fill-rule="evenodd" vector-effect="none" points="750,120 760,115 760,125 " />
+<polygon fill-rule="evenodd" vector-effect="none" points="750,200 740,195 740,205 " />
+<polygon fill-rule="evenodd" vector-effect="none" points="750,320 740,315 740,325 " />
+<polygon fill-rule="evenodd" vector-effect="none" points="750,400 740,395 740,405 " />
+</g>
+
+<g fill="none" stroke="#000000" stroke-opacity="1" stroke-width="1" stroke-linecap="square" stroke-linejoin="bevel" transform="matrix(1,0,0,1,0,0)"
+font-family="Segoe UI" font-size="9" font-weight="400" font-style="normal" 
+>
+</g>
+</g>
+</svg>
