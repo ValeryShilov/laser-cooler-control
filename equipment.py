@@ -26,7 +26,6 @@ class BaseEquipment:
         self.load_svg()
 
     def load_svg(self):
-        """ Загрузка SVG (определяется в наследниках) """
         pass
 
     def update_ports(self):
@@ -174,12 +173,17 @@ class Tank(BaseEquipment):
         self.renderer.load(os.path.join(ICONS_DIR, f"tank_evap_{self.state}.svg"))
 
     def update_ports(self):
-        self.ports['freon_in'] = (self.x, self.y + 20)
-        self.ports['freon_out'] = (self.x, self.y + 180)
-        self.ports['water_lt_in'] = (self.x + 30, self.y - 10)
-        self.ports['water_ht_in'] = (self.x + 70, self.y - 10)
-        self.ports['water_out'] = (self.x + 100, self.y + 180)
-        self.ports['drain'] = (self.x + 50, self.y + 200)
+        # Порты фреона — левая сторона бака
+        self.ports['freon_in'] = (self.x, self.y + 50)          # Левый, верхняя треть
+        self.ports['freon_out'] = (self.x, self.y + 190)        # Левый, нижний край
+        # Водяные входы — верхняя сторона (трубы подходят сверху)
+        # Разнесены по Y чтобы escape-points не пересекались
+        self.ports['water_lt_in'] = (self.x + 70, self.y)       # Верх, смещён вправо (выше)
+        self.ports['water_ht_in'] = (self.x + 30, self.y + 20)  # Верх, смещён влево (чуть ниже)
+        # Водяной выход — правая сторона, на уровне насоса (~160px)
+        self.ports['water_out'] = (self.x + 100, self.y + 160)  # Правый, середина
+        # Слив — правая нижняя зона
+        self.ports['drain'] = (self.x + 50, self.y + 200)       # Низ, центр
 
     def draw(self, painter: QPainter):
         # Сначала вода, потом SVG бака

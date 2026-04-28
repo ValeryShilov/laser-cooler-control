@@ -3,9 +3,8 @@ from PySide6.QtGui import QPainter, QColor, QPen, QPainterPath
 from PySide6.QtCore import Qt
 
 from parser import SchemeParser
-from layout import RuleBasedLayoutEngine
+from layout import TopologyLayoutEngine
 from router import AStarRouter
-from rules import ROUTING_RULES
 
 class ChillerMnemonic(QWidget):
     def __init__(self, parent=None):
@@ -17,8 +16,8 @@ class ChillerMnemonic(QWidget):
         self.components, self.connections = self.parser.parse()
         
         # 2. Инициализируем движок компоновки
-        self.layout_engine = RuleBasedLayoutEngine(padding=80)
-        self.layout_engine.layout(self.components)
+        self.layout_engine = TopologyLayoutEngine(padding=80)
+        self.layout_engine.layout(self.components, self.connections)
         
         self.is_running = False
 
@@ -26,7 +25,7 @@ class ChillerMnemonic(QWidget):
         super().resizeEvent(event)
         self.layout_engine.width = self.width()
         self.layout_engine.height = self.height()
-        self.layout_engine.layout(self.components)
+        self.layout_engine.layout(self.components, self.connections)
         self.update()
 
     def set_states(self, running, heater, solenoid):
@@ -67,75 +66,81 @@ class ChillerMnemonic(QWidget):
         painter.drawRoundedRect(self.rect().adjusted(1, 1, -2, -2), 6, 6)
 
         from router import AStarRouter
-        from rules import ROUTING_RULES
 
         router = AStarRouter(width=self.width(), height=self.height(), grid_size=10)
 
         for comp in self.components.values():
-            if "ext_" not in comp.id: 
+            if "ext_" not in comp.id:
                 router.add_obstacle(comp.x, comp.y, comp.width, comp.height, padding=10)
 
         def get_escape_point(obj, port_pos, is_external=False):
-            # Жестко округляем сам порт до сетки (убивает "крючки")
+            """
+            Определяет направление «убегания» трубы от порта.
+            Логика: порт привязан к РЕБРУ компонента — escape идёт
+            перпендикулярно этому ребру наружу.
+            """
             grid_px = round(port_pos[0] / 10) * 10
             grid_py = round(port_pos[1] / 10) * 10
-            
+
             safe_dist = 30
             if is_external:
                 return (grid_px, grid_py), (grid_px - safe_dist, grid_py)
-            
-            cx = obj.x + obj.width / 2
-            cy = obj.y + obj.height / 2
-            dx = port_pos[0] - cx
-            dy = port_pos[1] - cy
-            
-            if abs(dx) >= abs(dy):
-                safe_x = grid_px + (safe_dist if dx >= 0 else -safe_dist)
-                return (grid_px, grid_py), (safe_x, grid_py)
-            else:
-                safe_y = grid_py + (safe_dist if dy >= 0 else -safe_dist)
-                return (grid_px, grid_py), (grid_px, safe_y)
 
-        # Сортируем соединения, чтобы сначала рисовались простые, а потом сложные
-        # Это помогает алгоритму памяти труб работать эффективнее
-        sorted_connections = sorted(self.connections, key=lambda c: 0 if "freon" in c['type'] else 1)
+            # Определяем, к какому ребру ближе всего порт
+            dist_left   = abs(port_pos[0] - obj.x)
+            dist_right  = abs(port_pos[0] - (obj.x + obj.width))
+            dist_top    = abs(port_pos[1] - obj.y)
+            dist_bottom = abs(port_pos[1] - (obj.y + obj.height))
+
+            min_dist = min(dist_left, dist_right, dist_top, dist_bottom)
+
+            if min_dist == dist_left:
+                return (grid_px, grid_py), (grid_px - safe_dist, grid_py)
+            elif min_dist == dist_right:
+                return (grid_px, grid_py), (grid_px + safe_dist, grid_py)
+            elif min_dist == dist_top:
+                return (grid_px, grid_py), (grid_px, grid_py - safe_dist)
+            else:
+                return (grid_px, grid_py), (grid_px, grid_py + safe_dist)
+
+        # Приоритет маршрутизации: сначала простые трубы, потом сложные
+        type_priority = {
+            'freon': 0,
+            'freon_bypass': 1,
+            'water_lt': 2,
+            'water_ht': 3,
+            'drain': 4,
+            'mechanical': 99,
+        }
+        sorted_connections = sorted(
+            self.connections,
+            key=lambda c: type_priority.get(c['type'], 5)
+        )
 
         for conn in sorted_connections:
-            if conn['type'] == "mechanical": continue 
-            
+            if conn['type'] == "mechanical": continue
+
             src_obj = self.components.get(conn['source_id'])
             tgt_obj = self.components.get(conn['target_id'])
             if not src_obj or not tgt_obj: continue
-            
+
             src_port_name = conn.get('source_port', 'out')
             tgt_port_name = conn.get('target_port', 'in')
-                
+
             start_pos = src_obj.ports.get(src_port_name, (src_obj.x, src_obj.y))
             end_pos = tgt_obj.ports.get(tgt_port_name, (tgt_obj.x, tgt_obj.y))
-            
-            # Получаем ИДЕАЛЬНО выровненные точки
+
             exact_start, safe_start = get_escape_point(src_obj, start_pos, "ext_" in src_obj.id)
             exact_end, safe_end = get_escape_point(tgt_obj, end_pos, "ext_" in tgt_obj.id)
 
-            rule_key = (f"{conn['source_id']}.{src_port_name}", f"{conn['target_id']}.{tgt_port_name}")
-            waypoints_pct = ROUTING_RULES.get(rule_key, [])
-            
-            waypoints_px = []
-            safe_w = self.width() - 2 * self.layout_engine.padding
-            safe_h = self.height() - 2 * self.layout_engine.padding
-            for wp_x_pct, wp_y_pct in waypoints_pct:
-                px_x = self.layout_engine.padding + (safe_w * wp_x_pct)
-                px_y = self.layout_engine.padding + (safe_h * wp_y_pct)
-                waypoints_px.append((px_x, px_y))
+            path_pts = router.find_path(exact_start, exact_end, safe_start, safe_end, waypoints=[])
 
-            path_pts = router.find_path(exact_start, exact_end, safe_start, safe_end, waypoints=waypoints_px)
-            
             if path_pts:
                 path = QPainterPath()
                 path.moveTo(path_pts[0][0], path_pts[0][1])
                 for pt in path_pts[1:]:
                     path.lineTo(pt[0], pt[1])
-                
+
                 painter.setPen(self.get_pen_by_type(conn['type']))
                 painter.drawPath(path)
 

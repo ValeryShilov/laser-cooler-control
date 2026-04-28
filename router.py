@@ -6,15 +6,26 @@ class AStarRouter:
         self.height = height
         self.grid_size = grid_size
         self.obstacles = []
-        self.drawn_cells = set() # ПАМЯТЬ ТРУБ: Хранит занятые пиксели
+        self.drawn_cells = set()
 
     def add_obstacle(self, x, y, w, h, padding=10):
         self.obstacles.append((x - padding, y - padding, x + w + padding, y + h + padding))
 
     def register_path(self, path):
-        """ Запоминает проложенную трубу, чтобы другие шли параллельно, а не поверх """
-        for pt in path:
-            self.drawn_cells.add(pt)
+        """ Запоминает проложенную трубу со всеми промежуточными точками """
+        if not path: return
+        self.drawn_cells.add(path[0])
+        for i in range(len(path) - 1):
+            p1 = path[i]
+            p2 = path[i+1]
+            dx = p2[0] - p1[0]
+            dy = p2[1] - p1[1]
+            steps = max(abs(dx), abs(dy)) // self.grid_size
+            if steps == 0: continue
+            for step in range(1, steps + 1):
+                x = p1[0] + (dx * step // steps)
+                y = p1[1] + (dy * step // steps)
+                self.drawn_cells.add((x, y))
 
     def _is_blocked(self, x, y):
         if x < 0 or x > self.width or y < 0 or y > self.height: return True
@@ -65,7 +76,13 @@ class AStarRouter:
         queue = [(0, start)]
         came_from = {start: None}
         g_score = {start: 0}
-        directions = [(0, self.grid_size), (0, -self.grid_size), (self.grid_size, 0), (-self.grid_size, 0)]
+        gs = self.grid_size
+        directions = [(0, gs), (0, -gs), (gs, 0), (-gs, 0)]
+
+        # Освобождаем start и end от проверки препятствий:
+        # это позволяет трубам выходить из портов, расположенных
+        # вплотную к компоненту (внутри зоны obstacle-padding).
+        exempt = {start, end}
 
         while queue:
             _, current = heapq.heappop(queue)
@@ -78,21 +95,32 @@ class AStarRouter:
 
             for dx, dy in directions:
                 neighbor = (current[0] + dx, current[1] + dy)
-                if neighbor != end and self._is_blocked(neighbor[0], neighbor[1]): continue
 
-                # ЖЕСТКИЙ ШТРАФ ЗА ПОВОРОТЫ (убивает зигзаги)
+                # Проверка препятствий: start и end свободны от проверки
+                if neighbor not in exempt and self._is_blocked(neighbor[0], neighbor[1]):
+                    continue
+
+                # Штраф за повороты (убивает зигзаги)
                 turn_penalty = 0
                 if came_from[current]:
                     prev = came_from[current]
                     if (current[0] - prev[0], current[1] - prev[1]) != (dx, dy):
-                        turn_penalty = 200 
+                        turn_penalty = 200
 
-                # ШТРАФ ЗА НАЛОЖЕНИЕ ТРУБ (заставляет трубы идти параллельно)
+                # Штраф за наложение на существующую трубу
                 overlap_penalty = 0
-                if neighbor in self.drawn_cells and neighbor != end and neighbor != start:
-                    overlap_penalty = 150
+                if neighbor in self.drawn_cells and neighbor not in exempt:
+                    overlap_penalty = 200
 
-                tentative_g = g_score[current] + 1 + turn_penalty + overlap_penalty
+                # Штраф за соседство с трубой (мягкое разнесение)
+                proximity_penalty = 0
+                for pdx, pdy in directions:
+                    adj = (neighbor[0] + pdx, neighbor[1] + pdy)
+                    if adj in self.drawn_cells and adj not in exempt:
+                        proximity_penalty = 30
+                        break
+
+                tentative_g = g_score[current] + 1 + turn_penalty + overlap_penalty + proximity_penalty
                 if neighbor not in g_score or tentative_g < g_score[neighbor]:
                     came_from[neighbor] = current
                     g_score[neighbor] = tentative_g

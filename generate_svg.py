@@ -15,7 +15,6 @@ svg_condenser = """<svg viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg">
     <line x1="45" y1="15" x2="55" y2="5" stroke="{color}" stroke-width="2"/>
     <polygon points="55,5 48,5 53,10" fill="{color}"/></svg>"""
 
-# Добавлено preserveAspectRatio="none" для бака
 svg_tank_evap = """<svg viewBox="0 0 60 60" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
     <polyline points="15,5 15,55 45,55 45,5" fill="none" stroke="#37474F" stroke-width="3"/>
     <polyline points="20,10 40,20 20,35 40,45" fill="none" stroke="{color}" stroke-width="3" stroke-linejoin="round"/></svg>"""
@@ -34,7 +33,6 @@ svg_compressor = """<svg viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg">
     <circle cx="30" cy="30" r="26" stroke="{color}" stroke-width="3" fill="none"/>
     <polygon points="16,18 16,42 46,30" fill="none" stroke="{color}" stroke-width="3"/></svg>"""
 
-# ДОБАВЛЕНО: Вентилятор
 svg_fan = """<svg viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg">
     <circle cx="30" cy="30" r="26" stroke="#37474F" stroke-width="3" fill="none"/>
     <g stroke="{color}" stroke-width="4" stroke-linecap="round">
@@ -45,7 +43,6 @@ svg_fan = """<svg viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg">
     </g>
     <circle cx="30" cy="30" r="6" fill="#37474F"/></svg>"""
 
-# ДОБАВЛЕНО: Клапан
 svg_valve = """<svg viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg">
     <polygon points="10,25 10,55 30,40" fill="{color}" stroke="#37474F" stroke-width="2"/>
     <polygon points="50,25 50,55 30,40" fill="{color}" stroke="#37474F" stroke-width="2"/>
@@ -53,7 +50,7 @@ svg_valve = """<svg viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg">
     <line x1="20" y1="25" x2="40" y2="5" stroke="#37474F" stroke-width="2"/>
     <line x1="30" y1="25" x2="30" y2="40" stroke="#37474F" stroke-width="2"/></svg>"""
 
-# Исправленный список (теперь тут все 8)
+
 elements = [
     ("heater", svg_heater),
     ("condenser", svg_condenser),
@@ -61,14 +58,14 @@ elements = [
     ("throttle", svg_throttle),
     ("pump", svg_pump),
     ("compressor", svg_compressor),
-    ("fan", svg_fan),      # <-- добавлено
-    ("valve", svg_valve)   # <-- добавлено
+    ("fan", svg_fan),
+    ("valve", svg_valve)
 ]
 
 STATES = {"off": "#B0BEC5", "on": "#4CAF50", "err": "#F44336"}
 
 def export_files():
-    folder_name = "svg_icons" # Убедитесь, что имя папки совпадает с тем, что в вашем основном коде
+    folder_name = "svg_icons"
     os.makedirs(folder_name, exist_ok=True)
     for element_id, template in elements:
         for state_name, hex_color in STATES.items():
@@ -76,7 +73,7 @@ def export_files():
             filepath = os.path.join(folder_name, f"{element_id}_{state_name}.svg")
             with open(filepath, "w", encoding="utf-8") as file:
                 file.write(final_svg)
-    print("✅ Все файлы (включая вентилятор и клапан) успешно созданы!")
+    print("✅ Все файлы успешно созданы!")
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)
