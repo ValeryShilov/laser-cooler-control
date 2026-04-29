@@ -160,6 +160,7 @@ class Pump(BaseEquipment):
 class Heater(BaseEquipment):
     def __init__(self, x, y):
         super().__init__(x, y, 40, 80, "ТЭН")
+        self.label_pos = "top"
         self.load_svg()
 
     def load_svg(self):

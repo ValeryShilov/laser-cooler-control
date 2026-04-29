@@ -3,7 +3,7 @@ from rules import PORT_ORDER
 
 
 class TopologyLayoutEngine:
-    def __init__(self, padding=80):
+    def __init__(self, padding=50):
         self.width = 1000
         self.height = 600
         self.padding = padding
@@ -100,11 +100,37 @@ class TopologyLayoutEngine:
         # ── 6. Внешние порты ──
         if ext_ports:
             ext_ports.sort(key=lambda p: PORT_ORDER.index(p.id) if p.id in PORT_ORDER else 99)
-            x_pos = self.padding + safe_w * 1.05
-            step_y = safe_h / (len(ext_ports) + 1)
-            for i, port in enumerate(ext_ports):
+            
+            # Размещаем внешние порты на фиксированном расстоянии от самого правого компонента
+            max_comp_x = max([c.x + c.width for c in main_comps.values()]) if main_comps else 700
+            x_pos = max_comp_x + 120  
+            
+            # Найдём к чему подключены внешние порты для выравнивания Y
+            aligned_y = {}
+            for conn in connections:
+                src, tgt = conn['source_id'], conn['target_id']
+                src_port = conn.get('source_port', 'out')
+                if tgt in [p.id for p in ext_ports] and src in main_comps:
+                    comp = main_comps[src]
+                    if src_port in comp.ports:
+                        y_pos = comp.ports[src_port][1]
+                        # Если порт смотрит вниз (слив), труба сначала опускается на 30px
+                        if src_port == 'drain':
+                            y_pos += 30
+                        aligned_y[tgt] = y_pos
+
+            default_start_y = self.padding
+            for port in ext_ports:
                 port.x = round((x_pos - port.width / 2) / 10) * 10
-                port.y = round((self.padding + step_y * (i + 1) - port.height / 2) / 10) * 10
+                
+                if port.id in aligned_y:
+                    # Выравниваем так, чтобы port.ports['in'][1] совпадал с aligned_y
+                    # port.y + 20 = aligned_y -> port.y = aligned_y - 20
+                    port.y = round((aligned_y[port.id] - 20) / 10) * 10
+                else:
+                    port.y = round(default_start_y / 10) * 10
+                    default_start_y += 60
+                    
                 port.update_ports()
 
     # ================================================================
