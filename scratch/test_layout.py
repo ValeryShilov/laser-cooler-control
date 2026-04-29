@@ -49,8 +49,8 @@ for conn in connections:
     
     # Heuristic: break cycles by identifying "freon_out" to "in" for tank->comp, and bypass out to in
     is_backedge = False
-    if src == "tank_1" and tgt == "comp_1": is_backedge = True
-    if src == "valve_bp" and tgt == "comp_1": is_backedge = True
+    if src == "tank_evaporator" and tgt == "compressor_main": is_backedge = True
+    if src == "valve_bypass" and tgt == "compressor_main": is_backedge = True
     
     if not is_backedge:
         adj[src].append((tgt, conn['type']))

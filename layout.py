@@ -100,7 +100,7 @@ class TopologyLayoutEngine:
         # ── 6. Внешние порты ──
         if ext_ports:
             ext_ports.sort(key=lambda p: PORT_ORDER.index(p.id) if p.id in PORT_ORDER else 99)
-            x_pos = self.padding + safe_w * 0.95
+            x_pos = self.padding + safe_w * 1.05
             step_y = safe_h / (len(ext_ports) + 1)
             for i, port in enumerate(ext_ports):
                 port.x = round((x_pos - port.width / 2) / 10) * 10

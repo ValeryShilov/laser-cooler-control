@@ -19,7 +19,8 @@ class BaseEquipment:
         self.id = "" # Сюда парсер запишет ID из YAML
         self.state = "off" 
         self.renderer = QSvgRenderer()
-        self.ports = {} 
+        self.ports = {}
+        self.label_pos = "bottom"  # По умолчанию текст снизу 
 
     def set_state(self, new_state):
         self.state = new_state
@@ -39,13 +40,25 @@ class BaseEquipment:
         return QRectF(self.x, self.y, self.width, self.height)
 
     def draw(self, painter: QPainter):
-        """ Стандартная отрисовка: SVG + Текст снизу """
+        """ Стандартная отрисовка: SVG + Текст """
         self.renderer.render(painter, self.get_rect())
         
         painter.setPen(QPen(QColor(60, 60, 60), 2))
         painter.setFont(QFont("Arial", 8, QFont.Bold))
-        text_rect = QRectF(self.x - 30, self.y + self.height + 5, self.width + 60, 20)
-        painter.drawText(text_rect, Qt.AlignCenter, self.name)
+        
+        align = Qt.AlignCenter
+        if self.label_pos == "bottom":
+            text_rect = QRectF(self.x - 30, self.y + self.height + 5, self.width + 60, 20)
+        elif self.label_pos == "top":
+            text_rect = QRectF(self.x - 30, self.y - 25, self.width + 60, 20)
+        elif self.label_pos == "left":
+            text_rect = QRectF(self.x - 110, self.y + self.height/2 - 10, 100, 20)
+            align = Qt.AlignRight | Qt.AlignVCenter
+        elif self.label_pos == "right":
+            text_rect = QRectF(self.x + self.width + 5, self.y + self.height/2 - 10, 100, 20)
+            align = Qt.AlignLeft | Qt.AlignVCenter
+            
+        painter.drawText(text_rect, align, self.name)
 
 
 # ==========================================
@@ -68,6 +81,7 @@ class Compressor(BaseEquipment):
 class Condenser(BaseEquipment):
     def __init__(self, x, y):
         super().__init__(x, y, 60, 160, "Конденсатор")
+        self.label_pos = "right"
         self.load_svg()
 
     def load_svg(self):
@@ -106,8 +120,8 @@ class Throttle(BaseEquipment):
         self.renderer.load(os.path.join(ICONS_DIR, f"throttle_{self.state}.svg"))
 
     def update_ports(self):
-        self.ports['in'] = (self.x, self.y + 20)            # Вход слева
-        self.ports['out'] = (self.x + 60, self.y + 20)      # Выход справа
+        self.ports['in'] = (self.x, self.y + 20)            
+        self.ports['out'] = (self.x + 60, self.y + 20)      
 
     def draw(self, painter: QPainter):
         # Текст сверху
@@ -139,8 +153,8 @@ class Pump(BaseEquipment):
         self.renderer.load(os.path.join(ICONS_DIR, f"pump_{self.state}.svg"))
 
     def update_ports(self):
-        self.ports['in'] = (self.x, self.y + 25)            # Вход слева
-        self.ports['out'] = (self.x + 50, self.y + 25)      # Выход справа
+        self.ports['in'] = (self.x, self.y + 30)            # Вход слева
+        self.ports['out'] = (self.x + 50, self.y + 30)      # Выход справа
 
 
 class Heater(BaseEquipment):
@@ -156,11 +170,7 @@ class Heater(BaseEquipment):
         self.ports['out'] = (self.x + 40, self.y + 40)      # Выход справа
 
     def draw(self, painter: QPainter):
-        # Текст сверху
-        self.renderer.render(painter, self.get_rect())
-        painter.setPen(QPen(QColor(60, 60, 60), 2))
-        painter.setFont(QFont("Arial", 8, QFont.Bold))
-        painter.drawText(QRectF(self.x - 20, self.y - 25, 80, 20), Qt.AlignCenter, self.name)
+        super().draw(painter)
 
 
 class Tank(BaseEquipment):
@@ -196,7 +206,8 @@ class Tank(BaseEquipment):
         
         painter.setPen(QPen(QColor(60, 60, 60), 2))
         painter.setFont(QFont("Arial", 8, QFont.Bold))
-        painter.drawText(QRectF(self.x - 20, self.y - 25, 140, 20), Qt.AlignCenter, self.name)
+        # Пишем текст внутри бака сверху, чтобы не пересекать трубы
+        painter.drawText(QRectF(self.x, self.y + 10, self.width, 30), Qt.AlignCenter | Qt.TextWordWrap, self.name)
 
 
 class ExternalPort(BaseEquipment):
@@ -209,8 +220,8 @@ class ExternalPort(BaseEquipment):
         Штуцер всегда находится на левом краю блока (self.x), 
         так как порты стоят справа на экране, и трубы подходят к ним слева.
         """
-        self.ports['in'] = (self.x, self.y + 15)
-        self.ports['out'] = (self.x, self.y + 15)
+        self.ports['in'] = (self.x, self.y + 20)
+        self.ports['out'] = (self.x, self.y + 20)
 
     def draw(self, painter: QPainter):
         """ Переопределяем отрисовку: рисуем стрелку и текст сбоку """
@@ -225,16 +236,16 @@ class ExternalPort(BaseEquipment):
         if is_input:
             # Стрелка ВЛЕВО (поток входит в чиллер). 
             # Острие касается левого края (self.x) - точки входа трубы
-            path.moveTo(self.x, self.y + 15)          # Острие
-            path.lineTo(self.x + 15, self.y + 5)      # Верхний угол базы
-            path.lineTo(self.x + 15, self.y + 25)     # Нижний угол базы
+            path.moveTo(self.x, self.y + 20)          # Острие
+            path.lineTo(self.x + 15, self.y + 10)      # Верхний угол базы
+            path.lineTo(self.x + 15, self.y + 30)     # Нижний угол базы
             path.closeSubpath()
         else:
             # Стрелка ВПРАВО (поток выходит из чиллера).
             # Плоское основание касается левого края (self.x) - точки выхода трубы
-            path.moveTo(self.x, self.y + 5)           # Верхний угол базы
-            path.lineTo(self.x, self.y + 25)          # Нижний угол базы
-            path.lineTo(self.x + 15, self.y + 15)     # Острие
+            path.moveTo(self.x, self.y + 10)           # Верхний угол базы
+            path.lineTo(self.x, self.y + 30)          # Нижний угол базы
+            path.lineTo(self.x + 15, self.y + 20)     # Острие
             path.closeSubpath()
             
         painter.drawPath(path)

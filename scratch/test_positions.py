@@ -29,19 +29,19 @@ for cid, comp in components.items():
 
 print("\n=== Reference SVG centers (with 120px x-offset) ===")
 ref = {
-    "comp_1":       (210, 320),
-    "cond_1":       (210, 130),
-    "fan_1":        (155, 130),
-    "throttle_1":   (350, 30),
-    "valve_bp":     (320, 230),
-    "tank_1":       (510, 260),
-    "pump_1":       (650, 320),
-    "heater_1":     (750, 200),
-    "ext_laser_in": (870, 60),
-    "ext_optics_in":(870, 120),
-    "ext_optics_out":(870, 200),
-    "ext_laser_out":(870, 320),
-    "ext_drain":    (870, 400),
+    "compressor_main":       (210, 320),
+    "condenser_unit":       (210, 130),
+    "fan_cooling":        (155, 130),
+    "throttle":   (350, 30),
+    "valve_bypass":     (320, 230),
+    "tank_evaporator":       (510, 260),
+    "pump_circulating":       (650, 320),
+    "heater_optics":     (750, 200),
+    "port_laser_in": (870, 60),
+    "port_optics_in":(870, 120),
+    "port_optics_out":(870, 200),
+    "port_laser_out":(870, 320),
+    "port_drain_system":    (870, 400),
 }
 for cid, (rx, ry) in ref.items():
     if cid in components:

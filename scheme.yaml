@@ -1,84 +1,84 @@
 components:
-  - id: comp_1
+  - id: compressor_main
     type: Compressor
     name: "Компрессор"
-  - id: cond_1
+  - id: condenser_unit
     type: Condenser
     name: "Конденсатор"
-  - id: fan_1
+  - id: fan_cooling
     type: Fan
     name: "Вент."
-  - id: throttle_1
+  - id: throttle
     type: Throttle
     name: "Дроссель"
-  - id: valve_bp
+  - id: valve_bypass
     type: Valve
     name: "Клапан Байпаса"
-  - id: tank_1
+  - id: tank_evaporator
     type: Tank
     name: "Бак и Испаритель"
-  - id: pump_1
+  - id: pump_circulating
     type: Pump
     name: "Насос"
-  - id: heater_1
+  - id: heater_optics
     type: Heater
     name: "ТЭН"
-  - id: ext_laser_in
+  - id: port_laser_in
     type: ExternalPort
     name: "Вход L (Лазер)"
-  - id: ext_optics_in
+  - id: port_optics_in
     type: ExternalPort
     name: "Вход H (Оптика)"
-  - id: ext_optics_out
+  - id: port_optics_out
     type: ExternalPort
     name: "Выход H (Оптика)"
-  - id: ext_laser_out
+  - id: port_laser_out
     type: ExternalPort
     name: "Выход L (Лазер)"
-  - id: ext_drain
+  - id: port_drain_system
     type: ExternalPort
     name: "Слив"
 
 connections:
-  - source: comp_1.out
-    target: cond_1.in
+  - source: compressor_main.out
+    target: condenser_unit.in
     type: freon
-  - source: cond_1.out
-    target: throttle_1.in
+  - source: condenser_unit.out
+    target: throttle.in
     type: freon
-  - source: throttle_1.out
-    target: tank_1.freon_in
+  - source: throttle.out
+    target: tank_evaporator.freon_in
     type: freon
-  - source: tank_1.freon_out
-    target: comp_1.in
+  - source: tank_evaporator.freon_out
+    target: compressor_main.in
     type: freon
-  - source: comp_1.out
-    target: valve_bp.in
+  - source: compressor_main.out
+    target: valve_bypass.in
     type: freon_bypass
-  - source: valve_bp.out
-    target: comp_1.in
+  - source: valve_bypass.out
+    target: compressor_main.in
     type: freon_bypass
-  - source: ext_laser_in.out
-    target: tank_1.water_lt_in
+  - source: port_laser_in.out
+    target: tank_evaporator.water_lt_in
     type: water_lt
-  - source: tank_1.water_out
-    target: pump_1.in
+  - source: tank_evaporator.water_out
+    target: pump_circulating.in
     type: water_lt
-  - source: pump_1.out
-    target: ext_laser_out.in
+  - source: pump_circulating.out
+    target: port_laser_out.in
     type: water_lt
-  - source: ext_optics_in.out
-    target: tank_1.water_ht_in
+  - source: port_optics_in.out
+    target: tank_evaporator.water_ht_in
     type: water_ht
-  - source: pump_1.out
-    target: heater_1.in
+  - source: pump_circulating.out
+    target: heater_optics.in
     type: water_ht
-  - source: heater_1.out
-    target: ext_optics_out.in
+  - source: heater_optics.out
+    target: port_optics_out.in
     type: water_ht
-  - source: tank_1.drain
-    target: ext_drain.in
+  - source: tank_evaporator.drain
+    target: port_drain_system.in
     type: drain
-  - source: fan_1
-    target: cond_1
+  - source: fan_cooling
+    target: condenser_unit
     type: mechanical

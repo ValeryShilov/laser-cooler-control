@@ -76,17 +76,14 @@ class ChillerMnemonic(QWidget):
         def get_escape_point(obj, port_pos, is_external=False):
             """
             Определяет направление «убегания» трубы от порта.
-            Логика: порт привязан к РЕБРУ компонента — escape идёт
-            перпендикулярно этому ребру наружу.
             """
             grid_px = round(port_pos[0] / 10) * 10
             grid_py = round(port_pos[1] / 10) * 10
 
             safe_dist = 30
             if is_external:
-                return (grid_px, grid_py), (grid_px - safe_dist, grid_py)
+                return (port_pos[0], port_pos[1]), (grid_px - safe_dist, grid_py)
 
-            # Определяем, к какому ребру ближе всего порт
             dist_left   = abs(port_pos[0] - obj.x)
             dist_right  = abs(port_pos[0] - (obj.x + obj.width))
             dist_top    = abs(port_pos[1] - obj.y)
@@ -95,13 +92,13 @@ class ChillerMnemonic(QWidget):
             min_dist = min(dist_left, dist_right, dist_top, dist_bottom)
 
             if min_dist == dist_left:
-                return (grid_px, grid_py), (grid_px - safe_dist, grid_py)
+                return (port_pos[0], port_pos[1]), (grid_px - safe_dist, grid_py)
             elif min_dist == dist_right:
-                return (grid_px, grid_py), (grid_px + safe_dist, grid_py)
+                return (port_pos[0], port_pos[1]), (grid_px + safe_dist, grid_py)
             elif min_dist == dist_top:
-                return (grid_px, grid_py), (grid_px, grid_py - safe_dist)
+                return (port_pos[0], port_pos[1]), (grid_px, grid_py - safe_dist)
             else:
-                return (grid_px, grid_py), (grid_px, grid_py + safe_dist)
+                return (port_pos[0], port_pos[1]), (grid_px, grid_py + safe_dist)
 
         # Приоритет маршрутизации: сначала простые трубы, потом сложные
         type_priority = {
@@ -130,8 +127,8 @@ class ChillerMnemonic(QWidget):
             start_pos = src_obj.ports.get(src_port_name, (src_obj.x, src_obj.y))
             end_pos = tgt_obj.ports.get(tgt_port_name, (tgt_obj.x, tgt_obj.y))
 
-            exact_start, safe_start = get_escape_point(src_obj, start_pos, "ext_" in src_obj.id)
-            exact_end, safe_end = get_escape_point(tgt_obj, end_pos, "ext_" in tgt_obj.id)
+            exact_start, safe_start = get_escape_point(src_obj, start_pos, "port_" in src_obj.id)
+            exact_end, safe_end = get_escape_point(tgt_obj, end_pos, "port_" in tgt_obj.id)
 
             path_pts = router.find_path(exact_start, exact_end, safe_start, safe_end, waypoints=[])
 

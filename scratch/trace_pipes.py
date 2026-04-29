@@ -21,7 +21,7 @@ engine.layout(components, connections)
 
 # Print port positions
 print("=== Key port positions ===")
-for cid in ['tank_1', 'pump_1', 'heater_1']:
+for cid in ['tank_evaporator', 'pump_circulating', 'heater_optics']:
     comp = components[cid]
     print(f"  {cid}: pos=({comp.x},{comp.y}) size={comp.width}x{comp.height}")
     for pname, ppos in comp.ports.items():
@@ -94,19 +94,19 @@ for conn in sorted_connections:
 # Compare with SVG reference paths
 print("\n=== SVG Reference (with +120 offset) ===")
 svg_pipes = {
-    "comp_1->cond_1 (freon)": "vertical UP: (210,280)->(210,210)",
-    "cond_1->throttle_1 (freon)": "UP+RIGHT: (210,50)->(210,30)->(330,30)",
-    "throttle_1->tank_1 (freon)": "RIGHT+DOWN+RIGHT: (370,30)->(420,30)->(420,180)->(460,180)",
-    "tank_1->comp_1 (freon)": "LEFT+DOWN: (460,350)->(250,350)->(250,320)",
-    "comp_1->valve_bp (bypass)": "RIGHT: (210,230)->(300,230)",
-    "valve_bp->comp_1 (bypass)": "RIGHT: (340,230)->(420,230)",
-    "tank_1->pump_1 (water_lt)": "RIGHT: (560,320)->(620,320)",
-    "pump_1->ext_laser_out": "RIGHT: (680,320)->(870,320)",
-    "ext_laser_in->tank_1": "LEFT+DOWN: (870,60)->(540,60)->(540,160)",
-    "ext_optics_in->tank_1": "LEFT+DOWN: (870,120)->(500,120)->(500,160)",
-    "pump_1->heater_1": "UP+RIGHT: (700,320)->(700,200)->(730,200)",
-    "heater_1->ext_optics_out": "RIGHT: (770,200)->(870,200)",
-    "tank_1.drain->ext_drain": "DOWN+RIGHT: (520,360)->(520,400)->(870,400)",
+    "compressor_main->condenser_unit (freon)": "vertical UP: (210,280)->(210,210)",
+    "condenser_unit->throttle (freon)": "UP+RIGHT: (210,50)->(210,30)->(330,30)",
+    "throttle->tank_evaporator (freon)": "RIGHT+DOWN+RIGHT: (370,30)->(420,30)->(420,180)->(460,180)",
+    "tank_evaporator->compressor_main (freon)": "LEFT+DOWN: (460,350)->(250,350)->(250,320)",
+    "compressor_main->valve_bypass (freon_bypass)": "RIGHT+UP: (250,280)->(280,280)->(280,230)->(290,230)",
+    "valve_bypass->compressor_main (freon_bypass)": "RIGHT+DOWN+LEFT: (350,230)->(380,230)->(380,320)->(250,320)",
+    "port_laser_in->tank_evaporator (water_lt)": "LEFT+DOWN: (750,60)->(560,60)->(560,130)",
+    "tank_evaporator->pump_circulating (water_lt)": "RIGHT: (560,290)->(625,290)",
+    "pump_circulating->port_laser_out (water_lt)": "RIGHT: (675,290)->(700,290)->(700,320)->(750,320)",
+    "port_optics_in->tank_evaporator (water_ht)": "LEFT+UP: (750,120)->(520,120)->(520,150)",
+    "pump_circulating->heater_optics (water_ht)": "RIGHT+UP: (675,290)->(700,290)->(700,220)->(730,220)",
+    "heater_optics->port_optics_out (water_ht)": "RIGHT: (770,220)->(790,220)->(790,200)->(750,200)",
+    "tank_evaporator->port_drain_system (drain)": "DOWN+RIGHT: (510,360)->(510,400)->(750,400)"
 }
 for name, desc in svg_pipes.items():
     print(f"  {name}: {desc}")
