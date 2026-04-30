@@ -68,6 +68,7 @@ class BaseEquipment:
 class Compressor(BaseEquipment):
     def __init__(self, x, y):
         super().__init__(x, y, 60, 60, "Компрессор")
+        self.label_pos = "left"
         self.load_svg()
 
     def load_svg(self):
@@ -147,6 +148,7 @@ class Valve(BaseEquipment):
 class Pump(BaseEquipment):
     def __init__(self, x, y):
         super().__init__(x, y, 50, 50, "Насос")
+        self.label_pos = "top"
         self.load_svg()
 
     def load_svg(self):
@@ -188,9 +190,9 @@ class Tank(BaseEquipment):
         self.ports['freon_in'] = (self.x, self.y + 50)          # Левый, верхняя треть
         self.ports['freon_out'] = (self.x, self.y + 190)        # Левый, нижний край
         # Водяные входы — верхняя сторона (трубы подходят сверху)
-        # Разнесены по Y чтобы escape-points не пересекались
-        self.ports['water_lt_in'] = (self.x + 70, self.y)       # Верх, смещён вправо (выше)
-        self.ports['water_ht_in'] = (self.x + 30, self.y + 20)  # Верх, смещён влево (чуть ниже)
+        # Разнесены по X и Y чтобы трубы не пересекались
+        self.ports['water_lt_in'] = (self.x + 30, self.y)       # Вход L: теперь слева (выше)
+        self.ports['water_ht_in'] = (self.x + 70, self.y + 20)  # Вход H: теперь справа (чуть ниже)
         # Водяной выход — правая сторона, на уровне насоса (~160px)
         self.ports['water_out'] = (self.x + 100, self.y + 160)  # Правый, середина
         # Слив — правая нижняя зона
@@ -207,8 +209,9 @@ class Tank(BaseEquipment):
         
         painter.setPen(QPen(QColor(60, 60, 60), 2))
         painter.setFont(QFont("Arial", 8, QFont.Bold))
-        # Пишем текст внутри бака сверху, чтобы не пересекать трубы
-        painter.drawText(QRectF(self.x, self.y + 10, self.width, 30), Qt.AlignCenter | Qt.TextWordWrap, self.name)
+        # Пишем текст справа от бака, чтобы не пересекать трубы
+        text_rect = QRectF(self.x + self.width + 5, self.y + self.height/2 - 20, 100, 40)
+        painter.drawText(text_rect, Qt.AlignLeft | Qt.AlignVCenter | Qt.TextWordWrap, self.name)
 
 
 class ExternalPort(BaseEquipment):
