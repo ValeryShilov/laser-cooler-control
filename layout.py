@@ -7,6 +7,10 @@ class TopologyLayoutEngine:
         self.width = 1000
         self.height = 600
         self.padding = padding
+        self.pad_left = padding
+        self.pad_right = padding
+        self.pad_top = padding  # Увеличенный отступ сверху сместит всю схему вниз
+        self.pad_bottom = padding
 
     def layout(self, components, connections):
         main_comps = {}
@@ -17,8 +21,8 @@ class TopologyLayoutEngine:
             else:
                 main_comps[cid] = comp
 
-        safe_w = self.width - 2 * self.padding
-        safe_h = self.height - 2 * self.padding
+        safe_w = self.width - self.pad_left - self.pad_right
+        safe_h = self.height - self.pad_top - self.pad_bottom
 
         # ── Построить граф фреонового контура и механические связи ──
         freon_adj = defaultdict(list)
@@ -119,7 +123,7 @@ class TopologyLayoutEngine:
                             y_pos += 30
                         aligned_y[tgt] = y_pos
 
-            default_start_y = self.padding
+            default_start_y = self.pad_top
             for port in ext_ports:
                 port.x = round((x_pos - port.width / 2) / 10) * 10
                 

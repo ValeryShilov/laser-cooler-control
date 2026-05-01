@@ -1,6 +1,6 @@
 from PySide6.QtWidgets import QWidget
 from PySide6.QtGui import QPainter, QColor, QPen, QPainterPath
-from PySide6.QtCore import Qt
+from PySide6.QtCore import Qt, QRectF
 
 from parser import SchemeParser
 from layout import TopologyLayoutEngine
@@ -140,6 +140,68 @@ class ChillerMnemonic(QWidget):
 
                 painter.setPen(self.get_pen_by_type(conn['type']))
                 painter.drawPath(path)
+
+        # === АЛГОРИТМ УМНОГО РАЗМЕЩЕНИЯ НАДПИСЕЙ ===
+        occupied_rects = []
+        
+        # 1. Заносим в занятые зоны габариты самих компонентов (без текстов)
+        for comp in self.components.values():
+            occupied_rects.append(comp.get_rect())
+
+        for comp in self.components.values():
+            # Внешние порты пропускаем, у них стрелки и текст отрисовываются по жестким правилам
+            if type(comp).__name__ == "ExternalPort":
+                continue
+
+            # 2. Зоны проверки теперь совпадают с отрисовкой в equipment.py
+            areas = {
+                "bottom": QRectF(comp.x - 30, comp.y + comp.height + 5, comp.width + 60, 35),
+                "top": QRectF(comp.x - 30, comp.y - 40, comp.width + 60, 35),
+                "left": QRectF(comp.x - 110, comp.y + comp.height / 2 - 17, 100, 35),
+                "right": QRectF(comp.x + comp.width + 5, comp.y + comp.height / 2 - 17, 100, 35)
+            }
+            
+            best_pos = "bottom"
+            min_score = float('inf')
+            best_rect = areas["bottom"]
+            
+            for pos, rect in areas.items():
+                score = 0
+                
+                # Штраф за наложение на оборудование ИЛИ ДРУГИЕ НАДПИСИ
+                for occ_rect in occupied_rects:
+                    # Разрешаем тексту пересекать "самого себя" (свой же компонент),
+                    # иначе текст будет убегать от своего же насоса или бака.
+                    if occ_rect == comp.get_rect():
+                        continue
+                        
+                    if rect.intersects(occ_rect):
+                        score += 500  # Критический штраф за пересечение с графикой/чужим текстом
+                
+                # Штраф за наложение на трубы
+                for cell in router.drawn_cells:
+                    if rect.contains(cell[0], cell[1]):
+                        score += 50  # Средний штраф (лучше лечь на трубу, чем на чужой насос)
+                        
+                # Штраф за выход за края экрана (чтобы текст не обрезался)
+                if rect.left() < 0 or rect.right() > self.width() or rect.top() < 0 or rect.bottom() > self.height():
+                    score += 1000
+                    
+                # Приоритет позиций (если все чисто, предпочитаем снизу)
+                preference = {"bottom": 0, "top": 1, "right": 2, "left": 3}
+                score += preference[pos]
+                
+                if score < min_score:
+                    min_score = score
+                    best_pos = pos
+                    best_rect = rect
+                    
+            comp.label_pos = best_pos
+            
+            # 3. КЛЮЧЕВОЙ МОМЕНТ: Добавляем выбранное место текста в занятые зоны!
+            # Теперь следующая надпись будет знать, что здесь уже занято.
+            occupied_rects.append(best_rect)
+        # ===========================================        
 
         for comp in self.components.values():
             comp.draw(painter)

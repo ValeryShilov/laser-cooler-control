@@ -38,27 +38,30 @@ class BaseEquipment:
 
     def get_rect(self):
         return QRectF(self.x, self.y, self.width, self.height)
+    
+    def draw_label(self, painter: QPainter):
+        """ Вынесенная логика отрисовки текста с автовыравниванием """
+        painter.setPen(QPen(QColor(60, 60, 60), 2))
+        painter.setFont(QFont("Arial", 8, QFont.Bold))
+        
+        align = Qt.AlignCenter | Qt.TextWordWrap
+        if self.label_pos == "bottom":
+            text_rect = QRectF(self.x - 30, self.y + self.height + 5, self.width + 60, 35)
+        elif self.label_pos == "top":
+            text_rect = QRectF(self.x - 30, self.y - 40, self.width + 60, 35)
+        elif self.label_pos == "left":
+            text_rect = QRectF(self.x - 110, self.y + self.height/2 - 17, 100, 35)
+            align = Qt.AlignRight | Qt.AlignVCenter | Qt.TextWordWrap
+        elif self.label_pos == "right":
+            text_rect = QRectF(self.x + self.width + 5, self.y + self.height/2 - 17, 100, 35)
+            align = Qt.AlignLeft | Qt.AlignVCenter | Qt.TextWordWrap
+            
+        painter.drawText(text_rect, align, self.name)
 
     def draw(self, painter: QPainter):
         """ Стандартная отрисовка: SVG + Текст """
         self.renderer.render(painter, self.get_rect())
-        
-        painter.setPen(QPen(QColor(60, 60, 60), 2))
-        painter.setFont(QFont("Arial", 8, QFont.Bold))
-        
-        align = Qt.AlignCenter
-        if self.label_pos == "bottom":
-            text_rect = QRectF(self.x - 30, self.y + self.height + 5, self.width + 60, 20)
-        elif self.label_pos == "top":
-            text_rect = QRectF(self.x - 30, self.y - 25, self.width + 60, 20)
-        elif self.label_pos == "left":
-            text_rect = QRectF(self.x - 110, self.y + self.height/2 - 10, 100, 20)
-            align = Qt.AlignRight | Qt.AlignVCenter
-        elif self.label_pos == "right":
-            text_rect = QRectF(self.x + self.width + 5, self.y + self.height/2 - 10, 100, 20)
-            align = Qt.AlignLeft | Qt.AlignVCenter
-            
-        painter.drawText(text_rect, align, self.name)
+        self.draw_label(painter)
 
 
 # ==========================================
@@ -68,7 +71,6 @@ class BaseEquipment:
 class Compressor(BaseEquipment):
     def __init__(self, x, y):
         super().__init__(x, y, 60, 60, "Компрессор")
-        self.label_pos = "left"
         self.load_svg()
 
     def load_svg(self):
@@ -82,7 +84,6 @@ class Compressor(BaseEquipment):
 class Condenser(BaseEquipment):
     def __init__(self, x, y):
         super().__init__(x, y, 60, 160, "Конденсатор")
-        self.label_pos = "right"
         self.load_svg()
 
     def load_svg(self):
@@ -104,13 +105,6 @@ class Fan(BaseEquipment):
     def update_ports(self):
         pass # У вентилятора нет трубных портов
 
-    def draw(self, painter: QPainter):
-        # Переопределяем отрисовку, чтобы текст был слева от вентилятора
-        self.renderer.render(painter, self.get_rect())
-        painter.setPen(QPen(QColor(60, 60, 60), 2))
-        painter.setFont(QFont("Arial", 8, QFont.Bold))
-        painter.drawText(QRectF(self.x - 75, self.y + 10, 70, 20), Qt.AlignRight | Qt.AlignVCenter, self.name)
-
 
 class Throttle(BaseEquipment):
     def __init__(self, x, y):
@@ -123,13 +117,6 @@ class Throttle(BaseEquipment):
     def update_ports(self):
         self.ports['in'] = (self.x, self.y + 20)            
         self.ports['out'] = (self.x + 60, self.y + 20)      
-
-    def draw(self, painter: QPainter):
-        # Текст сверху
-        self.renderer.render(painter, self.get_rect())
-        painter.setPen(QPen(QColor(60, 60, 60), 2))
-        painter.setFont(QFont("Arial", 8, QFont.Bold))
-        painter.drawText(QRectF(self.x - 30, self.y - 25, 120, 20), Qt.AlignCenter, self.name)
 
 
 class Valve(BaseEquipment):
@@ -148,7 +135,6 @@ class Valve(BaseEquipment):
 class Pump(BaseEquipment):
     def __init__(self, x, y):
         super().__init__(x, y, 50, 50, "Насос")
-        self.label_pos = "top"
         self.load_svg()
 
     def load_svg(self):
@@ -162,7 +148,6 @@ class Pump(BaseEquipment):
 class Heater(BaseEquipment):
     def __init__(self, x, y):
         super().__init__(x, y, 40, 80, "ТЭН")
-        self.label_pos = "top"
         self.load_svg()
 
     def load_svg(self):
@@ -206,12 +191,7 @@ class Tank(BaseEquipment):
         painter.fillRect(water_rect, QColor(33, 150, 243, 100))
         
         self.renderer.render(painter, self.get_rect())
-        
-        painter.setPen(QPen(QColor(60, 60, 60), 2))
-        painter.setFont(QFont("Arial", 8, QFont.Bold))
-        # Пишем текст справа от бака, чтобы не пересекать трубы
-        text_rect = QRectF(self.x + self.width + 5, self.y + self.height/2 - 20, 100, 40)
-        painter.drawText(text_rect, Qt.AlignLeft | Qt.AlignVCenter | Qt.TextWordWrap, self.name)
+        self.draw_label(painter)
 
 
 class ExternalPort(BaseEquipment):
