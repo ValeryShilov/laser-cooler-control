@@ -33,7 +33,27 @@ class AStarRouter:
             if ox1 <= x <= ox2 and oy1 <= y <= oy2: return True
         return False
 
+    def _line_clear(self, p1, p2):
+        """Проверяет, свободен ли ортогональный отрезок от препятствий."""
+        if p1[0] != p2[0] and p1[1] != p2[1]:
+            return False  # Не ортогональный
+        gs = self.grid_size
+        if p1[0] == p2[0]:  # Вертикальный
+            x = p1[0]
+            y_start, y_end = min(p1[1], p2[1]), max(p1[1], p2[1])
+            for y in range(y_start, y_end + 1, gs):
+                if self._is_blocked(x, y):
+                    return False
+        else:  # Горизонтальный
+            y = p1[1]
+            x_start, x_end = min(p1[0], p2[0]), max(p1[0], p2[0])
+            for x in range(x_start, x_end + 1, gs):
+                if self._is_blocked(x, y):
+                    return False
+        return True
+
     def _cleanup_path(self, path):
+        """Удаляет дубликаты и коллинеарные промежуточные точки."""
         if not path: return []
         res = [path[0]]
         for i in range(1, len(path)):
@@ -48,6 +68,67 @@ class AStarRouter:
             final.append(p2)
         final.append(res[-1])
         return final
+
+    def _smooth_path(self, path):
+        """
+        Пост-обработка: пытается убрать лишние повороты.
+        Для каждой тройки точек проверяет, можно ли заменить
+        на более прямой L-образный маршрут.
+        """
+        if len(path) < 3:
+            return path
+        
+        changed = True
+        max_passes = 5
+        while changed and max_passes > 0:
+            changed = False
+            max_passes -= 1
+            new_path = [path[0]]
+            i = 0
+            while i < len(path) - 2:
+                p1 = path[i]
+                p3 = path[i + 2]
+                p2 = path[i + 1]
+                
+                # Если p1→p3 уже прямая линия (ортогональная и свободная), пропускаем p2
+                if (p1[0] == p3[0] or p1[1] == p3[1]) and self._line_clear(p1, p3):
+                    # Пропускаем p2 — прямая линия
+                    new_path.append(p3)
+                    i += 2
+                    changed = True
+                    continue
+                
+                # Пробуем L-образный маршрут с одним поворотом
+                mid_h = (p3[0], p1[1])
+                mid_v = (p1[0], p3[1])
+                
+                replaced = False
+                for mid in [mid_h, mid_v]:
+                    if mid == p2:
+                        continue  # То же самое — пропускаем
+                    if mid == p1 or mid == p3:
+                        continue
+                    if self._line_clear(p1, mid) and self._line_clear(mid, p3):
+                        new_path.append(mid)
+                        new_path.append(p3)
+                        i += 2
+                        changed = True
+                        replaced = True
+                        break
+                
+                if not replaced:
+                    new_path.append(p2)
+                    i += 1
+            
+            # Добавляем оставшиеся точки
+            while i < len(path):
+                if not new_path or path[i] != new_path[-1]:
+                    new_path.append(path[i])
+                i += 1
+            
+            path = new_path
+        
+        return path
 
     def find_path(self, exact_start, exact_end, safe_start, safe_end, waypoints=None):
         points = [safe_start]
@@ -67,10 +148,11 @@ class AStarRouter:
                 
         raw_path = [exact_start] + full_path + [exact_end]
         clean_path = self._cleanup_path(raw_path)
+        smooth_path = self._smooth_path(clean_path)
         
         # Сохраняем готовую трубу в память, чтобы следующие трубы её обходили
-        self.register_path(clean_path)
-        return clean_path
+        self.register_path(smooth_path)
+        return smooth_path
 
     def _astar(self, start, end):
         queue = [(0, start)]
@@ -84,7 +166,9 @@ class AStarRouter:
         # вплотную к компоненту (внутри зоны obstacle-padding).
         exempt = {start, end}
 
-        while queue:
+        max_iter = 50000
+        while queue and max_iter > 0:
+            max_iter -= 1
             _, current = heapq.heappop(queue)
             if current == end:
                 path = []
@@ -120,10 +204,11 @@ class AStarRouter:
                         proximity_penalty = 30
                         break
 
-                tentative_g = g_score[current] + 1 + turn_penalty + overlap_penalty + proximity_penalty
+                tentative_g = g_score[current] + gs + turn_penalty + overlap_penalty + proximity_penalty
                 if neighbor not in g_score or tentative_g < g_score[neighbor]:
                     came_from[neighbor] = current
                     g_score[neighbor] = tentative_g
-                    f_score = tentative_g + (abs(end[0] - neighbor[0]) + abs(end[1] - neighbor[1]))
+                    h = abs(end[0] - neighbor[0]) + abs(end[1] - neighbor[1])
+                    f_score = tentative_g + h * 1.001  # Tie-breaking ускоряет поиск
                     heapq.heappush(queue, (f_score, neighbor))
         return []

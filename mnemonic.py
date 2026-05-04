@@ -76,13 +76,16 @@ class ChillerMnemonic(QWidget):
         def get_escape_point(obj, port_pos, is_external=False):
             """
             Определяет направление «убегания» трубы от порта.
+            Оба точки (exact и safe) привязаны к сетке для ортогональности.
             """
-            grid_px = round(port_pos[0] / 10) * 10
-            grid_py = round(port_pos[1] / 10) * 10
+            gs = 10
+            grid_px = round(port_pos[0] / gs) * gs
+            grid_py = round(port_pos[1] / gs) * gs
+            exact = (grid_px, grid_py)
 
             safe_dist = 30
             if is_external:
-                return (port_pos[0], port_pos[1]), (grid_px - safe_dist, grid_py)
+                return exact, (grid_px - safe_dist, grid_py)
 
             dist_left   = abs(port_pos[0] - obj.x)
             dist_right  = abs(port_pos[0] - (obj.x + obj.width))
@@ -92,13 +95,13 @@ class ChillerMnemonic(QWidget):
             min_dist = min(dist_left, dist_right, dist_top, dist_bottom)
 
             if min_dist == dist_left:
-                return (port_pos[0], port_pos[1]), (grid_px - safe_dist, grid_py)
+                return exact, (grid_px - safe_dist, grid_py)
             elif min_dist == dist_right:
-                return (port_pos[0], port_pos[1]), (grid_px + safe_dist, grid_py)
+                return exact, (grid_px + safe_dist, grid_py)
             elif min_dist == dist_top:
-                return (port_pos[0], port_pos[1]), (grid_px, grid_py - safe_dist)
+                return exact, (grid_px, grid_py - safe_dist)
             else:
-                return (port_pos[0], port_pos[1]), (grid_px, grid_py + safe_dist)
+                return exact, (grid_px, grid_py + safe_dist)
 
         # Приоритет маршрутизации: сначала простые трубы, потом сложные
         type_priority = {
@@ -153,12 +156,12 @@ class ChillerMnemonic(QWidget):
             if type(comp).__name__ == "ExternalPort":
                 continue
 
-            # 2. Зоны проверки теперь совпадают с отрисовкой в equipment.py
+            # 2. Зоны проверки совпадают с отрисовкой в equipment.py
             areas = {
-                "bottom": QRectF(comp.x - 30, comp.y + comp.height + 5, comp.width + 60, 35),
-                "top": QRectF(comp.x - 30, comp.y - 40, comp.width + 60, 35),
-                "left": QRectF(comp.x - 110, comp.y + comp.height / 2 - 17, 100, 35),
-                "right": QRectF(comp.x + comp.width + 5, comp.y + comp.height / 2 - 17, 100, 35)
+                "bottom": QRectF(comp.x - 20, comp.y + comp.height + 2, comp.width + 40, 30),
+                "top": QRectF(comp.x - 20, comp.y - 28, comp.width + 40, 26),
+                "left": QRectF(comp.x - 85, comp.y + comp.height / 2 - 15, 80, 30),
+                "right": QRectF(comp.x + comp.width + 3, comp.y + comp.height / 2 - 15, 80, 30)
             }
             
             best_pos = "bottom"

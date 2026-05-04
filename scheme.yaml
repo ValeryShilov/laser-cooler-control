@@ -56,20 +56,20 @@ connections:
     target: valve_bypass.in
     type: freon_bypass
   - source: valve_bypass.out
-    target: compressor_main.in
+    target: tank_evaporator.freon_in
     type: freon_bypass
   - source: port_laser_in.out
-    target: tank_evaporator.water_lt_in
+    target: tank_evaporator.water_ht_in
     type: water_lt
+  - source: port_optics_in.out
+    target: tank_evaporator.water_lt_in
+    type: water_ht    
   - source: tank_evaporator.water_out
     target: pump_circulating.in
     type: water_lt
   - source: pump_circulating.out
     target: port_laser_out.in
     type: water_lt
-  - source: port_optics_in.out
-    target: tank_evaporator.water_ht_in
-    type: water_ht
   - source: pump_circulating.out
     target: heater_optics.in
     type: water_ht

@@ -46,14 +46,14 @@ class BaseEquipment:
         
         align = Qt.AlignCenter | Qt.TextWordWrap
         if self.label_pos == "bottom":
-            text_rect = QRectF(self.x - 30, self.y + self.height + 5, self.width + 60, 35)
+            text_rect = QRectF(self.x - 20, self.y + self.height + 2, self.width + 40, 30)
         elif self.label_pos == "top":
-            text_rect = QRectF(self.x - 30, self.y - 40, self.width + 60, 35)
+            text_rect = QRectF(self.x - 20, self.y - 28, self.width + 40, 26)
         elif self.label_pos == "left":
-            text_rect = QRectF(self.x - 110, self.y + self.height/2 - 17, 100, 35)
+            text_rect = QRectF(self.x - 85, self.y + self.height/2 - 15, 80, 30)
             align = Qt.AlignRight | Qt.AlignVCenter | Qt.TextWordWrap
         elif self.label_pos == "right":
-            text_rect = QRectF(self.x + self.width + 5, self.y + self.height/2 - 17, 100, 35)
+            text_rect = QRectF(self.x + self.width + 3, self.y + self.height/2 - 15, 80, 30)
             align = Qt.AlignLeft | Qt.AlignVCenter | Qt.TextWordWrap
             
         painter.drawText(text_rect, align, self.name)
@@ -163,7 +163,7 @@ class Heater(BaseEquipment):
 
 class Tank(BaseEquipment):
     def __init__(self, x, y):
-        super().__init__(x, y, 100, 200, "Бак и Испаритель")
+        super().__init__(x, y, 120, 200, "Бак и Испаритель")
         self.water_level = 0.85 
         self.load_svg()
 
@@ -174,20 +174,21 @@ class Tank(BaseEquipment):
         # Порты фреона — левая сторона бака
         self.ports['freon_in'] = (self.x, self.y + 50)          # Левый, верхняя треть
         self.ports['freon_out'] = (self.x, self.y + 190)        # Левый, нижний край
-        # Водяные входы — верхняя сторона (трубы подходят сверху)
-        # Разнесены по X и Y чтобы трубы не пересекались
-        self.ports['water_lt_in'] = (self.x + 30, self.y)       # Вход L: теперь слева (выше)
-        self.ports['water_ht_in'] = (self.x + 70, self.y + 20)  # Вход H: теперь справа (чуть ниже)
-        # Водяной выход — правая сторона, на уровне насоса (~160px)
-        self.ports['water_out'] = (self.x + 100, self.y + 160)  # Правый, середина
-        # Слив — правая нижняя зона
-        self.ports['drain'] = (self.x + 50, self.y + 200)       # Низ, центр
+        # Водяные входы — оба сверху, разнесены по X
+        # L правее (ближе к внешним портам) чтобы трубы не пересекались
+        self.ports['water_lt_in'] = (self.x + 90, self.y)       # Вход L: сверху, правее
+        self.ports['water_ht_in'] = (self.x + 30, self.y)       # Вход H: сверху, левее
+        # Водяной выход — правая сторона
+        self.ports['water_out'] = (self.x + 120, self.y + 160)  # Правый, середина
+        # Слив — низ, центр
+        self.ports['drain'] = (self.x + 60, self.y + 200)       # Низ, центр
 
     def draw(self, painter: QPainter):
         # Сначала вода, потом SVG бака
-        water_max_h = 166 
+        # Стенки SVG идут от ~x+4 до ~x+116, дно ~y+197
+        water_max_h = 190
         current_water_h = water_max_h * self.water_level
-        water_rect = QRectF(self.x + 25, self.y + self.height - 15 - current_water_h, 50, current_water_h)
+        water_rect = QRectF(self.x + 6, self.y + self.height - 5 - current_water_h, 108, current_water_h)
         painter.fillRect(water_rect, QColor(33, 150, 243, 100))
         
         self.renderer.render(painter, self.get_rect())

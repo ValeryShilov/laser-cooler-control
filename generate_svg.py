@@ -3,52 +3,55 @@ import os
 from PySide6.QtWidgets import QApplication
 
 # 1. Шаблоны
-svg_heater = """<svg viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg">
-    <rect x="10" y="20" width="40" height="20" fill="none" stroke="{color}" stroke-width="3"/>
-    <line x1="20" y1="20" x2="20" y2="40" stroke="{color}" stroke-width="3"/>
-    <line x1="30" y1="20" x2="30" y2="40" stroke="{color}" stroke-width="3"/>
-    <line x1="40" y1="20" x2="40" y2="40" stroke="{color}" stroke-width="3"/></svg>"""
+# ViewBox размеры совпадают с размерами компонентов в equipment.py
+# preserveAspectRatio="none" гарантирует заполнение всего прямоугольника
 
-svg_condenser = """<svg viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg">
-    <polygon points="30,5 55,30 30,55 5,30" fill="none" stroke="{color}" stroke-width="2"/>
-    <polyline points="15,30 25,20 35,40 45,30" fill="none" stroke="{color}" stroke-width="2" stroke-linejoin="round"/>
-    <line x1="45" y1="15" x2="55" y2="5" stroke="{color}" stroke-width="2"/>
-    <polygon points="55,5 48,5 53,10" fill="{color}"/></svg>"""
+svg_heater = """<svg viewBox="0 0 40 80" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+    <rect x="2" y="25" width="36" height="30" fill="none" stroke="{color}" stroke-width="3"/>
+    <line x1="12" y1="25" x2="12" y2="55" stroke="{color}" stroke-width="3"/>
+    <line x1="20" y1="25" x2="20" y2="55" stroke="{color}" stroke-width="3"/>
+    <line x1="28" y1="25" x2="28" y2="55" stroke="{color}" stroke-width="3"/></svg>"""
+
+svg_condenser = """<svg viewBox="0 0 60 160" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+    <polygon points="30,2 58,80 30,158 2,80" fill="none" stroke="{color}" stroke-width="2"/>
+    <polyline points="15,80 25,55 35,105 45,80" fill="none" stroke="{color}" stroke-width="2" stroke-linejoin="round"/>
+    <line x1="45" y1="38" x2="55" y2="12" stroke="{color}" stroke-width="2"/>
+    <polygon points="55,12 48,14 51,22" fill="{color}"/></svg>"""
 
 svg_tank_evap = """<svg viewBox="0 0 60 60" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
-    <polyline points="15,5 15,55 45,55 45,5" fill="none" stroke="#37474F" stroke-width="3"/>
-    <polyline points="20,10 40,20 20,35 40,45" fill="none" stroke="{color}" stroke-width="3" stroke-linejoin="round"/></svg>"""
+    <polyline points="2,1 2,59 58,59 58,1" fill="none" stroke="#37474F" stroke-width="3"/>
+    <polyline points="15,10 40,22 15,38 40,50" fill="none" stroke="{color}" stroke-width="3" stroke-linejoin="round"/></svg>"""
 
-svg_throttle = """<svg viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg">
-    <polygon points="10,20 10,40 30,30" fill="{color}" stroke="{color}" stroke-width="2"/>
-    <polygon points="50,20 50,40 30,30" fill="{color}" stroke="{color}" stroke-width="2"/>
-    <line x1="15" y1="50" x2="45" y2="10" stroke="#37474F" stroke-width="2"/>
-    <polygon points="45,10 38,10 42,15" fill="#37474F"/></svg>"""
+svg_throttle = """<svg viewBox="0 0 60 40" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+    <polygon points="2,3 2,37 30,20" fill="{color}" stroke="{color}" stroke-width="2"/>
+    <polygon points="58,3 58,37 30,20" fill="{color}" stroke="{color}" stroke-width="2"/>
+    <line x1="15" y1="35" x2="45" y2="5" stroke="#37474F" stroke-width="2"/>
+    <polygon points="45,5 38,6 41,13" fill="#37474F"/></svg>"""
 
-svg_pump = """<svg viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg">
-    <circle cx="30" cy="30" r="26" stroke="#37474F" stroke-width="3" fill="none"/>
-    <polygon points="16,18 16,42 46,30" fill="{color}"/></svg>"""
+svg_pump = """<svg viewBox="0 0 50 50" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+    <circle cx="25" cy="25" r="23" stroke="#37474F" stroke-width="3" fill="none"/>
+    <polygon points="12,13 12,37 40,25" fill="{color}"/></svg>"""
 
-svg_compressor = """<svg viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg">
+svg_compressor = """<svg viewBox="0 0 60 60" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
     <circle cx="30" cy="30" r="26" stroke="{color}" stroke-width="3" fill="none"/>
     <polygon points="16,18 16,42 46,30" fill="none" stroke="{color}" stroke-width="3"/></svg>"""
 
-svg_fan = """<svg viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg">
-    <circle cx="30" cy="30" r="26" stroke="#37474F" stroke-width="3" fill="none"/>
-    <g stroke="{color}" stroke-width="4" stroke-linecap="round">
-        <line x1="30" y1="10" x2="30" y2="50" />
-        <line x1="10" y1="30" x2="50" y2="30" />
-        <line x1="16" y1="16" x2="44" y2="44" />
-        <line x1="16" y1="44" x2="44" y2="16" />
+svg_fan = """<svg viewBox="0 0 40 40" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+    <circle cx="20" cy="20" r="18" stroke="#37474F" stroke-width="3" fill="none"/>
+    <g stroke="{color}" stroke-width="3" stroke-linecap="round">
+        <line x1="20" y1="5" x2="20" y2="35" />
+        <line x1="5" y1="20" x2="35" y2="20" />
+        <line x1="9" y1="9" x2="31" y2="31" />
+        <line x1="9" y1="31" x2="31" y2="9" />
     </g>
-    <circle cx="30" cy="30" r="6" fill="#37474F"/></svg>"""
+    <circle cx="20" cy="20" r="4" fill="#37474F"/></svg>"""
 
-svg_valve = """<svg viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg">
-    <polygon points="10,25 10,55 30,40" fill="{color}" stroke="#37474F" stroke-width="2"/>
-    <polygon points="50,25 50,55 30,40" fill="{color}" stroke="#37474F" stroke-width="2"/>
-    <rect x="20" y="5" width="20" height="20" fill="none" stroke="#37474F" stroke-width="2"/>
-    <line x1="20" y1="25" x2="40" y2="5" stroke="#37474F" stroke-width="2"/>
-    <line x1="30" y1="25" x2="30" y2="40" stroke="#37474F" stroke-width="2"/></svg>"""
+svg_valve = """<svg viewBox="0 0 60 40" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+    <polygon points="2,17 2,37 30,27" fill="{color}" stroke="#37474F" stroke-width="2"/>
+    <polygon points="58,17 58,37 30,27" fill="{color}" stroke="#37474F" stroke-width="2"/>
+    <rect x="20" y="0" width="20" height="14" fill="none" stroke="#37474F" stroke-width="2"/>
+    <line x1="20" y1="14" x2="40" y2="0" stroke="#37474F" stroke-width="2"/>
+    <line x1="30" y1="14" x2="30" y2="27" stroke="#37474F" stroke-width="2"/></svg>"""
 
 
 elements = [
@@ -73,7 +76,7 @@ def export_files():
             filepath = os.path.join(folder_name, f"{element_id}_{state_name}.svg")
             with open(filepath, "w", encoding="utf-8") as file:
                 file.write(final_svg)
-    print("✅ Все файлы успешно созданы!")
+    print("OK - Все файлы успешно созданы!")
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)

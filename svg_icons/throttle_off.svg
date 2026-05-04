@@ -1,5 +1,5 @@
-<svg viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg">
-    <polygon points="10,20 10,40 30,30" fill="#B0BEC5" stroke="#B0BEC5" stroke-width="2"/>
-    <polygon points="50,20 50,40 30,30" fill="#B0BEC5" stroke="#B0BEC5" stroke-width="2"/>
-    <line x1="15" y1="50" x2="45" y2="10" stroke="#37474F" stroke-width="2"/>
-    <polygon points="45,10 38,10 42,15" fill="#37474F"/></svg>
+<svg viewBox="0 0 60 40" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+    <polygon points="2,3 2,37 30,20" fill="#B0BEC5" stroke="#B0BEC5" stroke-width="2"/>
+    <polygon points="58,3 58,37 30,20" fill="#B0BEC5" stroke="#B0BEC5" stroke-width="2"/>
+    <line x1="15" y1="35" x2="45" y2="5" stroke="#37474F" stroke-width="2"/>
+    <polygon points="45,5 38,6 41,13" fill="#37474F"/></svg>
