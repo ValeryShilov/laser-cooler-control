@@ -3,8 +3,6 @@ import os
 from PySide6.QtWidgets import QApplication
 
 # 1. Шаблоны
-# ViewBox размеры совпадают с размерами компонентов в equipment.py
-# preserveAspectRatio="none" гарантирует заполнение всего прямоугольника
 
 svg_heater = """<svg viewBox="0 0 40 80" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
     <rect x="2" y="25" width="36" height="30" fill="none" stroke="{color}" stroke-width="3"/>

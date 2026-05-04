@@ -33,22 +33,27 @@ class AStarRouter:
             if ox1 <= x <= ox2 and oy1 <= y <= oy2: return True
         return False
 
-    def _line_clear(self, p1, p2):
-        """Проверяет, свободен ли ортогональный отрезок от препятствий."""
+    def _line_clear(self, p1, p2, exempt=None):
+        """Проверяет, свободен ли ортогональный отрезок от препятствий.
+        
+        exempt — множество точек, освобождённых от проверки (порты компонентов).
+        """
         if p1[0] != p2[0] and p1[1] != p2[1]:
             return False  # Не ортогональный
+        if exempt is None:
+            exempt = set()
         gs = self.grid_size
         if p1[0] == p2[0]:  # Вертикальный
             x = p1[0]
             y_start, y_end = min(p1[1], p2[1]), max(p1[1], p2[1])
             for y in range(y_start, y_end + 1, gs):
-                if self._is_blocked(x, y):
+                if (x, y) not in exempt and self._is_blocked(x, y):
                     return False
         else:  # Горизонтальный
             y = p1[1]
             x_start, x_end = min(p1[0], p2[0]), max(p1[0], p2[0])
             for x in range(x_start, x_end + 1, gs):
-                if self._is_blocked(x, y):
+                if (x, y) not in exempt and self._is_blocked(x, y):
                     return False
         return True
 
@@ -69,17 +74,77 @@ class AStarRouter:
         final.append(res[-1])
         return final
 
-    def _smooth_path(self, path):
+    def _smooth_path(self, path, exempt=None):
         """
-        Пост-обработка: пытается убрать лишние повороты.
-        Для каждой тройки точек проверяет, можно ли заменить
-        на более прямой L-образный маршрут.
+        Пост-обработка: убирает лишние повороты.
+        
+        1. Агрессивное сглаживание: пытается соединить далёкие точки напрямую
+           (пропуская промежуточные) через L-образный маршрут.
+        2. Тройное сглаживание: для каждой тройки последовательных точек
+           проверяет, можно ли заменить на более прямой маршрут.
+        3. Финальная очистка коллинеарных точек.
+        
+        exempt — множество точек (портов), освобождённых от проверки obstacles.
         """
         if len(path) < 3:
             return path
+        if exempt is None:
+            exempt = set()
         
+        # === Фаза 1: Агрессивное сглаживание (пропуск нескольких точек) ===
+        # Пробуем соединить point[i] с point[i+k] для k=len..3, убирая промежуточные
         changed = True
-        max_passes = 5
+        max_passes = 3
+        while changed and max_passes > 0:
+            changed = False
+            max_passes -= 1
+            new_path = [path[0]]
+            i = 0
+            while i < len(path) - 1:
+                # Пробуем пропустить максимум точек — от самого далёкого к ближайшему
+                best_j = None
+                best_mid = None
+                for j in range(len(path) - 1, i + 1, -1):
+                    pa = path[i]
+                    pb = path[j]
+                    
+                    # Прямая линия?
+                    if (pa[0] == pb[0] or pa[1] == pb[1]) and self._line_clear(pa, pb, exempt):
+                        best_j = j
+                        best_mid = None
+                        break
+                    
+                    # L-образный маршрут?
+                    mid_h = (pb[0], pa[1])
+                    mid_v = (pa[0], pb[1])
+                    for mid in [mid_h, mid_v]:
+                        if mid == pa or mid == pb:
+                            continue
+                        if self._line_clear(pa, mid, exempt) and self._line_clear(mid, pb, exempt):
+                            best_j = j
+                            best_mid = mid
+                            break
+                    if best_j is not None:
+                        break
+                
+                if best_j is not None and best_j > i + 1:
+                    # Нашли сокращение — пропускаем промежуточные точки
+                    if best_mid is not None:
+                        new_path.append(best_mid)
+                    new_path.append(path[best_j])
+                    i = best_j
+                    changed = True
+                else:
+                    # Не нашли — оставляем следующую точку как есть
+                    i += 1
+                    if i < len(path):
+                        new_path.append(path[i])
+            
+            path = new_path
+        
+        # === Фаза 2: Тройное сглаживание (L-shape на тройках) ===
+        changed = True
+        max_passes = 3
         while changed and max_passes > 0:
             changed = False
             max_passes -= 1
@@ -91,8 +156,7 @@ class AStarRouter:
                 p2 = path[i + 1]
                 
                 # Если p1→p3 уже прямая линия (ортогональная и свободная), пропускаем p2
-                if (p1[0] == p3[0] or p1[1] == p3[1]) and self._line_clear(p1, p3):
-                    # Пропускаем p2 — прямая линия
+                if (p1[0] == p3[0] or p1[1] == p3[1]) and self._line_clear(p1, p3, exempt):
                     new_path.append(p3)
                     i += 2
                     changed = True
@@ -108,7 +172,7 @@ class AStarRouter:
                         continue  # То же самое — пропускаем
                     if mid == p1 or mid == p3:
                         continue
-                    if self._line_clear(p1, mid) and self._line_clear(mid, p3):
+                    if self._line_clear(p1, mid, exempt) and self._line_clear(mid, p3, exempt):
                         new_path.append(mid)
                         new_path.append(p3)
                         i += 2
@@ -127,6 +191,9 @@ class AStarRouter:
                 i += 1
             
             path = new_path
+        
+        # === Фаза 3: Финальная очистка коллинеарных точек ===
+        path = self._cleanup_path(path)
         
         return path
 
@@ -148,7 +215,23 @@ class AStarRouter:
                 
         raw_path = [exact_start] + full_path + [exact_end]
         clean_path = self._cleanup_path(raw_path)
-        smooth_path = self._smooth_path(clean_path)
+        
+        # Точки портов и escape-сегменты освобождены от проверки obstacles.
+        # Это позволяет _smooth_path оптимизировать через зону padding рядом с портами.
+        exempt = {exact_start, exact_end, safe_start, safe_end}
+        gs = self.grid_size
+        # Добавляем все промежуточные точки escape-сегментов в exempt
+        for seg_start, seg_end in [(exact_start, safe_start), (safe_end, exact_end)]:
+            dx = seg_end[0] - seg_start[0]
+            dy = seg_end[1] - seg_start[1]
+            steps = max(abs(dx), abs(dy)) // gs if gs > 0 else 0
+            if steps > 0:
+                for s in range(steps + 1):
+                    ex = seg_start[0] + (dx * s // steps)
+                    ey = seg_start[1] + (dy * s // steps)
+                    exempt.add((ex, ey))
+        
+        smooth_path = self._smooth_path(clean_path, exempt)
         
         # Сохраняем готовую трубу в память, чтобы следующие трубы её обходили
         self.register_path(smooth_path)

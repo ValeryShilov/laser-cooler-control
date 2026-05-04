@@ -28,7 +28,7 @@ def get_escape_point(obj, port_pos, is_external=False):
     grid_px = round(port_pos[0] / gs) * gs
     grid_py = round(port_pos[1] / gs) * gs
     exact = (grid_px, grid_py)
-    safe_dist = 30
+    safe_dist = 20
     if is_external:
         return exact, (grid_px - safe_dist, grid_py)
     dist_left   = abs(port_pos[0] - obj.x)

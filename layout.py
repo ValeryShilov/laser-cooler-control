@@ -9,7 +9,7 @@ class TopologyLayoutEngine:
         self.padding = padding
         self.pad_left = padding
         self.pad_right = padding
-        self.pad_top = padding  # Увеличенный отступ сверху сместит всю схему вниз
+        self.pad_top = padding
         self.pad_bottom = padding
 
     def layout(self, components, connections):
@@ -55,6 +55,8 @@ class TopologyLayoutEngine:
                 comp.x = round((partner.x - comp.width - 10) / 10) * 10
                 comp.y = round((partner.y + (partner.height - comp.height) / 2) / 10) * 10
                 comp.update_ports()
+                # Проверяем коллизию и сдвигаем при необходимости
+                self._nudge_to_free(comp, main_comps, positioned, src_id)
                 positioned.add(src_id)
 
         # ── 3. Байпас (freon_bypass) ──
@@ -73,6 +75,8 @@ class TopologyLayoutEngine:
             if unplaced_id in positioned or unplaced_id in bypass_placed:
                 continue
             self._place_bypass(main_comps[unplaced_id], anchor, cycle, main_comps, safe_w, safe_h)
+            # Проверяем коллизию
+            self._nudge_to_free(main_comps[unplaced_id], main_comps, positioned, unplaced_id)
             positioned.add(unplaced_id)
             bypass_placed.add(unplaced_id)
 
@@ -87,19 +91,40 @@ class TopologyLayoutEngine:
                     continue
                 if src in positioned and tgt not in positioned and tgt in main_comps:
                     self._place_downstream(main_comps[tgt], main_comps[src], ctype, safe_w, safe_h)
+                    self._nudge_to_free(main_comps[tgt], main_comps, positioned, tgt)
                     positioned.add(tgt)
                     changed = True
                 elif tgt in positioned and src not in positioned and src in main_comps:
                     self._place_downstream(main_comps[src], main_comps[tgt], ctype, safe_w, safe_h)
+                    self._nudge_to_free(main_comps[src], main_comps, positioned, src)
                     positioned.add(src)
                     changed = True
 
-        # ── 5. Остаток (на случай если что-то не связано) ──
-        idx = 0
+        # ── 5. Остаток — размещение рядом с ближайшим однотипным компонентом ──
         for cid in main_comps:
             if cid not in positioned:
-                self._place(main_comps[cid], 0.60 + idx * 0.10, 0.50, safe_w, safe_h)
-                idx += 1
+                comp = main_comps[cid]
+                placed_near = False
+
+                # Ищем уже размещённый компонент того же класса
+                comp_class = type(comp).__name__
+                for pid in positioned:
+                    if type(main_comps[pid]).__name__ == comp_class:
+                        buddy = main_comps[pid]
+                        # Размещаем правее и чуть ниже компаньона
+                        comp.x = round((buddy.x + buddy.width + 20) / 10) * 10
+                        comp.y = round(buddy.y / 10) * 10
+                        comp.update_ports()
+                        self._nudge_to_free(comp, main_comps, positioned, cid)
+                        placed_near = True
+                        break
+
+                if not placed_near:
+                    # Нет однотипного — размещаем в свободной зоне справа
+                    self._place(comp, 0.60, 0.50, safe_w, safe_h)
+                    self._nudge_to_free(comp, main_comps, positioned, cid)
+
+                positioned.add(cid)
 
         # ── 6. Внешние порты ──
         if ext_ports:
@@ -145,6 +170,66 @@ class TopologyLayoutEngine:
         """Разместить компонент по процентным координатам безопасной зоны."""
         comp.x = round((self.padding + safe_w * x_pct - comp.width / 2) / 10) * 10
         comp.y = round((self.padding + safe_h * y_pct - comp.height / 2) / 10) * 10
+        comp.update_ports()
+
+    # ── Обнаружение и разрешение коллизий ──
+
+    def _rects_overlap(self, r1, r2, padding=15):
+        """Проверяет пересечение двух прямоугольников (x, y, w, h) с отступом."""
+        x1, y1, w1, h1 = r1
+        x2, y2, w2, h2 = r2
+        return not (x1 + w1 + padding <= x2 or x2 + w2 + padding <= x1 or
+                    y1 + h1 + padding <= y2 or y2 + h2 + padding <= y1)
+
+    def _overlaps_any(self, comp, main_comps, positioned, exclude_id=None):
+        """Проверяет, пересекается ли comp с любым уже размещённым компонентом."""
+        comp_rect = (comp.x, comp.y, comp.width, comp.height)
+        for cid in positioned:
+            if cid == exclude_id:
+                continue
+            other = main_comps[cid]
+            other_rect = (other.x, other.y, other.width, other.height)
+            if self._rects_overlap(comp_rect, other_rect):
+                return True
+        return False
+
+    def _nudge_to_free(self, comp, main_comps, positioned, comp_id):
+        """
+        Сдвигает компонент в ближайшую свободную позицию, если он
+        перекрывается с уже размещёнными компонентами.
+        Поиск идёт спиралью вокруг исходной позиции.
+        """
+        if not self._overlaps_any(comp, main_comps, positioned, comp_id):
+            return  # Позиция уже свободна
+
+        orig_x, orig_y = comp.x, comp.y
+        step = 10
+
+        # Спиральный поиск: пробуем смещения по возрастанию расстояния
+        for dist in range(step, 300, step):
+            # 8 направлений на каждом расстоянии
+            offsets = [
+                (0, dist), (0, -dist),          # вниз, вверх
+                (dist, 0), (-dist, 0),          # вправо, влево
+                (dist, dist), (-dist, dist),    # диагонали
+                (dist, -dist), (-dist, -dist),
+            ]
+            for dx, dy in offsets:
+                comp.x = round((orig_x + dx) / 10) * 10
+                comp.y = round((orig_y + dy) / 10) * 10
+
+                # Не выходим за границы рабочей области
+                if comp.x < self.pad_left or comp.x + comp.width > self.width - self.pad_right:
+                    continue
+                if comp.y < self.pad_top or comp.y + comp.height > self.height - self.pad_bottom:
+                    continue
+
+                if not self._overlaps_any(comp, main_comps, positioned, comp_id):
+                    comp.update_ports()
+                    return
+
+        # Не нашли — оставляем как есть
+        comp.x, comp.y = orig_x, orig_y
         comp.update_ports()
 
     # ── Поиск цикла ──
@@ -233,6 +318,7 @@ class TopologyLayoutEngine:
         горизонтально:
         - Для water_lt: насос встаёт на уровне порта water_out бака
         - Для water_ht: ТЭН встаёт на уровне середины бака
+        - Для drain: компонент встаёт ниже якоря на уровне слива
         """
         anchor_x_pct = (anchor.x + anchor.width / 2 - self.padding) / safe_w
         x_pct = min(0.85, anchor_x_pct + 0.15)
@@ -244,6 +330,13 @@ class TopologyLayoutEngine:
             y_pct = (port_y + comp.height / 2 - self.padding) / safe_h
         elif 'water_ht' in conn_type:
             y_pct = 0.35        # верхняя зона (ТЭН)
+        elif 'drain' in conn_type:
+            # Компонент слива — ниже якоря, на уровне сливного порта
+            if hasattr(anchor, 'ports') and 'drain' in anchor.ports:
+                port_y = anchor.ports['drain'][1]
+                y_pct = (port_y + 30 + comp.height / 2 - self.padding) / safe_h
+            else:
+                y_pct = (anchor.y + anchor.height + 30 + comp.height / 2 - self.padding) / safe_h
         else:
             y_pct = 0.50
 

@@ -5,7 +5,6 @@ from PySide6.QtWidgets import (
 )
 from PySide6.QtCore import Qt
 
-# Импортируем нашу умную мнемосхему из отдельного модуля
 from mnemonic import ChillerMnemonic
 
 class ChillerPanel(QMainWindow):
@@ -38,9 +37,7 @@ class ChillerPanel(QMainWindow):
         self.tabs.addTab(tab, "Мониторинг (Главная)")
         layout = QVBoxLayout(tab)
         
-        # ==========================================
-        # ВСТРАИВАЕМ УМНУЮ МНЕМОСХЕМУ
-        # ==========================================
+        # ВСТРАИВАЕМ МНЕМОСХЕМУ
         self.mnemonic = ChillerMnemonic()
         layout.addWidget(self.mnemonic)
 

@@ -11,11 +11,9 @@ class ChillerMnemonic(QWidget):
         super().__init__(parent)
         self.setMinimumHeight(500)
         
-        # 1. Читаем YAML
         self.parser = SchemeParser("scheme.yaml")
         self.components, self.connections = self.parser.parse()
         
-        # 2. Инициализируем движок компоновки
         self.layout_engine = TopologyLayoutEngine(padding=80)
         self.layout_engine.layout(self.components, self.connections)
         
@@ -83,7 +81,7 @@ class ChillerMnemonic(QWidget):
             grid_py = round(port_pos[1] / gs) * gs
             exact = (grid_px, grid_py)
 
-            safe_dist = 30
+            safe_dist = 20
             if is_external:
                 return exact, (grid_px - safe_dist, grid_py)
 
@@ -144,7 +142,7 @@ class ChillerMnemonic(QWidget):
                 painter.setPen(self.get_pen_by_type(conn['type']))
                 painter.drawPath(path)
 
-        # === АЛГОРИТМ УМНОГО РАЗМЕЩЕНИЯ НАДПИСЕЙ ===
+        # АЛГОРИТМ РАЗМЕЩЕНИЯ НАДПИСЕЙ
         occupied_rects = []
         
         # 1. Заносим в занятые зоны габариты самих компонентов (без текстов)
@@ -203,8 +201,7 @@ class ChillerMnemonic(QWidget):
             
             # 3. КЛЮЧЕВОЙ МОМЕНТ: Добавляем выбранное место текста в занятые зоны!
             # Теперь следующая надпись будет знать, что здесь уже занято.
-            occupied_rects.append(best_rect)
-        # ===========================================        
+            occupied_rects.append(best_rect)      
 
         for comp in self.components.values():
             comp.draw(painter)

@@ -7,7 +7,7 @@ components:
     name: "Конденсатор"
   - id: fan_cooling
     type: Fan
-    name: "Вент."
+    name: "Вентилятор"
   - id: throttle
     type: Throttle
     name: "Дроссель"
