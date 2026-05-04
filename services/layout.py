@@ -9,7 +9,7 @@ class TopologyLayoutEngine:
         self.padding = padding
         self.pad_left = padding
         self.pad_right = padding
-        self.pad_top = padding
+        self.pad_top = 80
         self.pad_bottom = padding
 
     def layout(self, components, connections):
@@ -162,10 +162,7 @@ class TopologyLayoutEngine:
                     
                 port.update_ports()
 
-    # ================================================================
     #  Вспомогательные методы
-    # ================================================================
-
     def _place(self, comp, x_pct, y_pct, safe_w, safe_h):
         """Разместить компонент по процентным координатам безопасной зоны."""
         comp.x = round((self.padding + safe_w * x_pct - comp.width / 2) / 10) * 10
@@ -228,7 +225,6 @@ class TopologyLayoutEngine:
                     comp.update_ports()
                     return
 
-        # Не нашли — оставляем как есть
         comp.x, comp.y = orig_x, orig_y
         comp.update_ports()
 

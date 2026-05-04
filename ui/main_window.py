@@ -5,7 +5,9 @@ from PySide6.QtWidgets import (
 )
 from PySide6.QtCore import Qt
 
-from mnemonic import ChillerMnemonic
+from ui.mnemonic import ChillerMnemonic
+from ui.styles import MAIN_STYLE, STOP_BUTTON_STYLE
+from core.controller import SystemController
 
 class ChillerPanel(QMainWindow):
     def __init__(self):
@@ -13,9 +15,14 @@ class ChillerPanel(QMainWindow):
         self.setWindowTitle("Интерфейс чиллера")
         self.setMinimumSize(1200, 850)
         
+        self.controller = SystemController(self)
+        
         self.init_ui()
         self.apply_styles()
         self.connect_signals()
+        
+        # Подписываемся на изменения состояния
+        self.controller.state_changed.connect(self._on_state_changed)
         
         # Инициализируем состояния полей ввода
         self.toggle_mode_settings(0)
@@ -309,14 +316,14 @@ class ChillerPanel(QMainWindow):
         self.cb_mode_srv.currentIndexChanged.connect(self.cb_mode_main.setCurrentIndex)
         self.cb_mode_main.currentIndexChanged.connect(self.toggle_mode_settings)
 
-        self.start_btn.clicked.connect(self.start_system)
-        self.stop_btn.clicked.connect(self.stop_system)
-        self.cb_debug.toggled.connect(self.toggle_debug)
+        self.start_btn.clicked.connect(self.controller.start)
+        self.stop_btn.clicked.connect(self.controller.stop)
+        self.cb_debug.toggled.connect(self._on_debug_toggled)
         
-        self.btn_man_pump.toggled.connect(self.update_manual_state)
-        self.btn_man_comp.toggled.connect(self.update_manual_state)
-        self.btn_man_heater.toggled.connect(self.update_manual_state)
-        self.btn_man_valve.toggled.connect(self.update_manual_state)
+        self.btn_man_pump.toggled.connect(self._on_manual_relay)
+        self.btn_man_comp.toggled.connect(self._on_manual_relay)
+        self.btn_man_heater.toggled.connect(self._on_manual_relay)
+        self.btn_man_valve.toggled.connect(self._on_manual_relay)
 
     def toggle_mode_settings(self, index):
         is_manual = (index == 1)
@@ -326,88 +333,74 @@ class ChillerPanel(QMainWindow):
         self.sp_main_ht.setEnabled(is_manual)
         self.sp_delta.setEnabled(not is_manual)
 
-    def update_manual_state(self):
-        if self.cb_debug.isChecked():
-            is_run = self.btn_man_pump.isChecked() or self.btn_man_comp.isChecked()
-            # Обновляем визуальное состояние компонентов в зависимости от нажатых реле
-            self.mnemonic.set_states(
-                running=is_run,
-                heater=self.btn_man_heater.isChecked(),
-                solenoid=self.btn_man_valve.isChecked()
-            )
+    # ================================================================
+    #  Реакция на изменение состояния (сигнал от контроллера)
+    # ================================================================
 
-    def start_system(self):
-        self.start_btn.setEnabled(False)
-        self.stop_btn.setEnabled(True)
-        self.status_label.setText("АВТОМАТИКА: В РАБОТЕ")
-        self.status_label.setStyleSheet("background-color: #C8E6C9; color: #2E7D32; font-size: 14px; font-weight: bold; padding: 6px; border-radius: 4px;")
-        
-        self.lbl_pump.setText("Насос: РАБОТА")
-        self.lbl_pump.setStyleSheet("color: #2E7D32; font-weight: bold; font-size: 13px;")
-        self.lbl_comp.setText("Компрессор: РАБОТА")
-        self.lbl_comp.setStyleSheet("color: #1976D2; font-weight: bold; font-size: 13px;")
-        self.lbl_heater.setText("ТЭН: НАГРЕВ")
-        self.lbl_heater.setStyleSheet("color: #D32F2F; font-weight: bold; font-size: 13px;")
-        self.lbl_valve.setText("Байпас: ЗАКРЫТ")
-        
-        self.lbl_flow_lt.setText("14.5 л/м")
-        self.lbl_flow_ht.setText("2.8 л/м")
-        self.lbl_press.setText("3.1 бар")
-        self.lbl_t_amb.setText("25.2")
-        self.lbl_level.setText("Норма (85%)")
-        self.lbl_level.setStyleSheet("font-size: 18px; font-weight: bold; color: #2E7D32;")
-        
-        # Передаем команду мнемосхеме изменить визуал (Запуск компрессора, насоса, ТЭНа)
-        self.mnemonic.set_states(running=True, heater=True, solenoid=False)
+    def _on_state_changed(self, state):
+        """Обновляет все виджеты по данным из SystemState."""
+        if state.running:
+            self.start_btn.setEnabled(False)
+            self.stop_btn.setEnabled(True)
+            self.status_label.setText("АВТОМАТИКА: В РАБОТЕ")
+            self.status_label.setStyleSheet("background-color: #C8E6C9; color: #2E7D32; font-size: 14px; font-weight: bold; padding: 6px; border-radius: 4px;")
 
-    def stop_system(self):
-        self.start_btn.setEnabled(True)
-        self.stop_btn.setEnabled(False)
-        self.status_label.setText("АВТОМАТИКА: ОСТАНОВ")
-        self.status_label.setStyleSheet("background-color: #e0e0e0; color: #555; font-size: 14px; font-weight: bold; padding: 6px; border-radius: 4px;")
-        
-        for lbl in [self.lbl_pump, self.lbl_comp, self.lbl_heater, self.lbl_valve]:
-            lbl.setText(lbl.text().split(":")[0] + ": ВЫКЛ")
-            lbl.setStyleSheet("color: #757575; font-weight: bold; font-size: 13px;")
-            
-        self.lbl_flow_lt.setText("0.0 л/м")
-        self.lbl_flow_ht.setText("0.0 л/м")
-        self.lbl_press.setText("0.0 бар")
-            
-        # Останавливаем мнемосхему (трубы сереют)
-        self.mnemonic.set_states(running=False, heater=False, solenoid=False)
+            self.lbl_pump.setText("Насос: РАБОТА")
+            self.lbl_pump.setStyleSheet("color: #2E7D32; font-weight: bold; font-size: 13px;")
+            self.lbl_comp.setText("Компрессор: РАБОТА")
+            self.lbl_comp.setStyleSheet("color: #1976D2; font-weight: bold; font-size: 13px;")
+            self.lbl_heater.setText("ТЭН: НАГРЕВ" if state.heater_on else "ТЭН: ВЫКЛ")
+            self.lbl_heater.setStyleSheet("color: #D32F2F; font-weight: bold; font-size: 13px;" if state.heater_on else "color: #757575; font-weight: bold; font-size: 13px;")
+            self.lbl_valve.setText("Байпас: ЗАКРЫТ")
 
-    def toggle_debug(self, checked):
-        self.start_btn.setEnabled(not checked)
-        if checked:
-            self.stop_system()
-            self.status_label.setText("РЕЖИМ НАЛАДКИ (РУЧНОЙ)")
-            self.status_label.setStyleSheet("background-color: #FFE0B2; color: #E65100; font-size: 14px; font-weight: bold; padding: 6px; border-radius: 4px;")
-            
+            self.lbl_flow_lt.setText(f"{state.flow_lt} л/м")
+            self.lbl_flow_ht.setText(f"{state.flow_ht} л/м")
+            self.lbl_press.setText(f"{state.pressure} бар")
+            self.lbl_t_amb.setText(str(state.temp_ambient))
+            self.lbl_level.setText(f"Норма ({int(state.water_level * 100)}%)")
+            self.lbl_level.setStyleSheet("font-size: 18px; font-weight: bold; color: #2E7D32;")
+        else:
+            self.start_btn.setEnabled(not state.debug_mode)
+            self.stop_btn.setEnabled(False)
+
+            if state.debug_mode:
+                self.status_label.setText("РЕЖИМ НАЛАДКИ (РУЧНОЙ)")
+                self.status_label.setStyleSheet("background-color: #FFE0B2; color: #E65100; font-size: 14px; font-weight: bold; padding: 6px; border-radius: 4px;")
+            else:
+                self.status_label.setText("АВТОМАТИКА: ОСТАНОВ")
+                self.status_label.setStyleSheet("background-color: #e0e0e0; color: #555; font-size: 14px; font-weight: bold; padding: 6px; border-radius: 4px;")
+
+            for lbl in [self.lbl_pump, self.lbl_comp, self.lbl_heater, self.lbl_valve]:
+                lbl.setText(lbl.text().split(":")[0] + ": ВЫКЛ")
+                lbl.setStyleSheet("color: #757575; font-weight: bold; font-size: 13px;")
+
+            self.lbl_flow_lt.setText("0.0 л/м")
+            self.lbl_flow_ht.setText("0.0 л/м")
+            self.lbl_press.setText("0.0 бар")
+
+        # Обновляем мнемосхему
+        self.mnemonic.set_states(
+            running=state.running,
+            heater=state.heater_on,
+            solenoid=state.valve_open
+        )
+
+    def _on_debug_toggled(self, checked):
+        """Реакция на переключение режима наладки."""
+        self.controller.set_debug_mode(checked)
         for btn in self.man_buttons:
             btn.setEnabled(checked)
             if not checked:
                 btn.setChecked(False)
-        
-        if not checked:
-            self.update_manual_state()
+
+    def _on_manual_relay(self):
+        """Реакция на переключение реле в режиме наладки."""
+        if self.cb_debug.isChecked():
+            is_run = self.btn_man_pump.isChecked() or self.btn_man_comp.isChecked()
+            self.controller._running = is_run
+            self.controller.set_relay("heater", self.btn_man_heater.isChecked())
+            self.controller.set_relay("valve", self.btn_man_valve.isChecked())
 
     def apply_styles(self):
-        self.setStyleSheet("""
-            QMainWindow { background-color: #f2f4f7; }
-            QGroupBox { font-weight: bold; font-size: 14px; border: 1px solid #c4c8cc; border-radius: 6px; margin-top: 15px; padding-top: 15px; background-color: #ffffff; }
-            QGroupBox::title { subcontrol-origin: margin; left: 10px; padding: 0 5px; color: #333; }
-            QPushButton { background-color: #4CAF50; color: white; border: none; padding: 10px 15px; font-size: 13px; font-weight: bold; border-radius: 4px; }
-            QPushButton:hover { background-color: #45a049; }
-            QPushButton:disabled { background-color: #cfd8dc; color: #90a4ae; }
-            QDoubleSpinBox, QComboBox { padding: 5px; border: 1px solid #ccc; border-radius: 4px; font-size: 13px; }
-            QDoubleSpinBox:disabled { background-color: #eeeeee; color: #999999; }
-            QTabWidget::pane { border: 1px solid #c4c8cc; border-radius: 6px; background-color: #ffffff; }
-            QTabBar::tab { background-color: #e6e9ed; border: 1px solid #c4c8cc; border-bottom: none; border-top-left-radius: 6px; border-top-right-radius: 6px; padding: 8px 20px; font-weight: bold; color: #555; }
-            QTabBar::tab:selected { background-color: #ffffff; border-bottom: 1px solid #ffffff; color: #000; }
-        """)
-        self.stop_btn.setStyleSheet("""
-            QPushButton { background-color: #F44336; }
-            QPushButton:hover { background-color: #D32F2F; }
-            QPushButton:disabled { background-color: #cfd8dc; color: #90a4ae; }
-        """)
+        self.setStyleSheet(MAIN_STYLE)
+        self.stop_btn.setStyleSheet(STOP_BUTTON_STYLE)

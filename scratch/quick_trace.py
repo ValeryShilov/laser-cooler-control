@@ -6,9 +6,9 @@ os.environ['QT_QPA_PLATFORM'] = 'offscreen'
 from PySide6.QtWidgets import QApplication
 app = QApplication.instance() or QApplication(sys.argv)
 
-from parser import SchemeParser
-from layout import TopologyLayoutEngine
-from router import AStarRouter
+from services.parser import SchemeParser
+from services.layout import TopologyLayoutEngine
+from services.router import AStarRouter
 
 parser = SchemeParser("scheme.yaml")
 components, connections = parser.parse()

@@ -9,8 +9,8 @@ sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), '..'
 from PySide6.QtWidgets import QApplication
 app = QApplication(sys.argv)
 
-from parser import SchemeParser
-from layout import TopologyLayoutEngine
+from services.parser import SchemeParser
+from services.layout import TopologyLayoutEngine
 
 parser = SchemeParser("scheme.yaml")
 components, connections = parser.parse()

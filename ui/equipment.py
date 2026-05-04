@@ -4,7 +4,8 @@ from PySide6.QtGui import QPainter, QColor, QFont, QPen, QPainterPath
 from PySide6.QtSvg import QSvgRenderer
 
 
-BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+_THIS_DIR = os.path.dirname(os.path.abspath(__file__))
+BASE_DIR = os.path.dirname(_THIS_DIR)  # Корень проекта (ui/ → ../)
 ICONS_DIR = os.path.join(BASE_DIR, "svg_icons")
 
 class BaseEquipment:
@@ -175,7 +176,6 @@ class Tank(BaseEquipment):
         self.ports['freon_in'] = (self.x, self.y + 50)          # Левый, верхняя треть
         self.ports['freon_out'] = (self.x, self.y + 190)        # Левый, нижний край
         # Водяные входы — оба сверху, разнесены по X
-        # L правее (ближе к внешним портам) чтобы трубы не пересекались
         self.ports['water_lt_in'] = (self.x + 90, self.y)       # Вход L: сверху, правее
         self.ports['water_ht_in'] = (self.x + 30, self.y)       # Вход H: сверху, левее
         # Водяной выход — правая сторона
@@ -184,8 +184,6 @@ class Tank(BaseEquipment):
         self.ports['drain'] = (self.x + 60, self.y + 200)       # Низ, центр
 
     def draw(self, painter: QPainter):
-        # Сначала вода, потом SVG бака
-        # Стенки SVG идут от ~x+4 до ~x+116, дно ~y+197
         water_max_h = 190
         current_water_h = water_max_h * self.water_level
         water_rect = QRectF(self.x + 6, self.y + self.height - 5 - current_water_h, 108, current_water_h)
@@ -197,7 +195,6 @@ class Tank(BaseEquipment):
 
 class ExternalPort(BaseEquipment):
     def __init__(self, x, y, name=""):
-        # Задаем ширину 150 (с запасом для текста) и высоту 30
         super().__init__(x, y, 150, 30, name)
 
     def update_ports(self):
@@ -235,8 +232,6 @@ class ExternalPort(BaseEquipment):
             
         painter.drawPath(path)
         
-        # Подпись порта (пишем справа от стрелки)
         painter.setPen(QPen(QColor(40, 40, 40), 1))
         painter.setFont(QFont("Arial", 9, QFont.Bold))
-        # Начинаем текст немного правее стрелки (self.x + 25)
         painter.drawText(self.x + 25, self.y + 20, self.name)

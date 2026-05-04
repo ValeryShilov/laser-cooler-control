@@ -1,6 +1,6 @@
 import sys
 from PySide6.QtWidgets import QApplication
-from interface import ChillerPanel
+from ui.main_window import ChillerPanel
 
 def main():
     app = QApplication(sys.argv)

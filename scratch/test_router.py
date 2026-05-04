@@ -1,7 +1,7 @@
 """Minimal A* test - no Qt dependency"""
 import sys, os, time
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)) + '/..')
-from router import AStarRouter
+from services.router import AStarRouter
 
 router = AStarRouter(width=1000, height=500, grid_size=10)
 # Add a simple obstacle

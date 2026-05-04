@@ -2,7 +2,7 @@ import yaml
 import os
 
 # Импортируем нашу библиотеку компонентов
-from equipment import (
+from ui.equipment import (
     Compressor, Condenser, Fan, Throttle, Valve, 
     Pump, Heater, Tank, ExternalPort
 )
@@ -59,10 +59,10 @@ class SchemeParser:
                 # Добавляем в словарь созданных компонентов
                 self.components[comp_id] = instance
             else:
-                print(f"⚠️ ПРЕДУПРЕЖДЕНИЕ: Неизвестный тип компонента '{comp_type}' для ID '{comp_id}'")
+                print(f"ПРЕДУПРЕЖДЕНИЕ: Неизвестный тип компонента '{comp_type}' для ID '{comp_id}'")
 
     def _parse_connections(self, conn_list):
-        """ Разбирает связи и порты (например, 'comp_1.out') """
+        """ Разбирает связи и порты """
         for conn_data in conn_list:
             source_str = conn_data['source']
             target_str = conn_data['target']
@@ -81,10 +81,6 @@ class SchemeParser:
             })
 
     def _split_port_string(self, port_string):
-        """ 
-        Если строка содержит точку (comp_1.out), возвращает ('comp_1', 'out').
-        Если точки нет (fan_1), возвращает ('fan_1', None).
-        """
         if '.' in port_string:
             parts = port_string.split('.')
             return parts[0], parts[1]
