@@ -34,3 +34,7 @@ class MockAdapter(BaseAdapter):
         """Сохраняет состояние реле в памяти."""
         if name in self._relays:
             self._relays[name] = state
+
+    def get_relay(self, name: str) -> bool:
+        """Возвращает текущее состояние реле."""
+        return self._relays.get(name, False)

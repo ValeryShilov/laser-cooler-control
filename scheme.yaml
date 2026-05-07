@@ -59,10 +59,10 @@ connections:
     target: tank_evaporator.freon_in
     type: freon_bypass
   - source: port_laser_in.out
-    target: tank_evaporator.water_ht_in
+    target: tank_evaporator.water_lt_in
     type: water_lt
   - source: port_optics_in.out
-    target: tank_evaporator.water_lt_in
+    target: tank_evaporator.water_ht_in
     type: water_ht    
   - source: tank_evaporator.water_out
     target: pump_circulating.in

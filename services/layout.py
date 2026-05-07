@@ -9,7 +9,7 @@ class TopologyLayoutEngine:
         self.padding = padding
         self.pad_left = padding
         self.pad_right = padding
-        self.pad_top = 80
+        self.pad_top = 70
         self.pad_bottom = padding
 
     def layout(self, components, connections):
@@ -133,33 +133,91 @@ class TopologyLayoutEngine:
             # Размещаем внешние порты на фиксированном расстоянии от самого правого компонента
             max_comp_x = max([c.x + c.width for c in main_comps.values()]) if main_comps else 700
             x_pos = max_comp_x + 120  
-            
+
             # Найдём к чему подключены внешние порты для выравнивания Y
             aligned_y = {}
             for conn in connections:
                 src, tgt = conn['source_id'], conn['target_id']
                 src_port = conn.get('source_port', 'out')
+                tgt_port = conn.get('target_port', 'in')
+                
+                # Если внешний порт - это target (выход системы)
                 if tgt in [p.id for p in ext_ports] and src in main_comps:
-                    comp = main_comps[src]
-                    if src_port in comp.ports:
-                        y_pos = comp.ports[src_port][1]
-                        # Если порт смотрит вниз (слив), труба сначала опускается на 30px
-                        if src_port == 'drain':
-                            y_pos += 30
-                        aligned_y[tgt] = y_pos
+                    if tgt not in aligned_y:
+                        comp = main_comps[src]
+                        if src_port in comp.ports:
+                            y_pos = comp.ports[src_port][1]
+                            if src_port == 'drain':
+                                y_pos += 30
+                            aligned_y[tgt] = y_pos
+                
+                # Если внешний порт - это source (вход в систему)
+                if src in [p.id for p in ext_ports] and tgt in main_comps:
+                    if src not in aligned_y:
+                        comp = main_comps[tgt]
+                        if tgt_port in comp.ports:
+                            y_pos = comp.ports[tgt_port][1]
+                            aligned_y[src] = y_pos
 
-            default_start_y = self.pad_top
+            min_spacing = 70  # Минимальное расстояние между внешними портами
+
+            # ── Фаза 1: Вычислить желаемую Y для каждого порта ──
+            desired_y = {}
+            for port in ext_ports:
+                if port.id in aligned_y:
+                    desired_y[port.id] = round((aligned_y[port.id] - 20) / 10) * 10
+
+            # ── Фаза 2: При наложении — определить направление сдвига по свободному пространству ──
+            y_groups = defaultdict(list)
+            for port in ext_ports:
+                if port.id in desired_y:
+                    y_groups[desired_y[port.id]].append(port)
+
+            for shared_y, group in y_groups.items():
+                if len(group) > 1:
+                    n = len(group)
+                    group_ids = {p.id for p in group}
+
+                    # Ближайшая занятая позиция ВЫШЕ группы
+                    y_above = self.pad_top
+                    for p in ext_ports:
+                        if p.id in group_ids:
+                            break
+                        if p.id in desired_y:
+                            y_above = max(y_above, desired_y[p.id] + min_spacing)
+
+                    # Доступное пространство вверх
+                    space_above = max(shared_y - y_above, 0)
+
+                    if space_above > 0:
+                        # Приоритет: двигать верхние порты ВВЕРХ, нижний остаётся на месте
+                        # Если места для полного spacing не хватает — уменьшаем шаг
+                        actual_spacing = min(min_spacing, space_above / max(n - 1, 1))
+                        actual_spacing = max(actual_spacing, 40)  # Минимум 40px (высота порта)
+
+                        for i, port in enumerate(group):
+                            offset = (n - 1 - i) * actual_spacing
+                            desired_y[port.id] = round(max(y_above, shared_y - offset) / 10) * 10
+                    else:
+                        # Вверху совсем нет места → двигаем нижние порты ВНИЗ
+                        for i, port in enumerate(group):
+                            desired_y[port.id] = shared_y + i * min_spacing
+
+            # ── Фаза 3: Размещение с гарантией порядка PORT_ORDER и отсутствия наложений ──
+            prev_bottom = self.pad_top
             for port in ext_ports:
                 port.x = round((x_pos - port.width / 2) / 10) * 10
-                
-                if port.id in aligned_y:
-                    # Выравниваем так, чтобы port.ports['in'][1] совпадал с aligned_y
-                    # port.y + 20 = aligned_y -> port.y = aligned_y - 20
-                    port.y = round((aligned_y[port.id] - 20) / 10) * 10
+
+                if port.id in desired_y:
+                    port.y = desired_y[port.id]
                 else:
-                    port.y = round(default_start_y / 10) * 10
-                    default_start_y += 60
-                    
+                    port.y = round(prev_bottom / 10) * 10
+
+                # Гарантия: порт не выше минимально допустимой позиции (pad_top и после предыдущего)
+                if port.y < prev_bottom:
+                    port.y = round(prev_bottom / 10) * 10
+
+                prev_bottom = port.y + min_spacing
                 port.update_ports()
 
     #  Вспомогательные методы
@@ -325,7 +383,7 @@ class TopologyLayoutEngine:
             port_y = anchor.ports['water_out'][1]
             y_pct = (port_y + comp.height / 2 - self.padding) / safe_h
         elif 'water_ht' in conn_type:
-            y_pct = 0.35        # верхняя зона (ТЭН)
+            y_pct = 0.50        # верхняя зона (ТЭН)
         elif 'drain' in conn_type:
             # Компонент слива — ниже якоря, на уровне сливного порта
             if hasattr(anchor, 'ports') and 'drain' in anchor.ports:

@@ -5,15 +5,21 @@
 (controller → UI).
 """
 from dataclasses import dataclass, field
+from enum import Enum
+
+
+class SystemMode(Enum):
+    OFF = "off"
+    AUTO = "auto"
+    MANUAL = "manual"
 
 
 @dataclass(frozen=True)
 class SystemState:
     """Неизменяемый снимок состояния системы."""
-    running: bool = False
+    mode: SystemMode = SystemMode.OFF
     heater_on: bool = False
     valve_open: bool = False
-    debug_mode: bool = False
 
     # Показания датчиков (заполняются адаптером)
     temp_lt: float = 25.0

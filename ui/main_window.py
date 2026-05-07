@@ -8,14 +8,17 @@ from PySide6.QtCore import Qt
 from ui.mnemonic import ChillerMnemonic
 from ui.styles import MAIN_STYLE, STOP_BUTTON_STYLE
 from core.controller import SystemController
+from core.models import SystemMode
+
+from hardware.base import BaseAdapter
 
 class ChillerPanel(QMainWindow):
-    def __init__(self):
+    def __init__(self, adapter: BaseAdapter):
         super().__init__()
         self.setWindowTitle("Интерфейс чиллера")
         self.setMinimumSize(1200, 850)
         
-        self.controller = SystemController(self)
+        self.controller = SystemController(adapter, self)
         
         self.init_ui()
         self.apply_styles()
@@ -339,7 +342,7 @@ class ChillerPanel(QMainWindow):
 
     def _on_state_changed(self, state):
         """Обновляет все виджеты по данным из SystemState."""
-        if state.running:
+        if state.mode == SystemMode.AUTO:
             self.start_btn.setEnabled(False)
             self.stop_btn.setEnabled(True)
             self.status_label.setText("АВТОМАТИКА: В РАБОТЕ")
@@ -360,34 +363,59 @@ class ChillerPanel(QMainWindow):
             self.lbl_level.setText(f"Норма ({int(state.water_level * 100)}%)")
             self.lbl_level.setStyleSheet("font-size: 18px; font-weight: bold; color: #2E7D32;")
         else:
-            self.start_btn.setEnabled(not state.debug_mode)
+            self.start_btn.setEnabled(state.mode != SystemMode.MANUAL)
             self.stop_btn.setEnabled(False)
 
-            if state.debug_mode:
+            if state.mode == SystemMode.MANUAL:
                 self.status_label.setText("РЕЖИМ НАЛАДКИ (РУЧНОЙ)")
                 self.status_label.setStyleSheet("background-color: #FFE0B2; color: #E65100; font-size: 14px; font-weight: bold; padding: 6px; border-radius: 4px;")
+
+                # В ручном режиме отображаем реальное состояние реле из адаптера
+                pump_on = self.adapter.get_relay('pump')
+                comp_on = self.adapter.get_relay('compressor')
+                fan_on = self.adapter.get_relay('fan')
+
+                self.lbl_pump.setText("Насос: ВКЛ" if pump_on else "Насос: ВЫКЛ")
+                self.lbl_pump.setStyleSheet("color: #2E7D32; font-weight: bold; font-size: 13px;" if pump_on else "color: #757575; font-weight: bold; font-size: 13px;")
+
+                self.lbl_comp.setText("Компр.: ВКЛ" if comp_on else "Компр.: ВЫКЛ")
+                self.lbl_comp.setStyleSheet("color: #2E7D32; font-weight: bold; font-size: 13px;" if comp_on else "color: #757575; font-weight: bold; font-size: 13px;")
+
+                self.lbl_heater.setText("ТЭН: НАГРЕВ" if state.heater_on else "ТЭН: ВЫКЛ")
+                self.lbl_heater.setStyleSheet("color: #D32F2F; font-weight: bold; font-size: 13px;" if state.heater_on else "color: #757575; font-weight: bold; font-size: 13px;")
+
+                self.lbl_valve.setText("Байпас: ОТКРЫТ" if state.valve_open else "Байпас: ЗАКРЫТ")
+                self.lbl_valve.setStyleSheet("color: #1565C0; font-weight: bold; font-size: 13px;" if state.valve_open else "color: #757575; font-weight: bold; font-size: 13px;")
+
+                self.lbl_flow_lt.setText(f"{state.flow_lt} л/м")
+                self.lbl_flow_ht.setText(f"{state.flow_ht} л/м")
+                self.lbl_press.setText(f"{state.pressure} бар")
             else:
                 self.status_label.setText("АВТОМАТИКА: ОСТАНОВ")
                 self.status_label.setStyleSheet("background-color: #e0e0e0; color: #555; font-size: 14px; font-weight: bold; padding: 6px; border-radius: 4px;")
 
-            for lbl in [self.lbl_pump, self.lbl_comp, self.lbl_heater, self.lbl_valve]:
-                lbl.setText(lbl.text().split(":")[0] + ": ВЫКЛ")
-                lbl.setStyleSheet("color: #757575; font-weight: bold; font-size: 13px;")
+                for lbl in [self.lbl_pump, self.lbl_comp, self.lbl_heater, self.lbl_valve]:
+                    lbl.setText(lbl.text().split(":")[0] + ": ВЫКЛ")
+                    lbl.setStyleSheet("color: #757575; font-weight: bold; font-size: 13px;")
 
-            self.lbl_flow_lt.setText("0.0 л/м")
-            self.lbl_flow_ht.setText("0.0 л/м")
-            self.lbl_press.setText("0.0 бар")
+                self.lbl_flow_lt.setText("0.0 л/м")
+                self.lbl_flow_ht.setText("0.0 л/м")
+                self.lbl_press.setText("0.0 бар")
 
         # Обновляем мнемосхему
         self.mnemonic.set_states(
-            running=state.running,
+            running=(state.mode == SystemMode.AUTO),
             heater=state.heater_on,
             solenoid=state.valve_open
         )
 
     def _on_debug_toggled(self, checked):
         """Реакция на переключение режима наладки."""
-        self.controller.set_debug_mode(checked)
+        if checked:
+            self.controller.set_mode(SystemMode.MANUAL)
+        else:
+            self.controller.set_mode(SystemMode.OFF)
+            
         for btn in self.man_buttons:
             btn.setEnabled(checked)
             if not checked:
@@ -396,8 +424,11 @@ class ChillerPanel(QMainWindow):
     def _on_manual_relay(self):
         """Реакция на переключение реле в режиме наладки."""
         if self.cb_debug.isChecked():
-            is_run = self.btn_man_pump.isChecked() or self.btn_man_comp.isChecked()
-            self.controller._running = is_run
+            # Запрещаем напрямую менять self.controller._running (DIP/SRP violation)
+            # Просто транслируем состояния кнопок в контроллер
+            self.controller.set_relay("pump", self.btn_man_pump.isChecked())
+            self.controller.set_relay("compressor", self.btn_man_comp.isChecked())
+            self.controller.set_relay("fan", self.btn_man_fan.isChecked())
             self.controller.set_relay("heater", self.btn_man_heater.isChecked())
             self.controller.set_relay("valve", self.btn_man_valve.isChecked())
 

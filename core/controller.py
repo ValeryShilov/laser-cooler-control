@@ -1,11 +1,6 @@
-"""
-Контроллер системы чиллера.
-
-Управляет состояниями (старт/стоп/наладка) и излучает сигналы.
-Не знает ничего про UI-виджеты — общается только через Qt-сигналы.
-"""
 from PySide6.QtCore import QObject, Signal
-from core.models import SystemState
+from core.models import SystemState, SystemMode
+from hardware.base import BaseAdapter
 
 
 class SystemController(QObject):
@@ -13,68 +8,61 @@ class SystemController(QObject):
 
     state_changed = Signal(object)  # Излучает SystemState
 
-    def __init__(self, parent=None):
+    def __init__(self, adapter: BaseAdapter, parent=None):
         super().__init__(parent)
-        self._running = False
-        self._heater = False
-        self._valve = False
-        self._debug_mode = False
+        self.adapter = adapter
+        self.mode = SystemMode.OFF
 
-    # ── Публичный API ──
 
     def start(self):
         """Запуск системы в автоматическом режиме."""
-        self._running = True
-        self._heater = True
-        self._valve = False
+        self.mode = SystemMode.AUTO
+        
+        self.adapter.set_relay('heater', True)
+        self.adapter.set_relay('valve', False)
+        self.adapter.set_relay('pump', True)
         self._emit()
 
     def stop(self):
         """Остановка системы."""
-        self._running = False
-        self._heater = False
-        self._valve = False
+        self.mode = SystemMode.OFF
+        
+        self.adapter.set_relay('heater', False)
+        self.adapter.set_relay('valve', False)
+        self.adapter.set_relay('pump', False)
         self._emit()
 
-    def set_debug_mode(self, enabled: bool):
-        """Включение/выключение режима наладки."""
-        if enabled:
+    def set_mode(self, mode: SystemMode):
+        """Установка режима работы системы."""
+        if mode != SystemMode.AUTO and self.mode == SystemMode.AUTO:
             self.stop()
-        self._debug_mode = enabled
+        self.mode = mode
         self._emit()
 
     def set_relay(self, name: str, state: bool):
-        """Ручное управление реле в режиме наладки."""
-        if name == "heater":
-            self._heater = state
-        elif name == "valve":
-            self._valve = state
+        """Ручное управление реле (только в ручном режиме)."""
+        if self.mode != SystemMode.MANUAL:
+            return  # Игнорируем в других режимах
+            
+        self.adapter.set_relay(name, state)
         self._emit()
-
-    @property
-    def is_running(self) -> bool:
-        return self._running
-
-    @property
-    def debug_mode(self) -> bool:
-        return self._debug_mode
 
     # ── Внутренние методы ──
 
     def _emit(self):
-        """Собирает текущее состояние и излучает сигнал."""
+        """Считывает данные с оборудования, собирает состояние и излучает сигнал."""
+        sensors = self.adapter.read_sensors()
+        
         state = SystemState(
-            running=self._running,
-            heater_on=self._heater,
-            valve_open=self._valve,
-            debug_mode=self._debug_mode,
-            # Данные датчиков будут заполняться адаптером в будущем
-            temp_lt=25.0 if self._running else 25.0,
-            temp_ht=30.0 if self._running else 30.0,
-            temp_ambient=25.2 if self._running else 24.1,
-            flow_lt=14.5 if self._running else 0.0,
-            flow_ht=2.8 if self._running else 0.0,
-            pressure=3.1 if self._running else 0.0,
-            water_level=0.85,
+            mode=self.mode,
+            heater_on=self.adapter.get_relay('heater'),
+            valve_open=self.adapter.get_relay('valve'),
+            temp_lt=sensors.get('temp_lt', 0.0),
+            temp_ht=sensors.get('temp_ht', 0.0),
+            temp_ambient=sensors.get('temp_ambient', 0.0),
+            flow_lt=sensors.get('flow_lt', 0.0),
+            flow_ht=sensors.get('flow_ht', 0.0),
+            pressure=sensors.get('pressure', 0.0),
+            water_level=sensors.get('water_level', 0.0),
         )
         self.state_changed.emit(state)

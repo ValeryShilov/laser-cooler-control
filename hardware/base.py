@@ -27,3 +27,14 @@ class BaseAdapter(ABC):
             name: 'pump', 'compressor', 'heater', 'valve', 'fan'
             state: True = включить, False = выключить
         """
+
+    @abstractmethod
+    def get_relay(self, name: str) -> bool:
+        """Возвращает текущее состояние реле.
+        
+        Args:
+            name: 'pump', 'compressor', 'heater', 'valve', 'fan'
+        
+        Returns:
+            True = включено, False = выключено
+        """

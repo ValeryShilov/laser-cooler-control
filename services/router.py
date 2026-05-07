@@ -47,14 +47,16 @@ class AStarRouter:
             x = p1[0]
             y_start, y_end = min(p1[1], p2[1]), max(p1[1], p2[1])
             for y in range(y_start, y_end + 1, gs):
-                if (x, y) not in exempt and self._is_blocked(x, y):
-                    return False
+                if (x, y) not in exempt:
+                    if self._is_blocked(x, y) or (x, y) in self.drawn_cells:
+                        return False
         else:  # Горизонтальный
             y = p1[1]
             x_start, x_end = min(p1[0], p2[0]), max(p1[0], p2[0])
             for x in range(x_start, x_end + 1, gs):
-                if (x, y) not in exempt and self._is_blocked(x, y):
-                    return False
+                if (x, y) not in exempt:
+                    if self._is_blocked(x, y) or (x, y) in self.drawn_cells:
+                        return False
         return True
 
     def _cleanup_path(self, path):
@@ -277,14 +279,14 @@ class AStarRouter:
                 # Штраф за наложение на существующую трубу
                 overlap_penalty = 0
                 if neighbor in self.drawn_cells and neighbor not in exempt:
-                    overlap_penalty = 200
+                    overlap_penalty = 500
 
                 # Штраф за соседство с трубой (мягкое разнесение)
                 proximity_penalty = 0
                 for pdx, pdy in directions:
                     adj = (neighbor[0] + pdx, neighbor[1] + pdy)
                     if adj in self.drawn_cells and adj not in exempt:
-                        proximity_penalty = 30
+                        proximity_penalty = 80
                         break
 
                 tentative_g = g_score[current] + gs + turn_penalty + overlap_penalty + proximity_penalty
