@@ -17,6 +17,7 @@ class ChillerPanel(QMainWindow):
         super().__init__()
         self.setWindowTitle("Интерфейс чиллера")
         self.setMinimumSize(1200, 850)
+        self.adapter = adapter
         
         self.controller = SystemController(adapter, self)
         
@@ -42,18 +43,27 @@ class ChillerPanel(QMainWindow):
         self.setup_monitoring_tab()
         self.setup_service_tab()
 
+    # ══════════════════════════════════════════
+    #  Вкладка «Мониторинг»
+    # ══════════════════════════════════════════
+
     def setup_monitoring_tab(self):
         tab = QWidget()
         self.tabs.addTab(tab, "Мониторинг (Главная)")
         layout = QVBoxLayout(tab)
         
-        # ВСТРАИВАЕМ МНЕМОСХЕМУ
         self.mnemonic = ChillerMnemonic()
         layout.addWidget(self.mnemonic)
 
         mid_panel = QHBoxLayout()
-        
-        # ТЕМПЕРАТУРЫ
+        mid_panel.addWidget(self._build_temperature_group())
+        mid_panel.addWidget(self._build_hydraulics_group())
+        mid_panel.addWidget(self._build_status_group())
+        mid_panel.addWidget(self._build_control_group())
+        layout.addLayout(mid_panel)
+
+    def _build_temperature_group(self):
+        """Группа виджетов управления температурой."""
         temp_group = QGroupBox("Управление температурой")
         temp_layout = QGridLayout()
         temp_layout.setSpacing(10)
@@ -101,9 +111,10 @@ class ChillerPanel(QMainWindow):
         temp_layout.addWidget(self.lbl_t_amb, 4, 1, Qt.AlignCenter)
         
         temp_group.setLayout(temp_layout)
-        mid_panel.addWidget(temp_group)
+        return temp_group
 
-        # ГИДРАВЛИКА
+    def _build_hydraulics_group(self):
+        """Группа виджетов гидравлики."""
         hydr_group = QGroupBox("Гидравлика")
         hydr_layout = QGridLayout()
         hydr_layout.setSpacing(5)
@@ -129,9 +140,10 @@ class ChillerPanel(QMainWindow):
         hydr_layout.addWidget(self.lbl_level, 3, 1, Qt.AlignRight)
 
         hydr_group.setLayout(hydr_layout)
-        mid_panel.addWidget(hydr_group)
+        return hydr_group
 
-        # СОСТОЯНИЕ АГРЕГАТОВ
+    def _build_status_group(self):
+        """Группа виджетов состояния агрегатов."""
         status_group = QGroupBox("Агрегаты")
         status_layout = QVBoxLayout()
         status_layout.setSpacing(2)
@@ -146,9 +158,10 @@ class ChillerPanel(QMainWindow):
             status_layout.addWidget(lbl)
 
         status_group.setLayout(status_layout)
-        mid_panel.addWidget(status_group)
+        return status_group
 
-        # УПРАВЛЕНИЕ
+    def _build_control_group(self):
+        """Группа виджетов управления (старт/стоп)."""
         ctrl_group = QGroupBox("Управление")
         ctrl_layout = QVBoxLayout()
         
@@ -166,9 +179,11 @@ class ChillerPanel(QMainWindow):
         btn_box.addWidget(self.stop_btn)
         ctrl_layout.addLayout(btn_box)
         ctrl_group.setLayout(ctrl_layout)
-        mid_panel.addWidget(ctrl_group)
+        return ctrl_group
 
-        layout.addLayout(mid_panel)
+    # ══════════════════════════════════════════
+    #  Вкладка «Настройки и наладка»
+    # ══════════════════════════════════════════
 
     def setup_service_tab(self):
         tab = QWidget()
@@ -176,8 +191,20 @@ class ChillerPanel(QMainWindow):
         layout = QHBoxLayout(tab)
         
         col_left = QVBoxLayout()
-        col_right = QVBoxLayout()
+        col_left.addWidget(self._build_setpoint_group())
+        col_left.addWidget(self._build_alarm_group())
+        col_left.addStretch()
 
+        col_right = QVBoxLayout()
+        col_right.addWidget(self._build_pid_group())
+        col_right.addWidget(self._build_manual_group())
+        col_right.addStretch()
+
+        layout.addLayout(col_left)
+        layout.addLayout(col_right)
+
+    def _build_setpoint_group(self):
+        """Группа параметров регулирования температур."""
         sp_group = QGroupBox("Параметры регулирования температур")
         sp_layout = QGridLayout()
         sp_layout.setSpacing(10)
@@ -216,8 +243,10 @@ class ChillerPanel(QMainWindow):
         sp_layout.addWidget(self.sp_alm_low, 4, 3)
 
         sp_group.setLayout(sp_layout)
-        col_left.addWidget(sp_group)
+        return sp_group
 
+    def _build_alarm_group(self):
+        """Группа статуса защит и аварий."""
         alarm_group = QGroupBox("Статус защит и аварий")
         alarm_layout = QVBoxLayout()
         alarm_layout.setSpacing(10)
@@ -250,9 +279,10 @@ class ChillerPanel(QMainWindow):
             self.alarm_indicators.append(indicator)
             
         alarm_group.setLayout(alarm_layout)
-        col_left.addWidget(alarm_group)
-        col_left.addStretch()
+        return alarm_group
 
+    def _build_pid_group(self):
+        """Группа настроек ПИД-регулятора."""
         pid_group = QGroupBox("ПИД-регулятор (ТЭН Оптики)")
         pid_layout = QGridLayout()
         pid_layout.setSpacing(10)
@@ -277,8 +307,10 @@ class ChillerPanel(QMainWindow):
         pid_layout.addWidget(self.pid_d, 3, 1)
 
         pid_group.setLayout(pid_layout)
-        col_right.addWidget(pid_group)
+        return pid_group
 
+    def _build_manual_group(self):
+        """Группа ручного тестирования выходов."""
         man_group = QGroupBox("Ручное тестирование выходов")
         man_layout = QVBoxLayout()
         self.cb_debug = QCheckBox("Включить режим наладки (Блокирует автомат)")
@@ -302,11 +334,11 @@ class ChillerPanel(QMainWindow):
             
         man_layout.addLayout(btn_grid)
         man_group.setLayout(man_layout)
-        col_right.addWidget(man_group)
-        col_right.addStretch()
+        return man_group
 
-        layout.addLayout(col_left)
-        layout.addLayout(col_right)
+    # ══════════════════════════════════════════
+    #  Связи сигналов
+    # ══════════════════════════════════════════
 
     def connect_signals(self):
         self.sp_main_lt.valueChanged.connect(self.sp_lt.setValue)
@@ -336,78 +368,87 @@ class ChillerPanel(QMainWindow):
         self.sp_main_ht.setEnabled(is_manual)
         self.sp_delta.setEnabled(not is_manual)
 
-    # ================================================================
-    #  Реакция на изменение состояния (сигнал от контроллера)
-    # ================================================================
+    # ══════════════════════════════════════════
+    #  Реакция на изменение состояния
+    # ══════════════════════════════════════════
 
     def _on_state_changed(self, state):
-        """Обновляет все виджеты по данным из SystemState."""
+        """Оркестратор обновления UI по данным из SystemState."""
         if state.mode == SystemMode.AUTO:
-            self.start_btn.setEnabled(False)
-            self.stop_btn.setEnabled(True)
-            self.status_label.setText("АВТОМАТИКА: В РАБОТЕ")
-            self.status_label.setStyleSheet("background-color: #C8E6C9; color: #2E7D32; font-size: 14px; font-weight: bold; padding: 6px; border-radius: 4px;")
-
-            self.lbl_pump.setText("Насос: РАБОТА")
-            self.lbl_pump.setStyleSheet("color: #2E7D32; font-weight: bold; font-size: 13px;")
-            self.lbl_comp.setText("Компрессор: РАБОТА")
-            self.lbl_comp.setStyleSheet("color: #1976D2; font-weight: bold; font-size: 13px;")
-            self.lbl_heater.setText("ТЭН: НАГРЕВ" if state.heater_on else "ТЭН: ВЫКЛ")
-            self.lbl_heater.setStyleSheet("color: #D32F2F; font-weight: bold; font-size: 13px;" if state.heater_on else "color: #757575; font-weight: bold; font-size: 13px;")
-            self.lbl_valve.setText("Байпас: ЗАКРЫТ")
-
-            self.lbl_flow_lt.setText(f"{state.flow_lt} л/м")
-            self.lbl_flow_ht.setText(f"{state.flow_ht} л/м")
-            self.lbl_press.setText(f"{state.pressure} бар")
-            self.lbl_t_amb.setText(str(state.temp_ambient))
-            self.lbl_level.setText(f"Норма ({int(state.water_level * 100)}%)")
-            self.lbl_level.setStyleSheet("font-size: 18px; font-weight: bold; color: #2E7D32;")
+            self._update_auto_mode(state)
+        elif state.mode == SystemMode.MANUAL:
+            self._update_manual_mode(state)
         else:
-            self.start_btn.setEnabled(state.mode != SystemMode.MANUAL)
-            self.stop_btn.setEnabled(False)
+            self._update_off_mode(state)
 
-            if state.mode == SystemMode.MANUAL:
-                self.status_label.setText("РЕЖИМ НАЛАДКИ (РУЧНОЙ)")
-                self.status_label.setStyleSheet("background-color: #FFE0B2; color: #E65100; font-size: 14px; font-weight: bold; padding: 6px; border-radius: 4px;")
-
-                # В ручном режиме отображаем реальное состояние реле из адаптера
-                pump_on = self.adapter.get_relay('pump')
-                comp_on = self.adapter.get_relay('compressor')
-                fan_on = self.adapter.get_relay('fan')
-
-                self.lbl_pump.setText("Насос: ВКЛ" if pump_on else "Насос: ВЫКЛ")
-                self.lbl_pump.setStyleSheet("color: #2E7D32; font-weight: bold; font-size: 13px;" if pump_on else "color: #757575; font-weight: bold; font-size: 13px;")
-
-                self.lbl_comp.setText("Компр.: ВКЛ" if comp_on else "Компр.: ВЫКЛ")
-                self.lbl_comp.setStyleSheet("color: #2E7D32; font-weight: bold; font-size: 13px;" if comp_on else "color: #757575; font-weight: bold; font-size: 13px;")
-
-                self.lbl_heater.setText("ТЭН: НАГРЕВ" if state.heater_on else "ТЭН: ВЫКЛ")
-                self.lbl_heater.setStyleSheet("color: #D32F2F; font-weight: bold; font-size: 13px;" if state.heater_on else "color: #757575; font-weight: bold; font-size: 13px;")
-
-                self.lbl_valve.setText("Байпас: ОТКРЫТ" if state.valve_open else "Байпас: ЗАКРЫТ")
-                self.lbl_valve.setStyleSheet("color: #1565C0; font-weight: bold; font-size: 13px;" if state.valve_open else "color: #757575; font-weight: bold; font-size: 13px;")
-
-                self.lbl_flow_lt.setText(f"{state.flow_lt} л/м")
-                self.lbl_flow_ht.setText(f"{state.flow_ht} л/м")
-                self.lbl_press.setText(f"{state.pressure} бар")
-            else:
-                self.status_label.setText("АВТОМАТИКА: ОСТАНОВ")
-                self.status_label.setStyleSheet("background-color: #e0e0e0; color: #555; font-size: 14px; font-weight: bold; padding: 6px; border-radius: 4px;")
-
-                for lbl in [self.lbl_pump, self.lbl_comp, self.lbl_heater, self.lbl_valve]:
-                    lbl.setText(lbl.text().split(":")[0] + ": ВЫКЛ")
-                    lbl.setStyleSheet("color: #757575; font-weight: bold; font-size: 13px;")
-
-                self.lbl_flow_lt.setText("0.0 л/м")
-                self.lbl_flow_ht.setText("0.0 л/м")
-                self.lbl_press.setText("0.0 бар")
-
-        # Обновляем мнемосхему
         self.mnemonic.set_states(
             running=(state.mode == SystemMode.AUTO),
             heater=state.heater_on,
             solenoid=state.valve_open
         )
+
+    def _update_auto_mode(self, state):
+        """Обновляет виджеты для автоматического режима."""
+        self.start_btn.setEnabled(False)
+        self.stop_btn.setEnabled(True)
+        self.status_label.setText("АВТОМАТИКА: В РАБОТЕ")
+        self.status_label.setStyleSheet("background-color: #C8E6C9; color: #2E7D32; font-size: 14px; font-weight: bold; padding: 6px; border-radius: 4px;")
+
+        self.lbl_pump.setText("Насос: РАБОТА")
+        self.lbl_pump.setStyleSheet("color: #2E7D32; font-weight: bold; font-size: 13px;")
+        self.lbl_comp.setText("Компрессор: РАБОТА")
+        self.lbl_comp.setStyleSheet("color: #1976D2; font-weight: bold; font-size: 13px;")
+        self.lbl_heater.setText("ТЭН: НАГРЕВ" if state.heater_on else "ТЭН: ВЫКЛ")
+        self.lbl_heater.setStyleSheet("color: #D32F2F; font-weight: bold; font-size: 13px;" if state.heater_on else "color: #757575; font-weight: bold; font-size: 13px;")
+        self.lbl_valve.setText("Байпас: ЗАКРЫТ")
+
+        self.lbl_flow_lt.setText(f"{state.flow_lt} л/м")
+        self.lbl_flow_ht.setText(f"{state.flow_ht} л/м")
+        self.lbl_press.setText(f"{state.pressure} бар")
+        self.lbl_t_amb.setText(str(state.temp_ambient))
+        self.lbl_level.setText(f"Норма ({int(state.water_level * 100)}%)")
+        self.lbl_level.setStyleSheet("font-size: 18px; font-weight: bold; color: #2E7D32;")
+
+    def _update_manual_mode(self, state):
+        """Обновляет виджеты для ручного режима наладки."""
+        self.start_btn.setEnabled(False)
+        self.stop_btn.setEnabled(False)
+        self.status_label.setText("РЕЖИМ НАЛАДКИ (РУЧНОЙ)")
+        self.status_label.setStyleSheet("background-color: #FFE0B2; color: #E65100; font-size: 14px; font-weight: bold; padding: 6px; border-radius: 4px;")
+
+        pump_on = self.adapter.get_relay('pump')
+        comp_on = self.adapter.get_relay('compressor')
+
+        self.lbl_pump.setText("Насос: ВКЛ" if pump_on else "Насос: ВЫКЛ")
+        self.lbl_pump.setStyleSheet("color: #2E7D32; font-weight: bold; font-size: 13px;" if pump_on else "color: #757575; font-weight: bold; font-size: 13px;")
+
+        self.lbl_comp.setText("Компр.: ВКЛ" if comp_on else "Компр.: ВЫКЛ")
+        self.lbl_comp.setStyleSheet("color: #2E7D32; font-weight: bold; font-size: 13px;" if comp_on else "color: #757575; font-weight: bold; font-size: 13px;")
+
+        self.lbl_heater.setText("ТЭН: НАГРЕВ" if state.heater_on else "ТЭН: ВЫКЛ")
+        self.lbl_heater.setStyleSheet("color: #D32F2F; font-weight: bold; font-size: 13px;" if state.heater_on else "color: #757575; font-weight: bold; font-size: 13px;")
+
+        self.lbl_valve.setText("Байпас: ОТКРЫТ" if state.valve_open else "Байпас: ЗАКРЫТ")
+        self.lbl_valve.setStyleSheet("color: #1565C0; font-weight: bold; font-size: 13px;" if state.valve_open else "color: #757575; font-weight: bold; font-size: 13px;")
+
+        self.lbl_flow_lt.setText(f"{state.flow_lt} л/м")
+        self.lbl_flow_ht.setText(f"{state.flow_ht} л/м")
+        self.lbl_press.setText(f"{state.pressure} бар")
+
+    def _update_off_mode(self, state):
+        """Обновляет виджеты для режима останова."""
+        self.start_btn.setEnabled(True)
+        self.stop_btn.setEnabled(False)
+        self.status_label.setText("АВТОМАТИКА: ОСТАНОВ")
+        self.status_label.setStyleSheet("background-color: #e0e0e0; color: #555; font-size: 14px; font-weight: bold; padding: 6px; border-radius: 4px;")
+
+        for lbl in [self.lbl_pump, self.lbl_comp, self.lbl_heater, self.lbl_valve]:
+            lbl.setText(lbl.text().split(":")[0] + ": ВЫКЛ")
+            lbl.setStyleSheet("color: #757575; font-weight: bold; font-size: 13px;")
+
+        self.lbl_flow_lt.setText("0.0 л/м")
+        self.lbl_flow_ht.setText("0.0 л/м")
+        self.lbl_press.setText("0.0 бар")
 
     def _on_debug_toggled(self, checked):
         """Реакция на переключение режима наладки."""
@@ -424,8 +465,6 @@ class ChillerPanel(QMainWindow):
     def _on_manual_relay(self):
         """Реакция на переключение реле в режиме наладки."""
         if self.cb_debug.isChecked():
-            # Запрещаем напрямую менять self.controller._running (DIP/SRP violation)
-            # Просто транслируем состояния кнопок в контроллер
             self.controller.set_relay("pump", self.btn_man_pump.isChecked())
             self.controller.set_relay("compressor", self.btn_man_comp.isChecked())
             self.controller.set_relay("fan", self.btn_man_fan.isChecked())

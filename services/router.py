@@ -1,5 +1,6 @@
 import heapq
 
+
 class AStarRouter:
     def __init__(self, width, height, grid_size=10):
         self.width = width
@@ -35,7 +36,7 @@ class AStarRouter:
 
     def _line_clear(self, p1, p2, exempt=None):
         """Проверяет, свободен ли ортогональный отрезок от препятствий.
-        
+
         exempt — множество точек, освобождённых от проверки (порты компонентов).
         """
         if p1[0] != p2[0] and p1[1] != p2[1]:
@@ -66,7 +67,7 @@ class AStarRouter:
         for i in range(1, len(path)):
             if path[i] != res[-1]: res.append(path[i])
         if len(res) < 2: return res
-        
+
         final = [res[0]]
         for i in range(1, len(res)-1):
             p1, p2, p3 = final[-1], res[i], res[i+1]
@@ -76,25 +77,19 @@ class AStarRouter:
         final.append(res[-1])
         return final
 
+    # ── Сглаживание пути ──
+
     def _smooth_path(self, path, exempt=None):
-        """
-        Пост-обработка: убирает лишние повороты.
-        
-        1. Агрессивное сглаживание: пытается соединить далёкие точки напрямую
-           (пропуская промежуточные) через L-образный маршрут.
-        2. Тройное сглаживание: для каждой тройки последовательных точек
-           проверяет, можно ли заменить на более прямой маршрут.
-        3. Финальная очистка коллинеарных точек.
-        
-        exempt — множество точек (портов), освобождённых от проверки obstacles.
-        """
+        """Оркестратор пост-обработки: убирает лишние повороты."""
         if len(path) < 3:
             return path
-        if exempt is None:
-            exempt = set()
-        
-        # === Фаза 1: Агрессивное сглаживание (пропуск нескольких точек) ===
-        # Пробуем соединить point[i] с point[i+k] для k=len..3, убирая промежуточные
+        exempt = exempt or set()
+        path = self._smooth_aggressive(path, exempt)
+        path = self._smooth_triples(path, exempt)
+        return self._cleanup_path(path)
+
+    def _smooth_aggressive(self, path, exempt):
+        """Фаза 1: Агрессивное сглаживание — пропуск промежуточных точек."""
         changed = True
         max_passes = 3
         while changed and max_passes > 0:
@@ -103,48 +98,42 @@ class AStarRouter:
             new_path = [path[0]]
             i = 0
             while i < len(path) - 1:
-                # Пробуем пропустить максимум точек — от самого далёкого к ближайшему
-                best_j = None
-                best_mid = None
-                for j in range(len(path) - 1, i + 1, -1):
-                    pa = path[i]
-                    pb = path[j]
-                    
-                    # Прямая линия?
-                    if (pa[0] == pb[0] or pa[1] == pb[1]) and self._line_clear(pa, pb, exempt):
-                        best_j = j
-                        best_mid = None
-                        break
-                    
-                    # L-образный маршрут?
-                    mid_h = (pb[0], pa[1])
-                    mid_v = (pa[0], pb[1])
-                    for mid in [mid_h, mid_v]:
-                        if mid == pa or mid == pb:
-                            continue
-                        if self._line_clear(pa, mid, exempt) and self._line_clear(mid, pb, exempt):
-                            best_j = j
-                            best_mid = mid
-                            break
-                    if best_j is not None:
-                        break
-                
+                best_j, best_mid = self._find_shortcut(path, i, exempt)
+
                 if best_j is not None and best_j > i + 1:
-                    # Нашли сокращение — пропускаем промежуточные точки
                     if best_mid is not None:
                         new_path.append(best_mid)
                     new_path.append(path[best_j])
                     i = best_j
                     changed = True
                 else:
-                    # Не нашли — оставляем следующую точку как есть
                     i += 1
                     if i < len(path):
                         new_path.append(path[i])
-            
+
             path = new_path
-        
-        # === Фаза 2: Тройное сглаживание (L-shape на тройках) ===
+        return path
+
+    def _find_shortcut(self, path, i, exempt):
+        """Ищет самый далёкий j > i+1, до которого можно сократить путь."""
+        for j in range(len(path) - 1, i + 1, -1):
+            pa = path[i]
+            pb = path[j]
+
+            # Прямая линия?
+            if (pa[0] == pb[0] or pa[1] == pb[1]) and self._line_clear(pa, pb, exempt):
+                return j, None
+
+            # L-образный маршрут?
+            for mid in [(pb[0], pa[1]), (pa[0], pb[1])]:
+                if mid == pa or mid == pb:
+                    continue
+                if self._line_clear(pa, mid, exempt) and self._line_clear(mid, pb, exempt):
+                    return j, mid
+        return None, None
+
+    def _smooth_triples(self, path, exempt):
+        """Фаза 2: Тройное сглаживание — L-shape на тройках."""
         changed = True
         max_passes = 3
         while changed and max_passes > 0:
@@ -154,25 +143,20 @@ class AStarRouter:
             i = 0
             while i < len(path) - 2:
                 p1 = path[i]
-                p3 = path[i + 2]
                 p2 = path[i + 1]
-                
-                # Если p1→p3 уже прямая линия (ортогональная и свободная), пропускаем p2
+                p3 = path[i + 2]
+
+                # Прямая линия p1→p3?
                 if (p1[0] == p3[0] or p1[1] == p3[1]) and self._line_clear(p1, p3, exempt):
                     new_path.append(p3)
                     i += 2
                     changed = True
                     continue
-                
-                # Пробуем L-образный маршрут с одним поворотом
-                mid_h = (p3[0], p1[1])
-                mid_v = (p1[0], p3[1])
-                
+
+                # L-образная замена
                 replaced = False
-                for mid in [mid_h, mid_v]:
-                    if mid == p2:
-                        continue  # То же самое — пропускаем
-                    if mid == p1 or mid == p3:
+                for mid in [(p3[0], p1[1]), (p1[0], p3[1])]:
+                    if mid == p2 or mid == p1 or mid == p3:
                         continue
                     if self._line_clear(p1, mid, exempt) and self._line_clear(mid, p3, exempt):
                         new_path.append(mid)
@@ -181,48 +165,115 @@ class AStarRouter:
                         changed = True
                         replaced = True
                         break
-                
+
                 if not replaced:
                     new_path.append(p2)
                     i += 1
-            
-            # Добавляем оставшиеся точки
+
             while i < len(path):
                 if not new_path or path[i] != new_path[-1]:
                     new_path.append(path[i])
                 i += 1
-            
+
             path = new_path
-        
-        # === Фаза 3: Финальная очистка коллинеарных точек ===
-        path = self._cleanup_path(path)
-        
         return path
 
-    def find_path(self, exact_start, exact_end, safe_start, safe_end, waypoints=None):
+    # ── Поиск пути ──
+
+    def find_path(self, exact_start, exact_end, safe_start, safe_end,
+                   waypoints=None, return_journal=False):
+        """Оркестратор: строит маршрут от exact_start до exact_end.
+
+        Args:
+            return_journal: если True, возвращает (path, journal).
+        """
+        journal = []
+
+        grid_points = self._build_waypoint_chain(safe_start, safe_end, waypoints)
+        journal.append({
+            "step": "build_waypoints",
+            "context": {},
+            "input": {"safe_start": safe_start, "safe_end": safe_end,
+                      "waypoints": waypoints},
+            "output": {"chain": grid_points, "segments": len(grid_points) - 1},
+            "decision": None,
+        })
+
+        raw_path = self._route_through_points(grid_points)
+        if not raw_path:
+            journal.append({
+                "step": "route_segments",
+                "context": {},
+                "input": {"segments": len(grid_points) - 1},
+                "output": {"raw_path_length": 0},
+                "decision": {"result": "no_path_found"},
+            })
+            if return_journal:
+                return [], journal
+            return []
+
+        journal.append({
+            "step": "route_segments",
+            "context": {},
+            "input": {"segments": len(grid_points) - 1},
+            "output": {"raw_path_length": len(raw_path)},
+            "decision": None,
+        })
+
+        full_path = [exact_start] + raw_path + [exact_end]
+        clean_path = self._cleanup_path(full_path)
+        exempt = self._build_exempt_set(exact_start, exact_end, safe_start, safe_end)
+        smooth_path = self._smooth_path(clean_path, exempt)
+
+        journal.append({
+            "step": "smooth_path",
+            "context": {},
+            "input": {"clean_path_points": len(clean_path)},
+            "output": {"smooth_path_points": len(smooth_path)},
+            "decision": {"points_removed": len(clean_path) - len(smooth_path)},
+        })
+
+        self.register_path(smooth_path)
+
+        journal.append({
+            "step": "final_path",
+            "context": {},
+            "input": {"exact_start": exact_start, "exact_end": exact_end},
+            "output": {"path": smooth_path, "total_points": len(smooth_path)},
+            "decision": None,
+        })
+
+        if return_journal:
+            return smooth_path, journal
+        return smooth_path
+
+    def _build_waypoint_chain(self, safe_start, safe_end, waypoints):
+        """Подготавливает цепочку промежуточных точек, привязанных к сетке."""
         points = [safe_start]
         if waypoints:
+            gs = self.grid_size
             for wp in waypoints:
-                points.append((round(wp[0]/self.grid_size)*self.grid_size, round(wp[1]/self.grid_size)*self.grid_size))
+                points.append((round(wp[0] / gs) * gs, round(wp[1] / gs) * gs))
         points.append(safe_end)
+        return points
 
+    def _route_through_points(self, points):
+        """Последовательный A* по цепочке промежуточных точек."""
         full_path = []
         for i in range(len(points) - 1):
-            segment = self._astar(points[i], points[i+1])
-            if not segment: return [] 
+            segment = self._astar(points[i], points[i + 1])
+            if not segment:
+                return []
             if full_path:
                 full_path.extend(segment[1:])
             else:
                 full_path.extend(segment)
-                
-        raw_path = [exact_start] + full_path + [exact_end]
-        clean_path = self._cleanup_path(raw_path)
-        
-        # Точки портов и escape-сегменты освобождены от проверки obstacles.
-        # Это позволяет _smooth_path оптимизировать через зону padding рядом с портами.
+        return full_path
+
+    def _build_exempt_set(self, exact_start, exact_end, safe_start, safe_end):
+        """Строит множество точек, освобождённых от проверки препятствий."""
         exempt = {exact_start, exact_end, safe_start, safe_end}
         gs = self.grid_size
-        # Добавляем все промежуточные точки escape-сегментов в exempt
         for seg_start, seg_end in [(exact_start, safe_start), (safe_end, exact_end)]:
             dx = seg_end[0] - seg_start[0]
             dy = seg_end[1] - seg_start[1]
@@ -232,12 +283,9 @@ class AStarRouter:
                     ex = seg_start[0] + (dx * s // steps)
                     ey = seg_start[1] + (dy * s // steps)
                     exempt.add((ex, ey))
-        
-        smooth_path = self._smooth_path(clean_path, exempt)
-        
-        # Сохраняем готовую трубу в память, чтобы следующие трубы её обходили
-        self.register_path(smooth_path)
-        return smooth_path
+        return exempt
+
+    # ── Ядро A* ──
 
     def _astar(self, start, end):
         queue = [(0, start)]
@@ -246,9 +294,6 @@ class AStarRouter:
         gs = self.grid_size
         directions = [(0, gs), (0, -gs), (gs, 0), (-gs, 0)]
 
-        # Освобождаем start и end от проверки препятствий:
-        # это позволяет трубам выходить из портов, расположенных
-        # вплотную к компоненту (внутри зоны obstacle-padding).
         exempt = {start, end}
 
         max_iter = 50000
@@ -265,7 +310,6 @@ class AStarRouter:
             for dx, dy in directions:
                 neighbor = (current[0] + dx, current[1] + dy)
 
-                # Проверка препятствий: start и end свободны от проверки
                 if neighbor not in exempt and self._is_blocked(neighbor[0], neighbor[1]):
                     continue
 
@@ -294,6 +338,6 @@ class AStarRouter:
                     came_from[neighbor] = current
                     g_score[neighbor] = tentative_g
                     h = abs(end[0] - neighbor[0]) + abs(end[1] - neighbor[1])
-                    f_score = tentative_g + h * 1.001  # Tie-breaking ускоряет поиск
+                    f_score = tentative_g + h * 1.001
                     heapq.heappush(queue, (f_score, neighbor))
         return []

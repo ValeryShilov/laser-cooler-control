@@ -14,10 +14,10 @@ from services.label_placer import LabelPlacer
 def get_escape_point(comp_data, port_pos, is_external=False):
     """
     Определяет направление «убегания» трубы от порта.
-    
+
     Работает с snapshot-словарём компонента (потокобезопасно).
     Обе точки (exact и safe) привязаны к сетке для ортогональности.
-    
+
     Args:
         comp_data: dict с ключами x, y, width, height
         port_pos: (x, y) координаты порта
@@ -63,29 +63,68 @@ _TYPE_PRIORITY = {
 }
 
 
-def compute_routes_and_labels(comp_snapshot, connections, width, height):
+def compute_routes_and_labels(comp_snapshot, connections, width, height,
+                               return_journal=False):
     """
-    Синхронный расчёт маршрутов и надписей.
-    
-    Может вызываться как из фонового потока (SchemeWorker),
-    так и напрямую для первоначальной отрисовки.
-    
+    Оркестратор: синхронный расчёт маршрутов и надписей.
+
     Args:
         comp_snapshot: dict {id: {x, y, width, height, ports, id, class_name}}
         connections: list of connection dicts
         width, height: размеры области
-    
+        return_journal: если True, возвращает (RenderData, journal).
+
     Returns:
         RenderData с маршрутами труб и позициями надписей
     """
-    router = AStarRouter(width=width, height=height, grid_size=10)
+    journal = []
 
-    # Добавляем препятствия (без внешних портов)
+    router = _create_router(comp_snapshot, width, height)
+    obstacle_count = len(router.obstacles)
+    journal.append({
+        "step": "create_router",
+        "context": {},
+        "input": {"comp_count": len(comp_snapshot), "width": width, "height": height},
+        "output": {"obstacles": obstacle_count},
+        "decision": None,
+    })
+
+    pipe_paths = _route_all_pipes(router, comp_snapshot, connections)
+    journal.append({
+        "step": "route_pipes",
+        "context": {},
+        "input": {"connections_count": len(connections)},
+        "output": {"routed_pipes": len(pipe_paths),
+                   "pipe_types": [t for _, t in pipe_paths]},
+        "decision": None,
+    })
+
+    label_positions = _compute_labels(comp_snapshot, router.drawn_cells, width, height)
+    journal.append({
+        "step": "compute_labels",
+        "context": {},
+        "input": {"drawn_cells_count": len(router.drawn_cells)},
+        "output": {"labels": dict(label_positions)},
+        "decision": None,
+    })
+
+    result = RenderData(pipe_paths=pipe_paths, label_positions=label_positions)
+    if return_journal:
+        return result, journal
+    return result
+
+
+def _create_router(comp_snapshot, width, height):
+    """Создаёт роутер и добавляет компоненты как препятствия."""
+    router = AStarRouter(width=width, height=height, grid_size=10)
     for cid, data in comp_snapshot.items():
         if data['class_name'] != 'ExternalPort':
             router.add_obstacle(data['x'], data['y'], data['width'], data['height'], padding=10)
+    return router
 
-    # Маршрутизация
+
+def _route_all_pipes(router, comp_snapshot, connections):
+    """Маршрутизация всех труб в порядке приоритета типов."""
     sorted_conns = sorted(connections, key=lambda c: _TYPE_PRIORITY.get(c['type'], 5))
     pipe_paths = []
 
@@ -93,41 +132,48 @@ def compute_routes_and_labels(comp_snapshot, connections, width, height):
         if conn['type'] == 'mechanical':
             continue
 
-        src_data = comp_snapshot.get(conn['source_id'])
-        tgt_data = comp_snapshot.get(conn['target_id'])
-        if not src_data or not tgt_data:
-            continue
-
-        src_port_name = conn.get('source_port', 'out')
-        tgt_port_name = conn.get('target_port', 'in')
-
-        start_pos = src_data['ports'].get(src_port_name, (src_data['x'], src_data['y']))
-        end_pos   = tgt_data['ports'].get(tgt_port_name, (tgt_data['x'], tgt_data['y']))
-
-        is_src_ext = 'port_' in src_data['id']
-        is_tgt_ext = 'port_' in tgt_data['id']
-
-        exact_start, safe_start = get_escape_point(src_data, start_pos, is_src_ext)
-        exact_end,   safe_end   = get_escape_point(tgt_data, end_pos,   is_tgt_ext)
-
-        path_pts = router.find_path(exact_start, exact_end, safe_start, safe_end, waypoints=[])
-
+        path_pts = _route_single_pipe(router, comp_snapshot, conn)
         if path_pts:
             pipe_paths.append((path_pts, conn['type']))
 
-    # Размещение надписей
-    placer = LabelPlacer(comp_snapshot, router.drawn_cells, width, height)
-    label_positions = placer.compute()
+    return pipe_paths
 
-    return RenderData(pipe_paths=pipe_paths, label_positions=label_positions)
+
+def _route_single_pipe(router, comp_snapshot, conn):
+    """Маршрутизация одной трубы между двумя компонентами."""
+    src_data = comp_snapshot.get(conn['source_id'])
+    tgt_data = comp_snapshot.get(conn['target_id'])
+    if not src_data or not tgt_data:
+        return None
+
+    src_port_name = conn.get('source_port', 'out')
+    tgt_port_name = conn.get('target_port', 'in')
+
+    start_pos = src_data['ports'].get(src_port_name, (src_data['x'], src_data['y']))
+    end_pos   = tgt_data['ports'].get(tgt_port_name, (tgt_data['x'], tgt_data['y']))
+
+    is_src_ext = 'port_' in src_data['id']
+    is_tgt_ext = 'port_' in tgt_data['id']
+
+    exact_start, safe_start = get_escape_point(src_data, start_pos, is_src_ext)
+    exact_end,   safe_end   = get_escape_point(tgt_data, end_pos,   is_tgt_ext)
+
+    path_pts = router.find_path(exact_start, exact_end, safe_start, safe_end, waypoints=[])
+    return path_pts if path_pts else None
+
+
+def _compute_labels(comp_snapshot, drawn_cells, width, height):
+    """Вычисляет оптимальные позиции надписей."""
+    placer = LabelPlacer(comp_snapshot, drawn_cells, width, height)
+    return placer.compute()
 
 
 def make_comp_snapshot(components):
     """Создаёт потокобезопасный снимок позиций компонентов.
-    
+
     Args:
         components: dict {id: BaseEquipment}
-    
+
     Returns:
         dict {id: {x, y, width, height, ports, id, class_name}}
     """

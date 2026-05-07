@@ -1,7 +1,7 @@
 {
-  "timestamp": "2026-05-07T16:47:24.491186",
-  "total_tests": 30,
-  "passed": 30,
+  "timestamp": "2026-05-07T18:55:01.708156",
+  "total_tests": 46,
+  "passed": 46,
   "failed": 0,
   "tests": [
     {
@@ -357,6 +357,125 @@
       ]
     },
     {
+      "test_id": "tests/services/test_label_placer.py::test_label_placer_init_occupied_zones",
+      "test_name": "test_label_placer_init_occupied_zones",
+      "status": "PASSED",
+      "checks": [
+        {
+          "description": "Количество зон",
+          "expected": "2",
+          "actual": "2",
+          "passed": true
+        },
+        {
+          "description": "Тип элемента",
+          "expected": "'QRectF'",
+          "actual": "'QRectF'",
+          "passed": true
+        }
+      ]
+    },
+    {
+      "test_id": "tests/services/test_label_placer.py::test_label_placer_build_candidate_areas",
+      "test_name": "test_label_placer_build_candidate_areas",
+      "status": "PASSED",
+      "checks": [
+        {
+          "description": "Количество слотов",
+          "expected": "4",
+          "actual": "4",
+          "passed": true
+        },
+        {
+          "description": "Наличие bottom",
+          "expected": "is True",
+          "actual": "True",
+          "passed": true
+        },
+        {
+          "description": "Наличие top",
+          "expected": "is True",
+          "actual": "True",
+          "passed": true
+        },
+        {
+          "description": "Наличие left",
+          "expected": "is True",
+          "actual": "True",
+          "passed": true
+        },
+        {
+          "description": "Наличие right",
+          "expected": "is True",
+          "actual": "True",
+          "passed": true
+        },
+        {
+          "description": "bottom.top > comp.bottom",
+          "expected": "162 ± 1",
+          "actual": "162.0",
+          "passed": true
+        }
+      ]
+    },
+    {
+      "test_id": "tests/services/test_label_placer.py::test_label_placer_score_slot_empty",
+      "test_name": "test_label_placer_score_slot_empty",
+      "status": "PASSED",
+      "checks": [
+        {
+          "description": "bottom score (пустое поле)",
+          "expected": "0",
+          "actual": "0",
+          "passed": true
+        },
+        {
+          "description": "top score (пустое поле)",
+          "expected": "1",
+          "actual": "1",
+          "passed": true
+        }
+      ]
+    },
+    {
+      "test_id": "tests/services/test_label_placer.py::test_label_placer_score_slot_with_pipes",
+      "test_name": "test_label_placer_score_slot_with_pipes",
+      "status": "PASSED",
+      "checks": [
+        {
+          "description": "bottom score > top score (трубы внизу)",
+          "expected": "> 1",
+          "actual": "1950",
+          "passed": true
+        }
+      ]
+    },
+    {
+      "test_id": "tests/services/test_label_placer.py::test_label_placer_select_best_slot",
+      "test_name": "test_label_placer_select_best_slot",
+      "status": "PASSED",
+      "checks": [
+        {
+          "description": "Лучший слот (пустое поле)",
+          "expected": "'bottom'",
+          "actual": "'bottom'",
+          "passed": true
+        },
+        {
+          "description": "Scores содержит 4 слота",
+          "expected": "4",
+          "actual": "4",
+          "passed": true
+        },
+        {
+          "description": "bottom score минимален",
+          "expected": "0",
+          "actual": "0",
+          "passed": true
+        }
+      ]
+    },
+    {
       "test_id": "tests/services/test_label_placer.py::test_label_placer_basic",
       "test_name": "test_label_placer_basic",
       "status": "PASSED",
@@ -416,6 +535,122 @@
           "description": "Надпись насоса (bottom+top+right заняты)",
           "expected": "'left'",
           "actual": "'left'",
+          "passed": true
+        }
+      ]
+    },
+    {
+      "test_id": "tests/services/test_label_placer.py::test_label_placer_journal",
+      "test_name": "test_label_placer_journal",
+      "status": "PASSED",
+      "checks": [
+        {
+          "description": "Журнал не пустой",
+          "expected": "> 0",
+          "actual": "3",
+          "passed": true
+        },
+        {
+          "description": "Первый шаг",
+          "expected": "'init_zones'",
+          "actual": "'init_zones'",
+          "passed": true
+        },
+        {
+          "description": "init_zones.input.comp_count",
+          "expected": "3",
+          "actual": "3",
+          "passed": true
+        },
+        {
+          "description": "init_zones.output.occupied_rects_count",
+          "expected": "3",
+          "actual": "3",
+          "passed": true
+        },
+        {
+          "description": "Количество select_slot записей",
+          "expected": "2",
+          "actual": "2",
+          "passed": true
+        },
+        {
+          "description": "tank entry имеет scores",
+          "expected": "is True",
+          "actual": "True",
+          "passed": true
+        },
+        {
+          "description": "tank scores имеет 4 слота",
+          "expected": "4",
+          "actual": "4",
+          "passed": true
+        },
+        {
+          "description": "tank decision.chosen",
+          "expected": "'bottom'",
+          "actual": "'bottom'",
+          "passed": true
+        },
+        {
+          "description": "Выбранный слот = минимальный score",
+          "expected": "0",
+          "actual": "0",
+          "passed": true
+        },
+        {
+          "description": "Результат с журналом = результат без",
+          "expected": "{'tank': 'bottom', 'pump': 'bottom'}",
+          "actual": "{'tank': 'bottom', 'pump': 'bottom'}",
+          "passed": true
+        }
+      ]
+    },
+    {
+      "test_id": "tests/services/test_label_placer.py::test_label_placer_regression",
+      "test_name": "test_label_placer_regression",
+      "status": "PASSED",
+      "checks": [
+        {
+          "description": "Результат совпадает с эталоном",
+          "expected": "{'tank': 'bottom', 'pump': 'bottom'}",
+          "actual": "{'tank': 'bottom', 'pump': 'bottom'}",
+          "passed": true
+        },
+        {
+          "description": "Количество записей журнала",
+          "expected": "3",
+          "actual": "3",
+          "passed": true
+        },
+        {
+          "description": "Шаг [0] совпадает",
+          "expected": "'init_zones'",
+          "actual": "'init_zones'",
+          "passed": true
+        },
+        {
+          "description": "Шаг [1] совпадает",
+          "expected": "'select_slot'",
+          "actual": "'select_slot'",
+          "passed": true
+        },
+        {
+          "description": "Решение [1] совпадает",
+          "expected": "'bottom'",
+          "actual": "'bottom'",
+          "passed": true
+        },
+        {
+          "description": "Шаг [2] совпадает",
+          "expected": "'select_slot'",
+          "actual": "'select_slot'",
+          "passed": true
+        },
+        {
+          "description": "Решение [2] совпадает",
+          "expected": "'bottom'",
+          "actual": "'bottom'",
           "passed": true
         }
       ]
@@ -650,32 +885,406 @@
       ]
     },
     {
+      "test_id": "tests/services/test_layout.py::test_layout_journal",
+      "test_name": "test_layout_journal",
+      "status": "PASSED",
+      "checks": [
+        {
+          "description": "separate_components в журнале",
+          "expected": "содержится в ['separate_components', 'build_adjacency', 'place_freon_cycle', 'place_mechanical', 'place_bypass', 'place_water_circuit', 'place_remaining', 'place_external_ports']",
+          "actual": "'separate_components'",
+          "passed": true
+        },
+        {
+          "description": "build_adjacency в журнале",
+          "expected": "содержится в ['separate_components', 'build_adjacency', 'place_freon_cycle', 'place_mechanical', 'place_bypass', 'place_water_circuit', 'place_remaining', 'place_external_ports']",
+          "actual": "'build_adjacency'",
+          "passed": true
+        },
+        {
+          "description": "place_freon_cycle в журнале",
+          "expected": "содержится в ['separate_components', 'build_adjacency', 'place_freon_cycle', 'place_mechanical', 'place_bypass', 'place_water_circuit', 'place_remaining', 'place_external_ports']",
+          "actual": "'place_freon_cycle'",
+          "passed": true
+        },
+        {
+          "description": "place_mechanical в журнале",
+          "expected": "содержится в ['separate_components', 'build_adjacency', 'place_freon_cycle', 'place_mechanical', 'place_bypass', 'place_water_circuit', 'place_remaining', 'place_external_ports']",
+          "actual": "'place_mechanical'",
+          "passed": true
+        },
+        {
+          "description": "place_bypass в журнале",
+          "expected": "содержится в ['separate_components', 'build_adjacency', 'place_freon_cycle', 'place_mechanical', 'place_bypass', 'place_water_circuit', 'place_remaining', 'place_external_ports']",
+          "actual": "'place_bypass'",
+          "passed": true
+        },
+        {
+          "description": "place_water_circuit в журнале",
+          "expected": "содержится в ['separate_components', 'build_adjacency', 'place_freon_cycle', 'place_mechanical', 'place_bypass', 'place_water_circuit', 'place_remaining', 'place_external_ports']",
+          "actual": "'place_water_circuit'",
+          "passed": true
+        },
+        {
+          "description": "place_external_ports в журнале",
+          "expected": "содержится в ['separate_components', 'build_adjacency', 'place_freon_cycle', 'place_mechanical', 'place_bypass', 'place_water_circuit', 'place_remaining', 'place_external_ports']",
+          "actual": "'place_external_ports'",
+          "passed": true
+        },
+        {
+          "description": "[separate_components] имеет context",
+          "expected": "is True",
+          "actual": "True",
+          "passed": true
+        },
+        {
+          "description": "[separate_components] имеет input",
+          "expected": "is True",
+          "actual": "True",
+          "passed": true
+        },
+        {
+          "description": "[separate_components] имеет output",
+          "expected": "is True",
+          "actual": "True",
+          "passed": true
+        },
+        {
+          "description": "[separate_components] имеет decision",
+          "expected": "is True",
+          "actual": "True",
+          "passed": true
+        },
+        {
+          "description": "[build_adjacency] имеет context",
+          "expected": "is True",
+          "actual": "True",
+          "passed": true
+        },
+        {
+          "description": "[build_adjacency] имеет input",
+          "expected": "is True",
+          "actual": "True",
+          "passed": true
+        },
+        {
+          "description": "[build_adjacency] имеет output",
+          "expected": "is True",
+          "actual": "True",
+          "passed": true
+        },
+        {
+          "description": "[build_adjacency] имеет decision",
+          "expected": "is True",
+          "actual": "True",
+          "passed": true
+        },
+        {
+          "description": "[place_freon_cycle] имеет context",
+          "expected": "is True",
+          "actual": "True",
+          "passed": true
+        },
+        {
+          "description": "[place_freon_cycle] имеет input",
+          "expected": "is True",
+          "actual": "True",
+          "passed": true
+        },
+        {
+          "description": "[place_freon_cycle] имеет output",
+          "expected": "is True",
+          "actual": "True",
+          "passed": true
+        },
+        {
+          "description": "[place_freon_cycle] имеет decision",
+          "expected": "is True",
+          "actual": "True",
+          "passed": true
+        },
+        {
+          "description": "[place_mechanical] имеет context",
+          "expected": "is True",
+          "actual": "True",
+          "passed": true
+        },
+        {
+          "description": "[place_mechanical] имеет input",
+          "expected": "is True",
+          "actual": "True",
+          "passed": true
+        },
+        {
+          "description": "[place_mechanical] имеет output",
+          "expected": "is True",
+          "actual": "True",
+          "passed": true
+        },
+        {
+          "description": "[place_mechanical] имеет decision",
+          "expected": "is True",
+          "actual": "True",
+          "passed": true
+        },
+        {
+          "description": "[place_bypass] имеет context",
+          "expected": "is True",
+          "actual": "True",
+          "passed": true
+        },
+        {
+          "description": "[place_bypass] имеет input",
+          "expected": "is True",
+          "actual": "True",
+          "passed": true
+        },
+        {
+          "description": "[place_bypass] имеет output",
+          "expected": "is True",
+          "actual": "True",
+          "passed": true
+        },
+        {
+          "description": "[place_bypass] имеет decision",
+          "expected": "is True",
+          "actual": "True",
+          "passed": true
+        },
+        {
+          "description": "[place_water_circuit] имеет context",
+          "expected": "is True",
+          "actual": "True",
+          "passed": true
+        },
+        {
+          "description": "[place_water_circuit] имеет input",
+          "expected": "is True",
+          "actual": "True",
+          "passed": true
+        },
+        {
+          "description": "[place_water_circuit] имеет output",
+          "expected": "is True",
+          "actual": "True",
+          "passed": true
+        },
+        {
+          "description": "[place_water_circuit] имеет decision",
+          "expected": "is True",
+          "actual": "True",
+          "passed": true
+        },
+        {
+          "description": "[place_remaining] имеет context",
+          "expected": "is True",
+          "actual": "True",
+          "passed": true
+        },
+        {
+          "description": "[place_remaining] имеет input",
+          "expected": "is True",
+          "actual": "True",
+          "passed": true
+        },
+        {
+          "description": "[place_remaining] имеет output",
+          "expected": "is True",
+          "actual": "True",
+          "passed": true
+        },
+        {
+          "description": "[place_remaining] имеет decision",
+          "expected": "is True",
+          "actual": "True",
+          "passed": true
+        },
+        {
+          "description": "[place_external_ports] имеет context",
+          "expected": "is True",
+          "actual": "True",
+          "passed": true
+        },
+        {
+          "description": "[place_external_ports] имеет input",
+          "expected": "is True",
+          "actual": "True",
+          "passed": true
+        },
+        {
+          "description": "[place_external_ports] имеет output",
+          "expected": "is True",
+          "actual": "True",
+          "passed": true
+        },
+        {
+          "description": "[place_external_ports] имеет decision",
+          "expected": "is True",
+          "actual": "True",
+          "passed": true
+        },
+        {
+          "description": "main_count",
+          "expected": "4",
+          "actual": "4",
+          "passed": true
+        },
+        {
+          "description": "ext_port_count",
+          "expected": "1",
+          "actual": "1",
+          "passed": true
+        },
+        {
+          "description": "Цикл найден",
+          "expected": "is True",
+          "actual": "True",
+          "passed": true
+        },
+        {
+          "description": "Длина цикла",
+          "expected": "4",
+          "actual": "4",
+          "passed": true
+        },
+        {
+          "description": "Без журнала = None",
+          "expected": "is True",
+          "actual": "True",
+          "passed": true
+        }
+      ]
+    },
+    {
+      "test_id": "tests/services/test_layout.py::test_layout_journal_regression",
+      "test_name": "test_layout_journal_regression",
+      "status": "PASSED",
+      "checks": [
+        {
+          "description": "Количество шагов",
+          "expected": "8",
+          "actual": "8",
+          "passed": true
+        },
+        {
+          "description": "Шаг [0]",
+          "expected": "'separate_components'",
+          "actual": "'separate_components'",
+          "passed": true
+        },
+        {
+          "description": "Decision [0]",
+          "expected": "None",
+          "actual": "None",
+          "passed": true
+        },
+        {
+          "description": "Шаг [1]",
+          "expected": "'build_adjacency'",
+          "actual": "'build_adjacency'",
+          "passed": true
+        },
+        {
+          "description": "Decision [1]",
+          "expected": "None",
+          "actual": "None",
+          "passed": true
+        },
+        {
+          "description": "Шаг [2]",
+          "expected": "'place_freon_cycle'",
+          "actual": "'place_freon_cycle'",
+          "passed": true
+        },
+        {
+          "description": "Decision [2]",
+          "expected": "{'found_cycle': True, 'cycle_length': 4}",
+          "actual": "{'found_cycle': True, 'cycle_length': 4}",
+          "passed": true
+        },
+        {
+          "description": "Шаг [3]",
+          "expected": "'place_mechanical'",
+          "actual": "'place_mechanical'",
+          "passed": true
+        },
+        {
+          "description": "Decision [3]",
+          "expected": "None",
+          "actual": "None",
+          "passed": true
+        },
+        {
+          "description": "Шаг [4]",
+          "expected": "'place_bypass'",
+          "actual": "'place_bypass'",
+          "passed": true
+        },
+        {
+          "description": "Decision [4]",
+          "expected": "None",
+          "actual": "None",
+          "passed": true
+        },
+        {
+          "description": "Шаг [5]",
+          "expected": "'place_water_circuit'",
+          "actual": "'place_water_circuit'",
+          "passed": true
+        },
+        {
+          "description": "Decision [5]",
+          "expected": "None",
+          "actual": "None",
+          "passed": true
+        },
+        {
+          "description": "Шаг [6]",
+          "expected": "'place_remaining'",
+          "actual": "'place_remaining'",
+          "passed": true
+        },
+        {
+          "description": "Decision [6]",
+          "expected": "None",
+          "actual": "None",
+          "passed": true
+        },
+        {
+          "description": "Шаг [7]",
+          "expected": "'place_external_ports'",
+          "actual": "'place_external_ports'",
+          "passed": true
+        },
+        {
+          "description": "Decision [7]",
+          "expected": "{'skipped': True, 'reason': 'no external ports'}",
+          "actual": "{'skipped': True, 'reason': 'no external ports'}",
+          "passed": true
+        }
+      ]
+    },
+    {
       "test_id": "tests/services/test_router.py::test_astar_simple_path",
       "test_name": "test_astar_simple_path",
       "status": "PASSED",
       "checks": [
         {
           "description": "Путь найден",
-          "expected": "is True",
-          "actual": "True",
+          "expected": "> 0",
+          "actual": "2",
           "passed": true
         },
         {
-          "description": "Начальная точка",
+          "description": "Начало пути",
           "expected": "(10, 10)",
           "actual": "(10, 10)",
           "passed": true
         },
         {
-          "description": "Конечная точка",
+          "description": "Конец пути",
           "expected": "(100, 10)",
           "actual": "(100, 10)",
-          "passed": true
-        },
-        {
-          "description": "Путь прямой (без зигзагов)",
-          "expected": "is True",
-          "actual": "True",
           "passed": true
         }
       ]
@@ -686,13 +1295,37 @@
       "status": "PASSED",
       "checks": [
         {
-          "description": "Путь найден (с препятствием)",
-          "expected": "is True",
-          "actual": "True",
+          "description": "Путь найден с обходом",
+          "expected": "> 0",
+          "actual": "4",
           "passed": true
         },
         {
-          "description": "Путь не пересекает препятствие",
+          "description": "Путь не прямой (> 2 точек)",
+          "expected": "> 2",
+          "actual": "4",
+          "passed": true
+        },
+        {
+          "description": "Начало пути",
+          "expected": "(10, 100)",
+          "actual": "(10, 100)",
+          "passed": true
+        },
+        {
+          "description": "Конец пути",
+          "expected": "(100, 100)",
+          "actual": "(100, 100)",
+          "passed": true
+        },
+        {
+          "description": "Точка (10, 60) не заблокирована",
+          "expected": "is False",
+          "actual": "False",
+          "passed": true
+        },
+        {
+          "description": "Точка (100, 60) не заблокирована",
           "expected": "is False",
           "actual": "False",
           "passed": true
@@ -705,27 +1338,21 @@
       "status": "PASSED",
       "checks": [
         {
-          "description": "exact точка (бак)",
-          "expected": "(490, 130)",
-          "actual": "(490, 130)",
+          "description": "Exact на сетке",
+          "expected": "0",
+          "actual": "0",
           "passed": true
         },
         {
-          "description": "safe точка (бак, y-20)",
-          "expected": "(490, 110)",
-          "actual": "(490, 110)",
+          "description": "Safe левее exact (левая грань)",
+          "expected": "< 100",
+          "actual": "80",
           "passed": true
         },
         {
-          "description": "exact точка (внешний порт)",
-          "expected": "(800, 150)",
-          "actual": "(800, 150)",
-          "passed": true
-        },
-        {
-          "description": "safe точка (внешний порт, x-20)",
-          "expected": "(780, 150)",
-          "actual": "(780, 150)",
+          "description": "Safe.y == Exact.y",
+          "expected": "130",
+          "actual": "130",
           "passed": true
         }
       ]
@@ -736,27 +1363,9 @@
       "status": "PASSED",
       "checks": [
         {
-          "description": "Первая труба найдена",
-          "expected": "is True",
-          "actual": "True",
-          "passed": true
-        },
-        {
-          "description": "Вторая труба найдена",
-          "expected": "is True",
-          "actual": "True",
-          "passed": true
-        },
-        {
-          "description": "Маршруты отличаются",
-          "expected": "is True",
-          "actual": "True",
-          "passed": true
-        },
-        {
-          "description": "Промежуточные точки различны",
-          "expected": "is True",
-          "actual": "True",
+          "description": "(50, 10) в drawn_cells",
+          "expected": "содержится в {(70, 10), (50, 10), (40, 10), (100, 10), (30, 10), (90, 10), (20, 10), (80, 10), (10, 10), (60, 10)}",
+          "actual": "(50, 10)",
           "passed": true
         }
       ]
@@ -767,21 +1376,340 @@
       "status": "PASSED",
       "checks": [
         {
-          "description": "Точек стало меньше",
-          "expected": "< 5",
+          "description": "Сглаженный путь не длиннее",
+          "expected": "<= 4",
           "actual": "3",
           "passed": true
         },
         {
-          "description": "Начальная точка сохранена",
+          "description": "Начало сохранено",
           "expected": "(10, 10)",
           "actual": "(10, 10)",
           "passed": true
         },
         {
-          "description": "Конечная точка сохранена",
-          "expected": "(30, 30)",
-          "actual": "(30, 30)",
+          "description": "Конец сохранён",
+          "expected": "(100, 50)",
+          "actual": "(100, 50)",
+          "passed": true
+        }
+      ]
+    },
+    {
+      "test_id": "tests/services/test_router.py::test_build_waypoint_chain",
+      "test_name": "test_build_waypoint_chain",
+      "status": "PASSED",
+      "checks": [
+        {
+          "description": "Без waypoints — 2 точки",
+          "expected": "2",
+          "actual": "2",
+          "passed": true
+        },
+        {
+          "description": "Первая = safe_start",
+          "expected": "(10, 10)",
+          "actual": "(10, 10)",
+          "passed": true
+        },
+        {
+          "description": "Последняя = safe_end",
+          "expected": "(100, 100)",
+          "actual": "(100, 100)",
+          "passed": true
+        },
+        {
+          "description": "С waypoint — 3 точки",
+          "expected": "3",
+          "actual": "3",
+          "passed": true
+        },
+        {
+          "description": "Waypoint привязан к сетке",
+          "expected": "(60, 60)",
+          "actual": "(60, 60)",
+          "passed": true
+        }
+      ]
+    },
+    {
+      "test_id": "tests/services/test_router.py::test_route_through_points",
+      "test_name": "test_route_through_points",
+      "status": "PASSED",
+      "checks": [
+        {
+          "description": "Путь найден",
+          "expected": "> 0",
+          "actual": "10",
+          "passed": true
+        },
+        {
+          "description": "Начало",
+          "expected": "(10, 10)",
+          "actual": "(10, 10)",
+          "passed": true
+        },
+        {
+          "description": "Конец",
+          "expected": "(100, 10)",
+          "actual": "(100, 10)",
+          "passed": true
+        }
+      ]
+    },
+    {
+      "test_id": "tests/services/test_router.py::test_build_exempt_set",
+      "test_name": "test_build_exempt_set",
+      "status": "PASSED",
+      "checks": [
+        {
+          "description": "exact_start в exempt",
+          "expected": "содержится в {(10, 10), (100, 10), (90, 10), (20, 10)}",
+          "actual": "(10, 10)",
+          "passed": true
+        },
+        {
+          "description": "exact_end в exempt",
+          "expected": "содержится в {(10, 10), (100, 10), (90, 10), (20, 10)}",
+          "actual": "(100, 10)",
+          "passed": true
+        },
+        {
+          "description": "safe_start в exempt",
+          "expected": "содержится в {(10, 10), (100, 10), (90, 10), (20, 10)}",
+          "actual": "(20, 10)",
+          "passed": true
+        },
+        {
+          "description": "safe_end в exempt",
+          "expected": "содержится в {(10, 10), (100, 10), (90, 10), (20, 10)}",
+          "actual": "(90, 10)",
+          "passed": true
+        }
+      ]
+    },
+    {
+      "test_id": "tests/services/test_router.py::test_cleanup_path",
+      "test_name": "test_cleanup_path",
+      "status": "PASSED",
+      "checks": [
+        {
+          "description": "Дубликат удалён",
+          "expected": "2",
+          "actual": "2",
+          "passed": true
+        },
+        {
+          "description": "Коллинеарная точка удалена",
+          "expected": "2",
+          "actual": "2",
+          "passed": true
+        },
+        {
+          "description": "Сохранены крайние",
+          "expected": "[(10, 10), (50, 10)]",
+          "actual": "[(10, 10), (50, 10)]",
+          "passed": true
+        }
+      ]
+    },
+    {
+      "test_id": "tests/services/test_router.py::test_line_clear",
+      "test_name": "test_line_clear",
+      "status": "PASSED",
+      "checks": [
+        {
+          "description": "Свободная линия",
+          "expected": "is True",
+          "actual": "True",
+          "passed": true
+        },
+        {
+          "description": "Заблокированная линия",
+          "expected": "is False",
+          "actual": "False",
+          "passed": true
+        }
+      ]
+    },
+    {
+      "test_id": "tests/services/test_router.py::test_find_path_journal",
+      "test_name": "test_find_path_journal",
+      "status": "PASSED",
+      "checks": [
+        {
+          "description": "Путь найден",
+          "expected": "> 0",
+          "actual": "2",
+          "passed": true
+        },
+        {
+          "description": "Журнал не пустой",
+          "expected": "> 0",
+          "actual": "4",
+          "passed": true
+        },
+        {
+          "description": "build_waypoints в журнале",
+          "expected": "содержится в ['build_waypoints', 'route_segments', 'smooth_path', 'final_path']",
+          "actual": "'build_waypoints'",
+          "passed": true
+        },
+        {
+          "description": "route_segments в журнале",
+          "expected": "содержится в ['build_waypoints', 'route_segments', 'smooth_path', 'final_path']",
+          "actual": "'route_segments'",
+          "passed": true
+        },
+        {
+          "description": "smooth_path в журнале",
+          "expected": "содержится в ['build_waypoints', 'route_segments', 'smooth_path', 'final_path']",
+          "actual": "'smooth_path'",
+          "passed": true
+        },
+        {
+          "description": "final_path в журнале",
+          "expected": "содержится в ['build_waypoints', 'route_segments', 'smooth_path', 'final_path']",
+          "actual": "'final_path'",
+          "passed": true
+        },
+        {
+          "description": "[build_waypoints] имеет context",
+          "expected": "is True",
+          "actual": "True",
+          "passed": true
+        },
+        {
+          "description": "[build_waypoints] имеет input",
+          "expected": "is True",
+          "actual": "True",
+          "passed": true
+        },
+        {
+          "description": "[build_waypoints] имеет output",
+          "expected": "is True",
+          "actual": "True",
+          "passed": true
+        },
+        {
+          "description": "[build_waypoints] имеет decision",
+          "expected": "is True",
+          "actual": "True",
+          "passed": true
+        },
+        {
+          "description": "[route_segments] имеет context",
+          "expected": "is True",
+          "actual": "True",
+          "passed": true
+        },
+        {
+          "description": "[route_segments] имеет input",
+          "expected": "is True",
+          "actual": "True",
+          "passed": true
+        },
+        {
+          "description": "[route_segments] имеет output",
+          "expected": "is True",
+          "actual": "True",
+          "passed": true
+        },
+        {
+          "description": "[route_segments] имеет decision",
+          "expected": "is True",
+          "actual": "True",
+          "passed": true
+        },
+        {
+          "description": "[smooth_path] имеет context",
+          "expected": "is True",
+          "actual": "True",
+          "passed": true
+        },
+        {
+          "description": "[smooth_path] имеет input",
+          "expected": "is True",
+          "actual": "True",
+          "passed": true
+        },
+        {
+          "description": "[smooth_path] имеет output",
+          "expected": "is True",
+          "actual": "True",
+          "passed": true
+        },
+        {
+          "description": "[smooth_path] имеет decision",
+          "expected": "is True",
+          "actual": "True",
+          "passed": true
+        },
+        {
+          "description": "[final_path] имеет context",
+          "expected": "is True",
+          "actual": "True",
+          "passed": true
+        },
+        {
+          "description": "[final_path] имеет input",
+          "expected": "is True",
+          "actual": "True",
+          "passed": true
+        },
+        {
+          "description": "[final_path] имеет output",
+          "expected": "is True",
+          "actual": "True",
+          "passed": true
+        },
+        {
+          "description": "[final_path] имеет decision",
+          "expected": "is True",
+          "actual": "True",
+          "passed": true
+        },
+        {
+          "description": "final_path.output.total_points",
+          "expected": "2",
+          "actual": "2",
+          "passed": true
+        },
+        {
+          "description": "Результат с журналом = без",
+          "expected": "[(10, 10), (100, 10)]",
+          "actual": "[(10, 10), (100, 10)]",
+          "passed": true
+        }
+      ]
+    },
+    {
+      "test_id": "tests/services/test_router.py::test_find_path_journal_no_path",
+      "test_name": "test_find_path_journal_no_path",
+      "status": "PASSED",
+      "checks": [
+        {
+          "description": "Путь пустой",
+          "expected": "0",
+          "actual": "0",
+          "passed": true
+        },
+        {
+          "description": "Журнал не пустой",
+          "expected": "> 0",
+          "actual": "2",
+          "passed": true
+        },
+        {
+          "description": "raw_path_length = 0",
+          "expected": "0",
+          "actual": "0",
+          "passed": true
+        },
+        {
+          "description": "decision = no_path_found",
+          "expected": "'no_path_found'",
+          "actual": "'no_path_found'",
           "passed": true
         }
       ]

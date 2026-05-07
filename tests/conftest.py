@@ -59,6 +59,9 @@ class TestLog:
         elif op == "ge":
             passed = actual >= expected
             expected_str = f">= {repr(expected)}"
+        elif op == "le":
+            passed = actual <= expected
+            expected_str = f"<= {repr(expected)}"
         elif op == "in":
             passed = actual in expected
             expected_str = f"содержится в {repr(expected)}"

@@ -1,0 +1,67 @@
+{
+  "result": {
+    "tank": "bottom",
+    "pump": "bottom"
+  },
+  "journal": [
+    {
+      "step": "init_zones",
+      "context": {},
+      "input": {
+        "comp_count": 3
+      },
+      "output": {
+        "occupied_rects_count": 3
+      },
+      "decision": null
+    },
+    {
+      "step": "select_slot",
+      "context": {
+        "comp_id": "tank"
+      },
+      "input": {
+        "x": 400,
+        "y": 150,
+        "w": 120,
+        "h": 200
+      },
+      "output": {
+        "scores": {
+          "bottom": 0,
+          "top": 1,
+          "left": 3,
+          "right": 2
+        }
+      },
+      "decision": {
+        "chosen": "bottom",
+        "reason": "min_score=0"
+      }
+    },
+    {
+      "step": "select_slot",
+      "context": {
+        "comp_id": "pump"
+      },
+      "input": {
+        "x": 600,
+        "y": 300,
+        "w": 50,
+        "h": 50
+      },
+      "output": {
+        "scores": {
+          "bottom": 0,
+          "top": 1,
+          "left": 503,
+          "right": 2
+        }
+      },
+      "decision": {
+        "chosen": "bottom",
+        "reason": "min_score=0"
+      }
+    }
+  ]
+}

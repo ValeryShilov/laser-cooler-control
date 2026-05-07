@@ -1,5 +1,15 @@
+import json
+import os
 from services.layout import TopologyLayoutEngine
 from ui.equipment import Tank, Pump, ExternalPort, Heater, Compressor, Condenser, Throttle, Valve
+
+GOLDEN_DIR = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(
+    os.path.abspath(__file__)))), "reports", "golden")
+
+
+# ══════════════════════════════════════
+#  Существующие тесты
+# ══════════════════════════════════════
 
 def test_layout_external_ports(test_log):
     engine = TopologyLayoutEngine(padding=50)
@@ -172,3 +182,114 @@ def test_layout_freon_cycle_integration(test_log):
 
     test_log.check("Компрессор левее бака", components["comp"].x, components["evap"].x, op="lt")
     test_log.check("Компрессор ниже конденсатора", components["comp"].y, components["cond"].y, op="gt")
+
+
+# ══════════════════════════════════════
+#  Интеграционный тест с журналом
+# ══════════════════════════════════════
+
+def test_layout_journal(test_log):
+    engine = TopologyLayoutEngine(padding=50)
+
+    components = {
+        "comp": Compressor(0, 0),
+        "cond": Condenser(0, 0),
+        "thr": Throttle(0, 0),
+        "evap": Tank(0, 0),
+        "port_in": ExternalPort(0, 0, "Вход")
+    }
+    for k, v in components.items():
+        v.id = k
+
+    connections = [
+        {"source_id": "comp", "target_id": "cond", "type": "freon"},
+        {"source_id": "cond", "target_id": "thr", "type": "freon"},
+        {"source_id": "thr", "target_id": "evap", "type": "freon"},
+        {"source_id": "evap", "target_id": "comp", "type": "freon"},
+        {"source_id": "port_in", "target_id": "evap", "type": "water_lt",
+         "target_port": "water_lt_in"},
+    ]
+
+    journal = engine.layout(components, connections, return_journal=True)
+
+    # Проверяем что все 7 шагов присутствуют
+    steps = [e["step"] for e in journal]
+    test_log.check("separate_components в журнале", "separate_components", steps, op="in")
+    test_log.check("build_adjacency в журнале", "build_adjacency", steps, op="in")
+    test_log.check("place_freon_cycle в журнале", "place_freon_cycle", steps, op="in")
+    test_log.check("place_mechanical в журнале", "place_mechanical", steps, op="in")
+    test_log.check("place_bypass в журнале", "place_bypass", steps, op="in")
+    test_log.check("place_water_circuit в журнале", "place_water_circuit", steps, op="in")
+    test_log.check("place_external_ports в журнале", "place_external_ports", steps, op="in")
+
+    # Проверяем структуру каждой записи
+    for entry in journal:
+        test_log.check(f"[{entry['step']}] имеет context", "context" in entry, True, op="is")
+        test_log.check(f"[{entry['step']}] имеет input", "input" in entry, True, op="is")
+        test_log.check(f"[{entry['step']}] имеет output", "output" in entry, True, op="is")
+        test_log.check(f"[{entry['step']}] имеет decision", "decision" in entry, True, op="is")
+
+    # separate_components: 4 main + 1 ext
+    sep = [e for e in journal if e["step"] == "separate_components"][0]
+    test_log.check("main_count", sep["output"]["main_count"], 4)
+    test_log.check("ext_port_count", sep["output"]["ext_port_count"], 1)
+
+    # place_freon_cycle: найден цикл из 4
+    freon = [e for e in journal if e["step"] == "place_freon_cycle"][0]
+    test_log.check("Цикл найден", freon["decision"]["found_cycle"], True, op="is")
+    test_log.check("Длина цикла", freon["decision"]["cycle_length"], 4)
+
+    # Без return_journal — результат None (как раньше)
+    normal_result = engine.layout(components, connections)
+    test_log.check("Без журнала = None", normal_result is None, True, op="is")
+
+
+# ══════════════════════════════════════
+#  Регрессионный тест (эталон)
+# ══════════════════════════════════════
+
+def test_layout_journal_regression(test_log):
+    engine = TopologyLayoutEngine(padding=50)
+
+    components = {
+        "comp": Compressor(0, 0),
+        "cond": Condenser(0, 0),
+        "thr": Throttle(0, 0),
+        "evap": Tank(0, 0)
+    }
+    for k, v in components.items():
+        v.id = k
+
+    connections = [
+        {"source_id": "comp", "target_id": "cond", "type": "freon"},
+        {"source_id": "cond", "target_id": "thr", "type": "freon"},
+        {"source_id": "thr", "target_id": "evap", "type": "freon"},
+        {"source_id": "evap", "target_id": "comp", "type": "freon"}
+    ]
+
+    journal = engine.layout(components, connections, return_journal=True)
+
+    # Сериализуемая копия (позиции — числа, не объекты)
+    serializable = []
+    for entry in journal:
+        serializable.append({
+            "step": entry["step"],
+            "decision": entry.get("decision"),
+        })
+
+    golden_path = os.path.join(GOLDEN_DIR, "layout.json")
+
+    if not os.path.exists(golden_path):
+        os.makedirs(GOLDEN_DIR, exist_ok=True)
+        with open(golden_path, "w", encoding="utf-8") as f:
+            json.dump(serializable, f, ensure_ascii=False, indent=2)
+        test_log.check("Эталон создан", True, True, op="is")
+        return
+
+    with open(golden_path, "r", encoding="utf-8") as f:
+        golden = json.load(f)
+
+    test_log.check("Количество шагов", len(serializable), len(golden))
+    for i, (entry, golden_entry) in enumerate(zip(serializable, golden)):
+        test_log.check(f"Шаг [{i}]", entry["step"], golden_entry["step"])
+        test_log.check(f"Decision [{i}]", entry["decision"], golden_entry["decision"])
