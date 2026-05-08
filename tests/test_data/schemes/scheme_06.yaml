@@ -1,0 +1,29 @@
+components:
+- id: tank
+  type: Tank
+  name: "Бак горячего контура"
+- id: heater
+  type: Heater
+  name: "Электрический нагреватель"
+- id: pump
+  type: Pump
+  name: "Циркуляционный насос HT"
+- id: port_ht_in
+  type: ExternalPort
+  name: "Возврат от оптики"
+- id: port_ht_out
+  type: ExternalPort
+  name: "Подача на оптику"
+connections:
+- source: port_ht_in.out
+  target: tank.water_ht_in
+  type: water_ht
+- source: tank.water_out
+  target: pump.in
+  type: water_ht
+- source: pump.out
+  target: heater.in
+  type: water_ht
+- source: heater.out
+  target: port_ht_out.in
+  type: water_ht

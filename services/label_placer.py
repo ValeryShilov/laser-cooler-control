@@ -5,7 +5,10 @@
 и выбирает лучший по scoring-системе: минимум пересечений с трубами,
 компонентами и краями экрана.
 """
+import logging
 from PySide6.QtCore import QRectF
+
+logger = logging.getLogger(__name__)
 
 
 class LabelPlacer:
@@ -24,22 +27,17 @@ class LabelPlacer:
         self._view_w = view_width
         self._view_h = view_height
 
-    def compute(self, return_journal=False):
-        """Оркестратор: возвращает {comp_id: 'bottom'|'top'|'left'|'right'}.
-
-        Args:
-            return_journal: если True, возвращает (result, journal).
-        """
-        journal = []
+    def compute(self):
+        """Оркестратор: возвращает {comp_id: 'bottom'|'top'|'left'|'right'}."""
         occupied_rects = self._init_occupied_zones()
 
-        journal.append({
+        logger.debug("Step: init_zones", extra={"journal_entry": {
             "step": "init_zones",
             "context": {},
             "input": {"comp_count": len(self._comps)},
             "output": {"occupied_rects_count": len(occupied_rects)},
             "decision": None,
-        })
+        }})
 
         result = {}
         for cid, data in self._comps.items():
@@ -50,7 +48,7 @@ class LabelPlacer:
             result[cid] = best_pos
             occupied_rects.append(best_rect)
 
-            journal.append({
+            logger.debug("Step: select_slot", extra={"journal_entry": {
                 "step": "select_slot",
                 "context": {"comp_id": cid},
                 "input": {"x": data['x'], "y": data['y'],
@@ -58,10 +56,8 @@ class LabelPlacer:
                 "output": {"scores": scores},
                 "decision": {"chosen": best_pos,
                              "reason": f"min_score={scores[best_pos]}"},
-            })
+            }})
 
-        if return_journal:
-            return result, journal
         return result
 
     def _init_occupied_zones(self):

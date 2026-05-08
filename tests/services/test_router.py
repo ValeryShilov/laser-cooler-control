@@ -1,3 +1,4 @@
+import logging
 from services.router import AStarRouter
 from services.worker import get_escape_point
 
@@ -122,13 +123,15 @@ def test_line_clear(test_log):
 #  Интеграционный тест с журналом
 # ══════════════════════════════════════
 
-def test_find_path_journal(test_log):
+def test_find_path_journal(test_log, caplog):
+    caplog.set_level(logging.DEBUG)
     router = AStarRouter(width=200, height=200, grid_size=10)
 
     start = (10, 10)
     end = (100, 10)
 
-    path, journal = router.find_path(start, end, start, end, return_journal=True)
+    path = router.find_path(start, end, start, end)
+    journal = [r.journal_entry for r in caplog.records if hasattr(r, "journal_entry")]
 
     test_log.check("Путь найден", len(path), 0, op="gt")
     test_log.check("Журнал не пустой", len(journal), 0, op="gt")
@@ -156,14 +159,15 @@ def test_find_path_journal(test_log):
     test_log.check("Результат с журналом = без", path, path_normal)
 
 
-def test_find_path_journal_no_path(test_log):
+def test_find_path_journal_no_path(test_log, caplog):
     """Проверяет журнал когда путь не найден."""
+    caplog.set_level(logging.DEBUG)
     router = AStarRouter(width=50, height=50, grid_size=10)
     # Полностью заблокированная область
     router.add_obstacle(0, 0, 50, 50, padding=0)
 
-    path, journal = router.find_path((0, 0), (40, 40), (0, 0), (40, 40),
-                                      return_journal=True)
+    path = router.find_path((0, 0), (40, 40), (0, 0), (40, 40))
+    journal = [r.journal_entry for r in caplog.records if hasattr(r, "journal_entry")]
 
     test_log.check("Путь пустой", len(path), 0)
     test_log.check("Журнал не пустой", len(journal), 0, op="gt")

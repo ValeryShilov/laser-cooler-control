@@ -1,4 +1,8 @@
+import logging
 import heapq
+
+
+logger = logging.getLogger(__name__)
 
 
 class AStarRouter:
@@ -187,61 +191,60 @@ class AStarRouter:
         Args:
             return_journal: если True, возвращает (path, journal).
         """
-        journal = []
-
+        
         grid_points = self._build_waypoint_chain(safe_start, safe_end, waypoints)
-        journal.append({
+        logger.debug("Step: build_waypoints", extra={"journal_entry": {
             "step": "build_waypoints",
             "context": {},
             "input": {"safe_start": safe_start, "safe_end": safe_end,
                       "waypoints": waypoints},
             "output": {"chain": grid_points, "segments": len(grid_points) - 1},
             "decision": None,
-        })
+        }})
 
         raw_path = self._route_through_points(grid_points)
         if not raw_path:
-            journal.append({
+            logger.debug("Step: route_segments", extra={"journal_entry": {
                 "step": "route_segments",
                 "context": {},
                 "input": {"segments": len(grid_points) - 1},
                 "output": {"raw_path_length": 0},
                 "decision": {"result": "no_path_found"},
-            })
+            }})
             if return_journal:
                 return [], journal
             return []
 
-        journal.append({
+        logger.debug("Step: route_segments", extra={"journal_entry": {
             "step": "route_segments",
             "context": {},
             "input": {"segments": len(grid_points) - 1},
             "output": {"raw_path_length": len(raw_path)},
             "decision": None,
-        })
+        }})
 
         full_path = [exact_start] + raw_path + [exact_end]
         clean_path = self._cleanup_path(full_path)
         exempt = self._build_exempt_set(exact_start, exact_end, safe_start, safe_end)
         smooth_path = self._smooth_path(clean_path, exempt)
 
-        journal.append({
+        logger.debug("Step: smooth_path", extra={"journal_entry": {
             "step": "smooth_path",
             "context": {},
             "input": {"clean_path_points": len(clean_path)},
             "output": {"smooth_path_points": len(smooth_path)},
             "decision": {"points_removed": len(clean_path) - len(smooth_path)},
-        })
+        }})
 
         self.register_path(smooth_path)
 
-        journal.append({
+        logger.debug("Step: final_path", extra={"journal_entry": {
             "step": "final_path",
             "context": {},
             "input": {"exact_start": exact_start, "exact_end": exact_end},
             "output": {"path": smooth_path, "total_points": len(smooth_path)},
             "decision": None,
-        })
+        }})
 
         if return_journal:
             return smooth_path, journal

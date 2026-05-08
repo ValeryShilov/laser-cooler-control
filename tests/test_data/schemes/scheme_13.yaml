@@ -1,0 +1,38 @@
+components:
+- id: comp_low
+  type: Compressor
+  name: "Компрессор низкого давления"
+- id: cond_mid
+  type: Condenser
+  name: "Промежуточный охладитель"
+- id: comp_high
+  type: Compressor
+  name: "Компрессор высокого давления"
+- id: cond_main
+  type: Condenser
+  name: "Главный конденсатор"
+- id: thr
+  type: Throttle
+  name: "ТРВ"
+- id: evap
+  type: Tank
+  name: "Бак-испаритель"
+connections:
+- source: comp_low.out
+  target: cond_mid.in
+  type: freon
+- source: cond_mid.out
+  target: comp_high.in
+  type: freon
+- source: comp_high.out
+  target: cond_main.in
+  type: freon
+- source: cond_main.out
+  target: thr.in
+  type: freon
+- source: thr.out
+  target: evap.freon_in
+  type: freon
+- source: evap.freon_out
+  target: comp_low.in
+  type: freon

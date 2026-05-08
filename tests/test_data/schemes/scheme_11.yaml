@@ -1,0 +1,74 @@
+components:
+- id: comp1
+  type: Compressor
+  name: "Основной компрессор"
+- id: comp2
+  type: Compressor
+  name: "Резервный компрессор"
+- id: cond_main
+  type: Condenser
+  name: "Блок конденсатора"
+- id: fan_1
+  type: Fan
+  name: "Вентилятор охлаждения 1"
+- id: fan_2
+  type: Fan
+  name: "Вентилятор охлаждения 2"
+- id: thr1
+  type: Throttle
+  name: "Дроссель контура А"
+- id: thr2
+  type: Throttle
+  name: "Дроссель контура Б"
+- id: tank_main
+  type: Tank
+  name: "Накопительный бак (Испаритель)"
+- id: pump_1
+  type: Pump
+  name: "Насос подачи воды"
+- id: port_in
+  type: ExternalPort
+  name: "Вход охлаждающей жидкости"
+- id: port_out
+  type: ExternalPort
+  name: "Выход охлаждающей жидкости"
+connections:
+- source: comp1.out
+  target: cond_main.in
+  type: freon
+- source: comp2.out
+  target: cond_main.in
+  type: freon
+- source: cond_main.out
+  target: thr1.in
+  type: freon
+- source: cond_main.out
+  target: thr2.in
+  type: freon
+- source: thr1.out
+  target: tank_main.freon_in
+  type: freon
+- source: thr2.out
+  target: tank_main.freon_in
+  type: freon
+- source: tank_main.freon_out
+  target: comp1.in
+  type: freon
+- source: tank_main.freon_out
+  target: comp2.in
+  type: freon
+- source: fan_1.out
+  target: cond_main.in
+  type: mechanical
+- source: fan_2.out
+  target: cond_main.in
+  type: mechanical
+- source: port_in.out
+  target: tank_main.water_lt_in
+  type: water_lt
+- source: tank_main.water_out
+  target: pump_1.in
+  type: water_lt
+- source: pump_1.out
+  target: port_out.in
+  type: water_lt

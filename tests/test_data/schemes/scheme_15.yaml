@@ -1,0 +1,68 @@
+components:
+- id: comp
+  type: Compressor
+  name: "Центробежный компрессор"
+- id: cond
+  type: Condenser
+  name: "Промышленный конденсатор"
+- id: thr
+  type: Throttle
+  name: "Расширительный клапан"
+- id: tank_evap
+  type: Tank
+  name: "Главный испарительный бак"
+- id: pump_circ
+  type: Pump
+  name: "Насос рециркуляции"
+- id: pump_out
+  type: Pump
+  name: "Насос подачи потребителю"
+- id: heater
+  type: Heater
+  name: "Система преднагрева"
+- id: drain_valve
+  type: Valve
+  name: "Дренажный клапан"
+- id: port_water_in
+  type: ExternalPort
+  name: "Подвод воды"
+- id: port_water_out
+  type: ExternalPort
+  name: "Отвод воды"
+- id: port_drain
+  type: ExternalPort
+  name: "Слив в канализацию"
+connections:
+- source: comp.out
+  target: cond.in
+  type: freon
+- source: cond.out
+  target: thr.in
+  type: freon
+- source: thr.out
+  target: tank_evap.freon_in
+  type: freon
+- source: tank_evap.freon_out
+  target: comp.in
+  type: freon
+- source: port_water_in.out
+  target: tank_evap.water_lt_in
+  type: water_lt
+- source: tank_evap.water_out
+  target: pump_circ.in
+  type: water_lt
+- source: pump_circ.out
+  target: heater.in
+  type: water_lt
+- source: heater.out
+  target: pump_out.in
+  type: water_lt
+- source: pump_out.out
+  target: port_water_out.in
+  type: water_lt
+- source: tank_evap.drain
+  target: drain_valve.in
+  type: drain
+- source: drain_valve.out
+  target: port_drain.in
+  type: drain

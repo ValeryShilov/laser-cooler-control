@@ -1,3 +1,4 @@
+import logging
 import json
 import os
 from services.label_placer import LabelPlacer
@@ -167,9 +168,11 @@ def test_label_placer_avoid_pipes_left(mock_components_snapshot, test_log):
 #  Интеграционный тест с журналом
 # ══════════════════════════════════════
 
-def test_label_placer_journal(mock_components_snapshot, test_log):
+def test_label_placer_journal(mock_components_snapshot, test_log, caplog):
+    caplog.set_level(logging.DEBUG)
     placer = LabelPlacer(mock_components_snapshot, set(), 1000, 600)
-    result, journal = placer.compute(return_journal=True)
+    result = placer.compute()
+    journal = [r.journal_entry for r in caplog.records if hasattr(r, "journal_entry")]
 
     # Структура журнала
     test_log.check("Журнал не пустой", len(journal), 0, op="gt")
@@ -206,9 +209,11 @@ def test_label_placer_journal(mock_components_snapshot, test_log):
 #  Регрессионный тест (эталон)
 # ══════════════════════════════════════
 
-def test_label_placer_regression(mock_components_snapshot, test_log):
+def test_label_placer_regression(mock_components_snapshot, test_log, caplog):
+    caplog.set_level(logging.DEBUG)
     placer = LabelPlacer(mock_components_snapshot, set(), 1000, 600)
-    result, journal = placer.compute(return_journal=True)
+    result = placer.compute()
+    journal = [r.journal_entry for r in caplog.records if hasattr(r, "journal_entry")]
 
     golden_path = os.path.join(GOLDEN_DIR, "label_placer.json")
 

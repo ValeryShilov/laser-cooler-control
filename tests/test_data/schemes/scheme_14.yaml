@@ -1,0 +1,50 @@
+components:
+- id: comp
+  type: Compressor
+  name: "Спиральный компрессор"
+- id: cond
+  type: Condenser
+  name: "Микроканальный конденсатор"
+- id: fan
+  type: Fan
+  name: "Осевой вентилятор"
+- id: thr
+  type: Throttle
+  name: "Электронный ТРВ"
+- id: valve1
+  type: Valve
+  name: "Байпас горячего газа (10%)"
+- id: valve2
+  type: Valve
+  name: "Байпас горячего газа (50%)"
+- id: evap
+  type: Tank
+  name: "Пластинчатый испаритель"
+connections:
+- source: comp.out
+  target: cond.in
+  type: freon
+- source: cond.out
+  target: thr.in
+  type: freon
+- source: thr.out
+  target: evap.freon_in
+  type: freon
+- source: evap.freon_out
+  target: comp.in
+  type: freon
+- source: comp.out
+  target: valve1.in
+  type: freon_bypass
+- source: valve1.out
+  target: evap.freon_in
+  type: freon_bypass
+- source: comp.out
+  target: valve2.in
+  type: freon_bypass
+- source: valve2.out
+  target: evap.freon_in
+  type: freon_bypass
+- source: fan.out
+  target: cond.in
+  type: mechanical

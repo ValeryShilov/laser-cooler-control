@@ -1,0 +1,50 @@
+components:
+- id: comp
+  type: Compressor
+  name: "Компрессор без байпаса"
+- id: cond
+  type: Condenser
+  name: "Радиатор конденсатора"
+- id: thr
+  type: Throttle
+  name: "Клапан ТРВ"
+- id: tank
+  type: Tank
+  name: "Бак-испаритель"
+- id: pump
+  type: Pump
+  name: "Рабочий насос"
+- id: fan
+  type: Fan
+  name: "Осевой вентилятор"
+- id: pin
+  type: ExternalPort
+  name: "Вход"
+- id: pout
+  type: ExternalPort
+  name: "Выход"
+connections:
+- source: comp.out
+  target: cond.in
+  type: freon
+- source: cond.out
+  target: thr.in
+  type: freon
+- source: thr.out
+  target: tank.freon_in
+  type: freon
+- source: tank.freon_out
+  target: comp.in
+  type: freon
+- source: fan.out
+  target: cond.in
+  type: mechanical
+- source: pin.out
+  target: tank.water_lt_in
+  type: water_lt
+- source: tank.water_out
+  target: pump.in
+  type: water_lt
+- source: pump.out
+  target: pout.in
+  type: water_lt

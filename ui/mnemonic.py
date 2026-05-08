@@ -21,7 +21,7 @@ class ChillerMnemonic(QWidget):
         self.setMinimumHeight(500)
 
         # 1. Читаем YAML
-        self.parser = SchemeParser("scheme.yaml")
+        self.parser = SchemeParser("tests/test_data/schemes/scheme_09.yaml")
         self.components, self.connections = self.parser.parse()
 
         # 2. Инициализируем движок компоновки

@@ -1,0 +1,17 @@
+components:
+- id: comp
+  type: Compressor
+  name: "Компрессор comp"
+- id: cond
+  type: Condenser
+  name: "Конденсатор cond"
+- id: thr
+  type: Throttle
+  name: "Дроссель thr"
+connections:
+- source: comp.out
+  target: cond.in
+  type: freon
+- source: cond.out
+  target: thr.in
+  type: freon

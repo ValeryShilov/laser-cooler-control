@@ -1,0 +1,11 @@
+components:
+- id: tank
+  type: Tank
+  name: "Бак tank"
+- id: drain_port
+  type: ExternalPort
+  name: "Порт drain_port"
+connections:
+- source: tank.drain
+  target: drain_port.in
+  type: drain

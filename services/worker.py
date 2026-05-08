@@ -1,3 +1,4 @@
+import logging
 """
 Фоновый рабочий поток для тяжёлых вычислений схемы.
 
@@ -63,8 +64,10 @@ _TYPE_PRIORITY = {
 }
 
 
-def compute_routes_and_labels(comp_snapshot, connections, width, height,
-                               return_journal=False):
+logger = logging.getLogger(__name__)
+
+
+def compute_routes_and_labels(comp_snapshot, connections, width, height):
     """
     Оркестратор: синхронный расчёт маршрутов и надписей.
 
@@ -72,45 +75,40 @@ def compute_routes_and_labels(comp_snapshot, connections, width, height,
         comp_snapshot: dict {id: {x, y, width, height, ports, id, class_name}}
         connections: list of connection dicts
         width, height: размеры области
-        return_journal: если True, возвращает (RenderData, journal).
 
     Returns:
         RenderData с маршрутами труб и позициями надписей
     """
-    journal = []
-
     router = _create_router(comp_snapshot, width, height)
     obstacle_count = len(router.obstacles)
-    journal.append({
+    logger.debug("Step: create_router", extra={"journal_entry": {
         "step": "create_router",
         "context": {},
         "input": {"comp_count": len(comp_snapshot), "width": width, "height": height},
         "output": {"obstacles": obstacle_count},
         "decision": None,
-    })
+    }})
 
     pipe_paths = _route_all_pipes(router, comp_snapshot, connections)
-    journal.append({
+    logger.debug("Step: route_pipes", extra={"journal_entry": {
         "step": "route_pipes",
         "context": {},
         "input": {"connections_count": len(connections)},
         "output": {"routed_pipes": len(pipe_paths),
                    "pipe_types": [t for _, t in pipe_paths]},
         "decision": None,
-    })
+    }})
 
     label_positions = _compute_labels(comp_snapshot, router.drawn_cells, width, height)
-    journal.append({
+    logger.debug("Step: compute_labels", extra={"journal_entry": {
         "step": "compute_labels",
         "context": {},
         "input": {"drawn_cells_count": len(router.drawn_cells)},
         "output": {"labels": dict(label_positions)},
         "decision": None,
-    })
+    }})
 
     result = RenderData(pipe_paths=pipe_paths, label_positions=label_positions)
-    if return_journal:
-        return result, journal
     return result
 
 

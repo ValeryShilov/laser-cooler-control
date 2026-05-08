@@ -11,33 +11,30 @@ if PROJECT_ROOT not in sys.path:
 REPORTS_DIR = os.path.join(PROJECT_ROOT, "reports")
 
 
+
+import logging
+
+# Настройка логгера для тестов
+test_logger = logging.getLogger("test_journal")
+test_logger.setLevel(logging.INFO)
+
+os.makedirs(REPORTS_DIR, exist_ok=True)
+log_file = os.path.join(REPORTS_DIR, "test_journal.log")
+fh = logging.FileHandler(log_file, mode='w', encoding='utf-8')
+formatter = logging.Formatter('%(asctime)s [%(levelname)s] %(message)s', datefmt='%Y-%m-%d %H:%M:%S')
+fh.setFormatter(formatter)
+test_logger.addHandler(fh)
+
 class TestLog:
     """Журнал проверок одного теста."""
 
     def __init__(self, node_id, node_name):
         self.node_id = node_id
         self.node_name = node_name
-        self.checks = []
-        self.status = "PASSED"
+        test_logger.info("=== START TEST: %s ===", self.node_name)
 
     def check(self, description, actual, expected, op="eq", **kwargs):
-        """Записать проверку и выполнить assertion.
-
-        Args:
-            description: Что проверяется (человекочитаемый текст).
-            actual: Фактическое значение.
-            expected: Ожидаемое значение.
-            op: Оператор сравнения:
-                'eq'     — actual == expected
-                'ne'     — actual != expected
-                'gt'     — actual > expected
-                'lt'     — actual < expected
-                'ge'     — actual >= expected
-                'is'     — actual is expected
-                'in'     — actual in expected
-                'not_in' — actual not in expected
-                'approx' — |actual - expected| <= abs (передайте abs=...)
-        """
+        """Записать проверку и выполнить assertion."""
         passed = False
         actual_str = repr(actual)
         expected_str = repr(expected)
@@ -73,64 +70,29 @@ class TestLog:
             passed = builtins_abs(actual - expected) <= tolerance
             expected_str = f"{repr(expected)} ± {tolerance}"
 
-        self.checks.append({
-            "description": description,
-            "expected": expected_str,
-            "actual": actual_str,
-            "passed": passed,
-        })
-
-        if not passed:
-            self.status = "FAILED"
+        if passed:
+            test_logger.info("[PASSED] %s: %s (Ожидалось: %s)", description, actual_str, expected_str)
+        else:
+            test_logger.error("[FAILED] %s: получено %s, ожидалось %s", description, actual_str, expected_str)
 
         assert passed, f"{description}: ожидалось {expected_str}, получено {actual_str}"
 
-    def to_dict(self):
-        return {
-            "test_id": self.node_id,
-            "test_name": self.node_name,
-            "status": self.status,
-            "checks": self.checks,
-        }
-
+    def finish(self):
+        test_logger.info("=== END TEST: %s ===\n", self.node_name)
 
 # Нужен доступ к встроенному abs, чтобы не конфликтовать с kwarg 'abs'
 import builtins
 builtins_abs = builtins.abs
-
-# Глобальное хранилище результатов за сессию
-_all_test_logs = []
-
 
 @pytest.fixture
 def test_log(request):
     """Фикстура журнала. Каждый тест получает свой экземпляр TestLog."""
     log = TestLog(request.node.nodeid, request.node.name)
     yield log
-    _all_test_logs.append(log.to_dict())
-
+    log.finish()
 
 def pytest_sessionfinish(session, exitstatus):
-    """Хук: вызывается после завершения всех тестов. Сохраняет журнал в JSON."""
-    if not _all_test_logs:
-        return
-
-    os.makedirs(REPORTS_DIR, exist_ok=True)
-
-    report = {
-        "timestamp": datetime.now().isoformat(),
-        "total_tests": len(_all_test_logs),
-        "passed": sum(1 for t in _all_test_logs if t["status"] == "PASSED"),
-        "failed": sum(1 for t in _all_test_logs if t["status"] != "PASSED"),
-        "tests": _all_test_logs,
-    }
-
-    report_path = os.path.join(REPORTS_DIR, "test_journal.json")
-    with open(report_path, "w", encoding="utf-8") as f:
-        json.dump(report, f, ensure_ascii=False, indent=2)
-
-    print(f"\n\n[OK] Журнал тестирования сохранён: {report_path}")
-
+    print(f"\n\n[OK] Журнал тестирования сохранён: {log_file}")
 
 @pytest.fixture
 def mock_components_snapshot():

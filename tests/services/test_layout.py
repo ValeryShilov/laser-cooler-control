@@ -1,3 +1,4 @@
+import logging
 import json
 import os
 from services.layout import TopologyLayoutEngine
@@ -188,7 +189,8 @@ def test_layout_freon_cycle_integration(test_log):
 #  Интеграционный тест с журналом
 # ══════════════════════════════════════
 
-def test_layout_journal(test_log):
+def test_layout_journal(test_log, caplog):
+    caplog.set_level(logging.DEBUG)
     engine = TopologyLayoutEngine(padding=50)
 
     components = {
@@ -210,7 +212,8 @@ def test_layout_journal(test_log):
          "target_port": "water_lt_in"},
     ]
 
-    journal = engine.layout(components, connections, return_journal=True)
+    _ = engine.layout(components, connections)
+    journal = [r.journal_entry for r in caplog.records if hasattr(r, "journal_entry")]
 
     # Проверяем что все 7 шагов присутствуют
     steps = [e["step"] for e in journal]
@@ -248,7 +251,8 @@ def test_layout_journal(test_log):
 #  Регрессионный тест (эталон)
 # ══════════════════════════════════════
 
-def test_layout_journal_regression(test_log):
+def test_layout_journal_regression(test_log, caplog):
+    caplog.set_level(logging.DEBUG)
     engine = TopologyLayoutEngine(padding=50)
 
     components = {
@@ -267,7 +271,8 @@ def test_layout_journal_regression(test_log):
         {"source_id": "evap", "target_id": "comp", "type": "freon"}
     ]
 
-    journal = engine.layout(components, connections, return_journal=True)
+    _ = engine.layout(components, connections)
+    journal = [r.journal_entry for r in caplog.records if hasattr(r, "journal_entry")]
 
     # Сериализуемая копия (позиции — числа, не объекты)
     serializable = []

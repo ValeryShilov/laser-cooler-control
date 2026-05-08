@@ -1,5 +1,9 @@
+import logging
 from collections import defaultdict
 from rules import PORT_ORDER
+
+
+logger = logging.getLogger(__name__)
 
 
 class TopologyLayoutEngine:
@@ -12,47 +16,40 @@ class TopologyLayoutEngine:
         self.pad_top = 70
         self.pad_bottom = padding
 
-    def layout(self, components, connections, return_journal=False):
-        """Главный оркестратор расстановки компонентов.
-
-        Args:
-            return_journal: если True, возвращает journal (список записей).
-        """
-        journal = []
+    def layout(self, components, connections):
+        """Главный оркестратор расстановки компонентов."""
         main_comps, ext_ports = self._separate_components(components)
         safe_w = self.width - self.pad_left - self.pad_right
         safe_h = self.height - self.pad_top - self.pad_bottom
 
-        journal.append({
+        logger.debug("Step: separate_components", extra={"journal_entry": {
             "step": "separate_components",
             "context": {},
             "input": {"total_components": len(components)},
             "output": {"main_count": len(main_comps),
                        "ext_port_count": len(ext_ports)},
             "decision": None,
-        })
+        }})
 
         freon_adj, mechanical_links = self._build_adjacency(connections, main_comps)
-        journal.append({
+        logger.debug("Step: build_adjacency", extra={"journal_entry": {
             "step": "build_adjacency",
             "context": {},
             "input": {"connections_count": len(connections)},
             "output": {"freon_edges": sum(len(v) for v in freon_adj.values()),
                        "mechanical_links": len(mechanical_links)},
             "decision": None,
-        })
+        }})
 
         positioned = set()
 
-        cycle = self._place_freon_cycle(freon_adj, main_comps, positioned, safe_w, safe_h, journal)
-        self._place_mechanical(mechanical_links, main_comps, positioned, journal)
-        self._place_bypass_components(connections, cycle, main_comps, positioned, safe_w, safe_h, journal)
-        self._place_water_circuit(connections, main_comps, positioned, safe_w, safe_h, journal)
-        self._place_remaining(main_comps, positioned, safe_w, safe_h, journal)
-        self._place_external_ports(ext_ports, connections, main_comps, journal)
+        cycle = self._place_freon_cycle(freon_adj, main_comps, positioned, safe_w, safe_h)
+        self._place_mechanical(mechanical_links, main_comps, positioned)
+        self._place_bypass_components(connections, cycle, main_comps, positioned, safe_w, safe_h)
+        self._place_water_circuit(connections, main_comps, positioned, safe_w, safe_h)
+        self._place_remaining(main_comps, positioned, safe_w, safe_h)
+        self._place_external_ports(ext_ports, connections, main_comps)
 
-        if return_journal:
-            return journal
         return None
 
     # ── Фаза 0: Разделение компонентов ──
@@ -84,7 +81,7 @@ class TopologyLayoutEngine:
 
     # ── Фаза 1: Фреоновый цикл ──
 
-    def _place_freon_cycle(self, freon_adj, main_comps, positioned, safe_w, safe_h, journal):
+    def _place_freon_cycle(self, freon_adj, main_comps, positioned, safe_w, safe_h):
         """Находит замкнутый фреоновый цикл и расставляет его по углам."""
         cycle = self._find_cycle(freon_adj, set(main_comps.keys()))
         placed = {}
@@ -96,7 +93,7 @@ class TopologyLayoutEngine:
                 placed[cid] = {"x": main_comps[cid].x, "y": main_comps[cid].y,
                                "pct": pts[i]}
 
-        journal.append({
+        logger.debug("Step: place_freon_cycle", extra={"journal_entry": {
             "step": "place_freon_cycle",
             "context": {},
             "input": {"freon_nodes": list(freon_adj.keys())},
@@ -104,12 +101,12 @@ class TopologyLayoutEngine:
                        "positions": placed},
             "decision": {"found_cycle": bool(cycle),
                          "cycle_length": len(cycle) if cycle else 0},
-        })
+        }})
         return cycle
 
     # ── Фаза 2: Механические связи ──
 
-    def _place_mechanical(self, mechanical_links, main_comps, positioned, journal):
+    def _place_mechanical(self, mechanical_links, main_comps, positioned):
         """Размещает механически связанные компоненты (вентилятор ← конденсатор)."""
         placed = {}
         for src_id, tgt_id in mechanical_links.items():
@@ -123,17 +120,17 @@ class TopologyLayoutEngine:
                 positioned.add(src_id)
                 placed[src_id] = {"partner": tgt_id, "x": comp.x, "y": comp.y}
 
-        journal.append({
+        logger.debug("Step: place_mechanical", extra={"journal_entry": {
             "step": "place_mechanical",
             "context": {},
             "input": {"links": dict(mechanical_links)},
             "output": {"placed": placed},
             "decision": None,
-        })
+        }})
 
     # ── Фаза 3: Байпас ──
 
-    def _place_bypass_components(self, connections, cycle, main_comps, positioned, safe_w, safe_h, journal):
+    def _place_bypass_components(self, connections, cycle, main_comps, positioned, safe_w, safe_h):
         """Размещает клапаны байпаса рядом с фреоновым контуром."""
         bypass_placed = set()
         placed = {}
@@ -157,17 +154,17 @@ class TopologyLayoutEngine:
                                    "x": main_comps[unplaced_id].x,
                                    "y": main_comps[unplaced_id].y}
 
-        journal.append({
+        logger.debug("Step: place_bypass", extra={"journal_entry": {
             "step": "place_bypass",
             "context": {},
             "input": {"bypass_connections": len([c for c in connections if c['type'] == 'freon_bypass'])},
             "output": {"placed": placed},
             "decision": None,
-        })
+        }})
 
     # ── Фаза 4: Водяной контур (BFS) ──
 
-    def _place_water_circuit(self, connections, main_comps, positioned, safe_w, safe_h, journal):
+    def _place_water_circuit(self, connections, main_comps, positioned, safe_w, safe_h):
         """BFS-расстановка компонентов водяного контура от уже размещённых."""
         placed = []
         changed = True
@@ -193,18 +190,18 @@ class TopologyLayoutEngine:
                                    "x": main_comps[src].x, "y": main_comps[src].y})
                     changed = True
 
-        journal.append({
+        logger.debug("Step: place_water_circuit", extra={"journal_entry": {
             "step": "place_water_circuit",
             "context": {},
             "input": {"water_connections": len([c for c in connections
                       if c['type'] in ('water_lt', 'water_ht', 'drain')])},
             "output": {"placed": placed},
             "decision": None,
-        })
+        }})
 
     # ── Фаза 5: Остаток ──
 
-    def _place_remaining(self, main_comps, positioned, safe_w, safe_h, journal):
+    def _place_remaining(self, main_comps, positioned, safe_w, safe_h):
         """Размещает оставшиеся компоненты рядом с однотипными или в свободной зоне."""
         placed = []
         for cid in main_comps:
@@ -219,13 +216,13 @@ class TopologyLayoutEngine:
             placed.append({"comp_id": cid, "method": "buddy" if placed_near else "fallback",
                            "x": comp.x, "y": comp.y})
 
-        journal.append({
+        logger.debug("Step: place_remaining", extra={"journal_entry": {
             "step": "place_remaining",
             "context": {},
             "input": {"unpositioned_count": len(placed)},
             "output": {"placed": placed},
             "decision": None,
-        })
+        }})
 
     def _place_near_buddy(self, comp, comp_id, main_comps, positioned):
         """Пытается поставить компонент рядом с однотипным уже размещённым."""
@@ -242,16 +239,16 @@ class TopologyLayoutEngine:
 
     # ── Фаза 6: Внешние порты ──
 
-    def _place_external_ports(self, ext_ports, connections, main_comps, journal):
+    def _place_external_ports(self, ext_ports, connections, main_comps):
         """Оркестратор размещения внешних портов."""
         if not ext_ports:
-            journal.append({
+            logger.debug("Step: place_external_ports", extra={"journal_entry": {
                 "step": "place_external_ports",
                 "context": {},
                 "input": {"ext_port_count": 0},
                 "output": {},
                 "decision": {"skipped": True, "reason": "no external ports"},
-            })
+            }})
             return
         ext_ports.sort(key=lambda p: PORT_ORDER.index(p.id) if p.id in PORT_ORDER else 99)
 
@@ -264,7 +261,7 @@ class TopologyLayoutEngine:
         self._finalize_port_positions(ext_ports, x_pos, desired_y, min_spacing)
 
         final_positions = {p.id: {"x": p.x, "y": p.y} for p in ext_ports}
-        journal.append({
+        logger.debug("Step: place_external_ports", extra={"journal_entry": {
             "step": "place_external_ports",
             "context": {},
             "input": {"ext_port_count": len(ext_ports),
@@ -272,7 +269,7 @@ class TopologyLayoutEngine:
             "output": {"desired_y": dict(desired_y),
                        "final_positions": final_positions},
             "decision": None,
-        })
+        }})
 
     def _align_ports_y(self, ext_ports, connections, main_comps):
         """Вычисляет желаемую Y-координату для каждого внешнего порта."""
