@@ -1,8 +1,0 @@
-components:
-- id: pump
-  type: Pump
-  name: "Насос pump"
-connections:
-- source: pump.out
-  target: non_existent_port.in
-  type: water_lt

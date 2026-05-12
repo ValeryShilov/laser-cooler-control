@@ -1,0 +1,11 @@
+components:
+- id: t
+  type: Tank
+  name: Бак
+- id: cp
+  type: Compressor
+  name: Компрессор
+connections:
+- source: t.water_out
+  target: cp.in
+  type: water_lt

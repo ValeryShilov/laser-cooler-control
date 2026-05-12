@@ -1,0 +1,92 @@
+components:
+- id: c0
+  type: Compressor
+  name: Компрессор 0
+- id: c1
+  type: Compressor
+  name: Компрессор 1
+- id: c2
+  type: Compressor
+  name: Компрессор 2
+- id: c3
+  type: Compressor
+  name: Компрессор 3
+- id: c4
+  type: Compressor
+  name: Компрессор 4
+- id: t0
+  type: Tank
+  name: Бак 0
+- id: t1
+  type: Tank
+  name: Бак 1
+- id: t2
+  type: Tank
+  name: Бак 2
+- id: t3
+  type: Tank
+  name: Бак 3
+- id: t4
+  type: Tank
+  name: Бак 4
+- id: p0
+  type: Pump
+  name: Насос 0
+- id: p1
+  type: Pump
+  name: Насос 1
+- id: p2
+  type: Pump
+  name: Насос 2
+- id: p3
+  type: Pump
+  name: Насос 3
+- id: p4
+  type: Pump
+  name: Насос 4
+- id: p5
+  type: Pump
+  name: Насос 5
+- id: p6
+  type: Pump
+  name: Насос 6
+- id: p7
+  type: Pump
+  name: Насос 7
+- id: p8
+  type: Pump
+  name: Насос 8
+- id: p9
+  type: Pump
+  name: Насос 9
+- id: p10
+  type: Pump
+  name: Насос 10
+- id: p11
+  type: Pump
+  name: Насос 11
+- id: p12
+  type: Pump
+  name: Насос 12
+- id: p13
+  type: Pump
+  name: Насос 13
+- id: p14
+  type: Pump
+  name: Насос 14
+- id: p15
+  type: Pump
+  name: Насос 15
+- id: p16
+  type: Pump
+  name: Насос 16
+- id: p17
+  type: Pump
+  name: Насос 17
+- id: p18
+  type: Pump
+  name: Насос 18
+- id: p19
+  type: Pump
+  name: Насос 19
+connections: []

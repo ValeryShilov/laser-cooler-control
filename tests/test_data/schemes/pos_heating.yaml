@@ -1,0 +1,26 @@
+components:
+- id: t
+  type: Tank
+  name: Бак
+- id: p
+  type: Pump
+  name: Насос
+- id: h
+  type: Heater
+  name: Heater
+- id: e
+  type: ExternalPort
+  name: Порт
+connections:
+- source: t.water_out
+  target: p.in
+  type: water_lt
+- source: p.out
+  target: h.in
+  type: water_lt
+- source: h.out
+  target: e.in
+  type: water_lt
+- source: e.out
+  target: t.water_lt_in
+  type: water_lt

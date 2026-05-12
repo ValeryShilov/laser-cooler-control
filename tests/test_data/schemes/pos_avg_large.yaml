@@ -1,0 +1,35 @@
+components:
+- id: cp1
+  type: Compressor
+  name: Компрессор 1
+- id: cp2
+  type: Compressor
+  name: Компрессор 2
+- id: cd
+  type: Condenser
+  name: Конденсатор
+- id: f1
+  type: Fan
+  name: Вентилятор 1
+- id: f2
+  type: Fan
+  name: Вентилятор 2
+- id: th
+  type: Throttle
+  name: ТРВ
+- id: t
+  type: Tank
+  name: Бак
+- id: p1
+  type: Pump
+  name: Насос 1
+- id: p2
+  type: Pump
+  name: Насос 2
+- id: e1
+  type: ExternalPort
+  name: Порт 1
+- id: e2
+  type: ExternalPort
+  name: Порт 2
+connections: []

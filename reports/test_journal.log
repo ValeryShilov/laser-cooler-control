@@ -1,621 +1,993 @@
-2026-05-08 09:57:18 [INFO] === START TEST: test_controller_initial_state ===
-2026-05-08 09:57:18 [INFO] [PASSED] Режим при создании: <SystemMode.OFF: 'off'> (Ожидалось: <SystemMode.OFF: 'off'>)
-2026-05-08 09:57:18 [INFO] === END TEST: test_controller_initial_state ===
-
-2026-05-08 09:57:18 [INFO] === START TEST: test_controller_start_stop ===
-2026-05-08 09:57:18 [INFO] [PASSED] Режим после start(): <SystemMode.AUTO: 'auto'> (Ожидалось: <SystemMode.AUTO: 'auto'>)
-2026-05-08 09:57:18 [INFO] [PASSED] Количество сигналов после start(): 1 (Ожидалось: 1)
-2026-05-08 09:57:18 [INFO] [PASSED] Режим в сигнале: <SystemMode.AUTO: 'auto'> (Ожидалось: <SystemMode.AUTO: 'auto'>)
-2026-05-08 09:57:18 [INFO] [PASSED] ТЭН включен при старте: True (Ожидалось: is True)
-2026-05-08 09:57:18 [INFO] [PASSED] Клапан выключен при старте: False (Ожидалось: is False)
-2026-05-08 09:57:18 [INFO] [PASSED] Режим после stop(): <SystemMode.OFF: 'off'> (Ожидалось: <SystemMode.OFF: 'off'>)
-2026-05-08 09:57:18 [INFO] [PASSED] Количество сигналов после stop(): 2 (Ожидалось: 2)
-2026-05-08 09:57:18 [INFO] [PASSED] Режим в сигнале после stop(): <SystemMode.OFF: 'off'> (Ожидалось: <SystemMode.OFF: 'off'>)
-2026-05-08 09:57:18 [INFO] [PASSED] ТЭН выключен после stop(): False (Ожидалось: is False)
-2026-05-08 09:57:18 [INFO] === END TEST: test_controller_start_stop ===
-
-2026-05-08 09:57:18 [INFO] === START TEST: test_controller_set_mode ===
-2026-05-08 09:57:18 [INFO] [PASSED] Режим контроллера: <SystemMode.MANUAL: 'manual'> (Ожидалось: <SystemMode.MANUAL: 'manual'>)
-2026-05-08 09:57:18 [INFO] [PASSED] Режим в последнем сигнале: <SystemMode.MANUAL: 'manual'> (Ожидалось: <SystemMode.MANUAL: 'manual'>)
-2026-05-08 09:57:18 [INFO] === END TEST: test_controller_set_mode ===
-
-2026-05-08 09:57:18 [INFO] === START TEST: test_controller_manual_relay ===
-2026-05-08 09:57:18 [INFO] [PASSED] ТЭН включен вручную: True (Ожидалось: is True)
-2026-05-08 09:57:18 [INFO] [PASSED] Клапан включен вручную: True (Ожидалось: is True)
-2026-05-08 09:57:18 [INFO] === END TEST: test_controller_manual_relay ===
-
-2026-05-08 09:57:18 [INFO] === START TEST: test_system_mode_enum ===
-2026-05-08 09:57:18 [INFO] [PASSED] SystemMode.OFF: 'off' (Ожидалось: 'off')
-2026-05-08 09:57:18 [INFO] [PASSED] SystemMode.AUTO: 'auto' (Ожидалось: 'auto')
-2026-05-08 09:57:18 [INFO] [PASSED] SystemMode.MANUAL: 'manual' (Ожидалось: 'manual')
-2026-05-08 09:57:18 [INFO] === END TEST: test_system_mode_enum ===
-
-2026-05-08 09:57:18 [INFO] === START TEST: test_system_state_defaults ===
-2026-05-08 09:57:18 [INFO] [PASSED] Режим по умолчанию: <SystemMode.OFF: 'off'> (Ожидалось: <SystemMode.OFF: 'off'>)
-2026-05-08 09:57:18 [INFO] [PASSED] ТЭН по умолчанию: False (Ожидалось: is False)
-2026-05-08 09:57:18 [INFO] [PASSED] Клапан по умолчанию: False (Ожидалось: is False)
-2026-05-08 09:57:18 [INFO] [PASSED] Температура LT: 25.0 (Ожидалось: 25.0)
-2026-05-08 09:57:18 [INFO] [PASSED] Температура HT: 30.0 (Ожидалось: 30.0)
-2026-05-08 09:57:18 [INFO] [PASSED] Температура воздуха: 24.1 (Ожидалось: 24.1)
-2026-05-08 09:57:18 [INFO] [PASSED] Проток LT: 0.0 (Ожидалось: 0.0)
-2026-05-08 09:57:18 [INFO] [PASSED] Проток HT: 0.0 (Ожидалось: 0.0)
-2026-05-08 09:57:18 [INFO] [PASSED] Давление: 0.0 (Ожидалось: 0.0)
-2026-05-08 09:57:18 [INFO] [PASSED] Уровень воды: 0.85 (Ожидалось: 0.85)
-2026-05-08 09:57:18 [INFO] === END TEST: test_system_state_defaults ===
-
-2026-05-08 09:57:18 [INFO] === START TEST: test_system_state_initialization ===
-2026-05-08 09:57:18 [INFO] [PASSED] Режим: <SystemMode.AUTO: 'auto'> (Ожидалось: <SystemMode.AUTO: 'auto'>)
-2026-05-08 09:57:18 [INFO] [PASSED] ТЭН: True (Ожидалось: is True)
-2026-05-08 09:57:18 [INFO] [PASSED] Клапан: True (Ожидалось: is True)
-2026-05-08 09:57:18 [INFO] [PASSED] Температура LT: 20.5 (Ожидалось: 20.5)
-2026-05-08 09:57:18 [INFO] [PASSED] Проток LT: 15.0 (Ожидалось: 15.0)
-2026-05-08 09:57:18 [INFO] === END TEST: test_system_state_initialization ===
-
-2026-05-08 09:57:18 [INFO] === START TEST: test_mock_adapter_initial_state ===
-2026-05-08 09:57:18 [INFO] [PASSED] Реле pump: False (Ожидалось: is False)
-2026-05-08 09:57:18 [INFO] [PASSED] Реле compressor: False (Ожидалось: is False)
-2026-05-08 09:57:18 [INFO] [PASSED] Реле heater: False (Ожидалось: is False)
-2026-05-08 09:57:18 [INFO] [PASSED] Реле valve: False (Ожидалось: is False)
-2026-05-08 09:57:18 [INFO] [PASSED] Реле fan: False (Ожидалось: is False)
-2026-05-08 09:57:18 [INFO] === END TEST: test_mock_adapter_initial_state ===
-
-2026-05-08 09:57:18 [INFO] === START TEST: test_mock_adapter_set_get_relay ===
-2026-05-08 09:57:18 [INFO] [PASSED] Реле pump после включения: True (Ожидалось: is True)
-2026-05-08 09:57:18 [INFO] [PASSED] Несуществующее реле: False (Ожидалось: is False)
-2026-05-08 09:57:18 [INFO] === END TEST: test_mock_adapter_set_get_relay ===
-
-2026-05-08 09:57:18 [INFO] === START TEST: test_mock_adapter_sensors_running ===
-2026-05-08 09:57:18 [INFO] [PASSED] Проток LT (выкл): 0.0 (Ожидалось: 0.0)
-2026-05-08 09:57:18 [INFO] [PASSED] Проток HT (выкл): 0.0 (Ожидалось: 0.0)
-2026-05-08 09:57:18 [INFO] [PASSED] Давление (выкл): 0.0 (Ожидалось: 0.0)
-2026-05-08 09:57:18 [INFO] [PASSED] Температура воздуха (выкл): 24.1 (Ожидалось: 24.1)
-2026-05-08 09:57:18 [INFO] [PASSED] Проток LT (вкл): 14.5 (Ожидалось: > 0.0)
-2026-05-08 09:57:18 [INFO] [PASSED] Проток HT (вкл): 2.8 (Ожидалось: > 0.0)
-2026-05-08 09:57:18 [INFO] [PASSED] Давление (вкл): 3.1 (Ожидалось: > 0.0)
-2026-05-08 09:57:18 [INFO] [PASSED] Температура воздуха (вкл): 25.2 (Ожидалось: 25.2)
-2026-05-08 09:57:18 [INFO] === END TEST: test_mock_adapter_sensors_running ===
-
-2026-05-08 09:57:18 [INFO] === START TEST: test_label_placer_init_occupied_zones ===
-2026-05-08 09:57:18 [INFO] [PASSED] Количество зон: 2 (Ожидалось: 2)
-2026-05-08 09:57:18 [INFO] [PASSED] Тип элемента: 'QRectF' (Ожидалось: 'QRectF')
-2026-05-08 09:57:18 [INFO] === END TEST: test_label_placer_init_occupied_zones ===
-
-2026-05-08 09:57:18 [INFO] === START TEST: test_label_placer_build_candidate_areas ===
-2026-05-08 09:57:18 [INFO] [PASSED] Количество слотов: 4 (Ожидалось: 4)
-2026-05-08 09:57:18 [INFO] [PASSED] Наличие bottom: True (Ожидалось: is True)
-2026-05-08 09:57:18 [INFO] [PASSED] Наличие top: True (Ожидалось: is True)
-2026-05-08 09:57:18 [INFO] [PASSED] Наличие left: True (Ожидалось: is True)
-2026-05-08 09:57:18 [INFO] [PASSED] Наличие right: True (Ожидалось: is True)
-2026-05-08 09:57:18 [INFO] [PASSED] bottom.top > comp.bottom: 162.0 (Ожидалось: 162 ± 1)
-2026-05-08 09:57:18 [INFO] === END TEST: test_label_placer_build_candidate_areas ===
-
-2026-05-08 09:57:18 [INFO] === START TEST: test_label_placer_score_slot_empty ===
-2026-05-08 09:57:18 [INFO] [PASSED] bottom score (пустое поле): 0 (Ожидалось: 0)
-2026-05-08 09:57:18 [INFO] [PASSED] top score (пустое поле): 1 (Ожидалось: 1)
-2026-05-08 09:57:18 [INFO] === END TEST: test_label_placer_score_slot_empty ===
-
-2026-05-08 09:57:18 [INFO] === START TEST: test_label_placer_score_slot_with_pipes ===
-2026-05-08 09:57:18 [INFO] [PASSED] bottom score > top score (трубы внизу): 1950 (Ожидалось: > 1)
-2026-05-08 09:57:18 [INFO] === END TEST: test_label_placer_score_slot_with_pipes ===
-
-2026-05-08 09:57:18 [INFO] === START TEST: test_label_placer_select_best_slot ===
-2026-05-08 09:57:18 [INFO] [PASSED] Лучший слот (пустое поле): 'bottom' (Ожидалось: 'bottom')
-2026-05-08 09:57:18 [INFO] [PASSED] Scores содержит 4 слота: 4 (Ожидалось: 4)
-2026-05-08 09:57:18 [INFO] [PASSED] bottom score минимален: 0 (Ожидалось: 0)
-2026-05-08 09:57:18 [INFO] === END TEST: test_label_placer_select_best_slot ===
-
-2026-05-08 09:57:18 [INFO] === START TEST: test_label_placer_basic ===
-2026-05-08 09:57:18 [INFO] [PASSED] Позиция надписи бака: 'bottom' (Ожидалось: 'bottom')
-2026-05-08 09:57:18 [INFO] [PASSED] Позиция надписи насоса: 'bottom' (Ожидалось: 'bottom')
-2026-05-08 09:57:18 [INFO] [PASSED] Внешний порт исключён: False (Ожидалось: is False)
-2026-05-08 09:57:18 [INFO] === END TEST: test_label_placer_basic ===
-
-2026-05-08 09:57:18 [INFO] === START TEST: test_label_placer_avoid_pipes ===
-2026-05-08 09:57:18 [INFO] [PASSED] Надпись насоса (bottom занят): 'top' (Ожидалось: 'top')
-2026-05-08 09:57:18 [INFO] === END TEST: test_label_placer_avoid_pipes ===
-
-2026-05-08 09:57:18 [INFO] === START TEST: test_label_placer_avoid_pipes_right ===
-2026-05-08 09:57:18 [INFO] [PASSED] Надпись насоса (bottom+top заняты): 'right' (Ожидалось: 'right')
-2026-05-08 09:57:18 [INFO] === END TEST: test_label_placer_avoid_pipes_right ===
-
-2026-05-08 09:57:18 [INFO] === START TEST: test_label_placer_avoid_pipes_left ===
-2026-05-08 09:57:18 [INFO] [PASSED] Надпись насоса (bottom+top+right заняты): 'left' (Ожидалось: 'left')
-2026-05-08 09:57:18 [INFO] === END TEST: test_label_placer_avoid_pipes_left ===
-
-2026-05-08 09:57:18 [INFO] === START TEST: test_label_placer_journal ===
-2026-05-08 09:57:18 [INFO] [PASSED] Журнал не пустой: 3 (Ожидалось: > 0)
-2026-05-08 09:57:18 [INFO] [PASSED] Первый шаг: 'init_zones' (Ожидалось: 'init_zones')
-2026-05-08 09:57:18 [INFO] [PASSED] init_zones.input.comp_count: 3 (Ожидалось: 3)
-2026-05-08 09:57:18 [INFO] [PASSED] init_zones.output.occupied_rects_count: 3 (Ожидалось: 3)
-2026-05-08 09:57:18 [INFO] [PASSED] Количество select_slot записей: 2 (Ожидалось: 2)
-2026-05-08 09:57:18 [INFO] [PASSED] tank entry имеет scores: True (Ожидалось: is True)
-2026-05-08 09:57:18 [INFO] [PASSED] tank scores имеет 4 слота: 4 (Ожидалось: 4)
-2026-05-08 09:57:18 [INFO] [PASSED] tank decision.chosen: 'bottom' (Ожидалось: 'bottom')
-2026-05-08 09:57:18 [INFO] [PASSED] Выбранный слот = минимальный score: 0 (Ожидалось: 0)
-2026-05-08 09:57:18 [INFO] [PASSED] Результат с журналом = результат без: {'tank': 'bottom', 'pump': 'bottom'} (Ожидалось: {'tank': 'bottom', 'pump': 'bottom'})
-2026-05-08 09:57:18 [INFO] === END TEST: test_label_placer_journal ===
-
-2026-05-08 09:57:18 [INFO] === START TEST: test_label_placer_regression ===
-2026-05-08 09:57:18 [INFO] [PASSED] Результат совпадает с эталоном: {'tank': 'bottom', 'pump': 'bottom'} (Ожидалось: {'tank': 'bottom', 'pump': 'bottom'})
-2026-05-08 09:57:18 [INFO] [PASSED] Количество записей журнала: 3 (Ожидалось: 3)
-2026-05-08 09:57:18 [INFO] [PASSED] Шаг [0] совпадает: 'init_zones' (Ожидалось: 'init_zones')
-2026-05-08 09:57:18 [INFO] [PASSED] Шаг [1] совпадает: 'select_slot' (Ожидалось: 'select_slot')
-2026-05-08 09:57:18 [INFO] [PASSED] Решение [1] совпадает: 'bottom' (Ожидалось: 'bottom')
-2026-05-08 09:57:18 [INFO] [PASSED] Шаг [2] совпадает: 'select_slot' (Ожидалось: 'select_slot')
-2026-05-08 09:57:18 [INFO] [PASSED] Решение [2] совпадает: 'bottom' (Ожидалось: 'bottom')
-2026-05-08 09:57:18 [INFO] === END TEST: test_label_placer_regression ===
-
-2026-05-08 09:57:18 [INFO] === START TEST: test_layout_external_ports ===
-2026-05-08 09:57:18 [INFO] [PASSED] port_in правее основных: 700 (Ожидалось: > 650)
-2026-05-08 09:57:18 [INFO] [PASSED] port_out правее основных: 700 (Ожидалось: > 650)
-2026-05-08 09:57:18 [INFO] [PASSED] port_in выровнен по Y: 170 (Ожидалось: 170 ± 20)
-2026-05-08 09:57:18 [INFO] [PASSED] port_out выровнен по Y: 270 (Ожидалось: 270 ± 20)
-2026-05-08 09:57:18 [INFO] === END TEST: test_layout_external_ports ===
-
-2026-05-08 09:57:18 [INFO] === START TEST: test_layout_place_downstream ===
-2026-05-08 09:57:18 [INFO] [PASSED] Насос правее бака: 570 (Ожидалось: > 520)
-2026-05-08 09:57:18 [INFO] [PASSED] Насос на уровне water_out: 360 (Ожидалось: 360 ± 20)
-2026-05-08 09:57:18 [INFO] [PASSED] ТЭН на 50% высоты: 260 (Ожидалось: 260)
-2026-05-08 09:57:18 [INFO] === END TEST: test_layout_place_downstream ===
-
-2026-05-08 09:57:18 [INFO] === START TEST: test_layout_nudge_to_free ===
-2026-05-08 09:57:18 [INFO] [PASSED] Пересечение до сдвига: True (Ожидалось: is True)
-2026-05-08 09:57:18 [INFO] [PASSED] Нет пересечения после сдвига: False (Ожидалось: is False)
-2026-05-08 09:57:18 [INFO] [PASSED] pump2 сдвинулся с (300,300): True (Ожидалось: is True)
-2026-05-08 09:57:18 [INFO] === END TEST: test_layout_nudge_to_free ===
-
-2026-05-08 09:57:18 [INFO] === START TEST: test_layout_find_cycle ===
-2026-05-08 09:57:18 [INFO] [PASSED] Длина цикла: 4 (Ожидалось: 4)
-2026-05-08 09:57:18 [INFO] [PASSED] comp в цикле: 'comp' (Ожидалось: содержится в ['comp', 'cond', 'thr', 'evap'])
-2026-05-08 09:57:18 [INFO] [PASSED] cond в цикле: 'cond' (Ожидалось: содержится в ['comp', 'cond', 'thr', 'evap'])
-2026-05-08 09:57:18 [INFO] [PASSED] thr в цикле: 'thr' (Ожидалось: содержится в ['comp', 'cond', 'thr', 'evap'])
-2026-05-08 09:57:18 [INFO] [PASSED] evap в цикле: 'evap' (Ожидалось: содержится в ['comp', 'cond', 'thr', 'evap'])
-2026-05-08 09:57:18 [INFO] === END TEST: test_layout_find_cycle ===
-
-2026-05-08 09:57:18 [INFO] === START TEST: test_layout_cycle_rect_positions ===
-2026-05-08 09:57:18 [INFO] [PASSED] Количество позиций (n=4): 4 (Ожидалось: 4)
-2026-05-08 09:57:18 [INFO] [PASSED] Позиция 0 (bottom-left): (0.12, 0.82) (Ожидалось: (0.12, 0.82))
-2026-05-08 09:57:18 [INFO] [PASSED] Позиция 1 (top-left): (0.12, 0.22) (Ожидалось: (0.12, 0.22))
-2026-05-08 09:57:18 [INFO] [PASSED] Позиция 2 (top-center): (0.32, 0.12) (Ожидалось: (0.32, 0.12))
-2026-05-08 09:57:18 [INFO] [PASSED] Позиция 3 (center): (0.5, 0.5) (Ожидалось: (0.5, 0.5))
-2026-05-08 09:57:18 [INFO] [PASSED] Количество позиций (n=5): 5 (Ожидалось: 5)
-2026-05-08 09:57:18 [INFO] [PASSED] 5-я позиция уникальна: True (Ожидалось: is True)
-2026-05-08 09:57:18 [INFO] === END TEST: test_layout_cycle_rect_positions ===
-
-2026-05-08 09:57:18 [INFO] === START TEST: test_layout_place_bypass ===
-2026-05-08 09:57:18 [INFO] [PASSED] X клапана байпаса: 440 (Ожидалось: 440)
-2026-05-08 09:57:18 [INFO] [PASSED] Y клапана байпаса: 270 (Ожидалось: 270)
-2026-05-08 09:57:18 [INFO] === END TEST: test_layout_place_bypass ===
-
-2026-05-08 09:57:18 [INFO] === START TEST: test_layout_freon_cycle_integration ===
-2026-05-08 09:57:18 [INFO] [PASSED] Компонент comp размещён: True (Ожидалось: is True)
-2026-05-08 09:57:18 [INFO] [PASSED] Компонент cond размещён: True (Ожидалось: is True)
-2026-05-08 09:57:18 [INFO] [PASSED] Компонент thr размещён: True (Ожидалось: is True)
-2026-05-08 09:57:18 [INFO] [PASSED] Компонент evap размещён: True (Ожидалось: is True)
-2026-05-08 09:57:18 [INFO] [PASSED] Компрессор левее бака: 130 (Ожидалось: < 440)
-2026-05-08 09:57:18 [INFO] [PASSED] Компрессор ниже конденсатора: 410 (Ожидалось: > 80)
-2026-05-08 09:57:18 [INFO] === END TEST: test_layout_freon_cycle_integration ===
-
-2026-05-08 09:57:18 [INFO] === START TEST: test_layout_journal ===
-2026-05-08 09:57:18 [INFO] [PASSED] separate_components в журнале: 'separate_components' (Ожидалось: содержится в ['separate_components', 'build_adjacency', 'place_freon_cycle', 'place_mechanical', 'place_bypass', 'place_water_circuit', 'place_remaining', 'place_external_ports'])
-2026-05-08 09:57:18 [INFO] [PASSED] build_adjacency в журнале: 'build_adjacency' (Ожидалось: содержится в ['separate_components', 'build_adjacency', 'place_freon_cycle', 'place_mechanical', 'place_bypass', 'place_water_circuit', 'place_remaining', 'place_external_ports'])
-2026-05-08 09:57:18 [INFO] [PASSED] place_freon_cycle в журнале: 'place_freon_cycle' (Ожидалось: содержится в ['separate_components', 'build_adjacency', 'place_freon_cycle', 'place_mechanical', 'place_bypass', 'place_water_circuit', 'place_remaining', 'place_external_ports'])
-2026-05-08 09:57:18 [INFO] [PASSED] place_mechanical в журнале: 'place_mechanical' (Ожидалось: содержится в ['separate_components', 'build_adjacency', 'place_freon_cycle', 'place_mechanical', 'place_bypass', 'place_water_circuit', 'place_remaining', 'place_external_ports'])
-2026-05-08 09:57:18 [INFO] [PASSED] place_bypass в журнале: 'place_bypass' (Ожидалось: содержится в ['separate_components', 'build_adjacency', 'place_freon_cycle', 'place_mechanical', 'place_bypass', 'place_water_circuit', 'place_remaining', 'place_external_ports'])
-2026-05-08 09:57:18 [INFO] [PASSED] place_water_circuit в журнале: 'place_water_circuit' (Ожидалось: содержится в ['separate_components', 'build_adjacency', 'place_freon_cycle', 'place_mechanical', 'place_bypass', 'place_water_circuit', 'place_remaining', 'place_external_ports'])
-2026-05-08 09:57:18 [INFO] [PASSED] place_external_ports в журнале: 'place_external_ports' (Ожидалось: содержится в ['separate_components', 'build_adjacency', 'place_freon_cycle', 'place_mechanical', 'place_bypass', 'place_water_circuit', 'place_remaining', 'place_external_ports'])
-2026-05-08 09:57:18 [INFO] [PASSED] [separate_components] имеет context: True (Ожидалось: is True)
-2026-05-08 09:57:18 [INFO] [PASSED] [separate_components] имеет input: True (Ожидалось: is True)
-2026-05-08 09:57:18 [INFO] [PASSED] [separate_components] имеет output: True (Ожидалось: is True)
-2026-05-08 09:57:18 [INFO] [PASSED] [separate_components] имеет decision: True (Ожидалось: is True)
-2026-05-08 09:57:18 [INFO] [PASSED] [build_adjacency] имеет context: True (Ожидалось: is True)
-2026-05-08 09:57:18 [INFO] [PASSED] [build_adjacency] имеет input: True (Ожидалось: is True)
-2026-05-08 09:57:18 [INFO] [PASSED] [build_adjacency] имеет output: True (Ожидалось: is True)
-2026-05-08 09:57:18 [INFO] [PASSED] [build_adjacency] имеет decision: True (Ожидалось: is True)
-2026-05-08 09:57:18 [INFO] [PASSED] [place_freon_cycle] имеет context: True (Ожидалось: is True)
-2026-05-08 09:57:18 [INFO] [PASSED] [place_freon_cycle] имеет input: True (Ожидалось: is True)
-2026-05-08 09:57:18 [INFO] [PASSED] [place_freon_cycle] имеет output: True (Ожидалось: is True)
-2026-05-08 09:57:18 [INFO] [PASSED] [place_freon_cycle] имеет decision: True (Ожидалось: is True)
-2026-05-08 09:57:18 [INFO] [PASSED] [place_mechanical] имеет context: True (Ожидалось: is True)
-2026-05-08 09:57:18 [INFO] [PASSED] [place_mechanical] имеет input: True (Ожидалось: is True)
-2026-05-08 09:57:18 [INFO] [PASSED] [place_mechanical] имеет output: True (Ожидалось: is True)
-2026-05-08 09:57:18 [INFO] [PASSED] [place_mechanical] имеет decision: True (Ожидалось: is True)
-2026-05-08 09:57:18 [INFO] [PASSED] [place_bypass] имеет context: True (Ожидалось: is True)
-2026-05-08 09:57:18 [INFO] [PASSED] [place_bypass] имеет input: True (Ожидалось: is True)
-2026-05-08 09:57:18 [INFO] [PASSED] [place_bypass] имеет output: True (Ожидалось: is True)
-2026-05-08 09:57:18 [INFO] [PASSED] [place_bypass] имеет decision: True (Ожидалось: is True)
-2026-05-08 09:57:18 [INFO] [PASSED] [place_water_circuit] имеет context: True (Ожидалось: is True)
-2026-05-08 09:57:18 [INFO] [PASSED] [place_water_circuit] имеет input: True (Ожидалось: is True)
-2026-05-08 09:57:18 [INFO] [PASSED] [place_water_circuit] имеет output: True (Ожидалось: is True)
-2026-05-08 09:57:18 [INFO] [PASSED] [place_water_circuit] имеет decision: True (Ожидалось: is True)
-2026-05-08 09:57:18 [INFO] [PASSED] [place_remaining] имеет context: True (Ожидалось: is True)
-2026-05-08 09:57:18 [INFO] [PASSED] [place_remaining] имеет input: True (Ожидалось: is True)
-2026-05-08 09:57:18 [INFO] [PASSED] [place_remaining] имеет output: True (Ожидалось: is True)
-2026-05-08 09:57:18 [INFO] [PASSED] [place_remaining] имеет decision: True (Ожидалось: is True)
-2026-05-08 09:57:18 [INFO] [PASSED] [place_external_ports] имеет context: True (Ожидалось: is True)
-2026-05-08 09:57:18 [INFO] [PASSED] [place_external_ports] имеет input: True (Ожидалось: is True)
-2026-05-08 09:57:18 [INFO] [PASSED] [place_external_ports] имеет output: True (Ожидалось: is True)
-2026-05-08 09:57:18 [INFO] [PASSED] [place_external_ports] имеет decision: True (Ожидалось: is True)
-2026-05-08 09:57:18 [INFO] [PASSED] main_count: 4 (Ожидалось: 4)
-2026-05-08 09:57:18 [INFO] [PASSED] ext_port_count: 1 (Ожидалось: 1)
-2026-05-08 09:57:18 [INFO] [PASSED] Цикл найден: True (Ожидалось: is True)
-2026-05-08 09:57:18 [INFO] [PASSED] Длина цикла: 4 (Ожидалось: 4)
-2026-05-08 09:57:18 [INFO] [PASSED] Без журнала = None: True (Ожидалось: is True)
-2026-05-08 09:57:18 [INFO] === END TEST: test_layout_journal ===
-
-2026-05-08 09:57:18 [INFO] === START TEST: test_layout_journal_regression ===
-2026-05-08 09:57:18 [INFO] [PASSED] Количество шагов: 8 (Ожидалось: 8)
-2026-05-08 09:57:18 [INFO] [PASSED] Шаг [0]: 'separate_components' (Ожидалось: 'separate_components')
-2026-05-08 09:57:18 [INFO] [PASSED] Decision [0]: None (Ожидалось: None)
-2026-05-08 09:57:18 [INFO] [PASSED] Шаг [1]: 'build_adjacency' (Ожидалось: 'build_adjacency')
-2026-05-08 09:57:18 [INFO] [PASSED] Decision [1]: None (Ожидалось: None)
-2026-05-08 09:57:18 [INFO] [PASSED] Шаг [2]: 'place_freon_cycle' (Ожидалось: 'place_freon_cycle')
-2026-05-08 09:57:18 [INFO] [PASSED] Decision [2]: {'found_cycle': True, 'cycle_length': 4} (Ожидалось: {'found_cycle': True, 'cycle_length': 4})
-2026-05-08 09:57:18 [INFO] [PASSED] Шаг [3]: 'place_mechanical' (Ожидалось: 'place_mechanical')
-2026-05-08 09:57:18 [INFO] [PASSED] Decision [3]: None (Ожидалось: None)
-2026-05-08 09:57:18 [INFO] [PASSED] Шаг [4]: 'place_bypass' (Ожидалось: 'place_bypass')
-2026-05-08 09:57:18 [INFO] [PASSED] Decision [4]: None (Ожидалось: None)
-2026-05-08 09:57:18 [INFO] [PASSED] Шаг [5]: 'place_water_circuit' (Ожидалось: 'place_water_circuit')
-2026-05-08 09:57:18 [INFO] [PASSED] Decision [5]: None (Ожидалось: None)
-2026-05-08 09:57:18 [INFO] [PASSED] Шаг [6]: 'place_remaining' (Ожидалось: 'place_remaining')
-2026-05-08 09:57:18 [INFO] [PASSED] Decision [6]: None (Ожидалось: None)
-2026-05-08 09:57:18 [INFO] [PASSED] Шаг [7]: 'place_external_ports' (Ожидалось: 'place_external_ports')
-2026-05-08 09:57:18 [INFO] [PASSED] Decision [7]: {'skipped': True, 'reason': 'no external ports'} (Ожидалось: {'skipped': True, 'reason': 'no external ports'})
-2026-05-08 09:57:18 [INFO] === END TEST: test_layout_journal_regression ===
-
-2026-05-08 09:57:18 [INFO] === START TEST: test_astar_simple_path ===
-2026-05-08 09:57:18 [INFO] [PASSED] Путь найден: 2 (Ожидалось: > 0)
-2026-05-08 09:57:18 [INFO] [PASSED] Начало пути: (10, 10) (Ожидалось: (10, 10))
-2026-05-08 09:57:18 [INFO] [PASSED] Конец пути: (100, 10) (Ожидалось: (100, 10))
-2026-05-08 09:57:18 [INFO] === END TEST: test_astar_simple_path ===
-
-2026-05-08 09:57:18 [INFO] === START TEST: test_astar_obstacle_avoidance ===
-2026-05-08 09:57:18 [INFO] [PASSED] Путь найден с обходом: 4 (Ожидалось: > 0)
-2026-05-08 09:57:18 [INFO] [PASSED] Путь не прямой (> 2 точек): 4 (Ожидалось: > 2)
-2026-05-08 09:57:18 [INFO] [PASSED] Начало пути: (10, 100) (Ожидалось: (10, 100))
-2026-05-08 09:57:18 [INFO] [PASSED] Конец пути: (100, 100) (Ожидалось: (100, 100))
-2026-05-08 09:57:18 [INFO] [PASSED] Точка (10, 60) не заблокирована: False (Ожидалось: is False)
-2026-05-08 09:57:18 [INFO] [PASSED] Точка (100, 60) не заблокирована: False (Ожидалось: is False)
-2026-05-08 09:57:18 [INFO] === END TEST: test_astar_obstacle_avoidance ===
-
-2026-05-08 09:57:18 [INFO] === START TEST: test_get_escape_point ===
-2026-05-08 09:57:18 [INFO] [PASSED] Exact на сетке: 0 (Ожидалось: 0)
-2026-05-08 09:57:18 [INFO] [PASSED] Safe левее exact (левая грань): 80 (Ожидалось: < 100)
-2026-05-08 09:57:18 [INFO] [PASSED] Safe.y == Exact.y: 130 (Ожидалось: 130)
-2026-05-08 09:57:18 [INFO] === END TEST: test_get_escape_point ===
-
-2026-05-08 09:57:18 [INFO] === START TEST: test_router_register_path_avoidance ===
-2026-05-08 09:57:18 [INFO] [PASSED] (50, 10) в drawn_cells: (50, 10) (Ожидалось: содержится в {(70, 10), (50, 10), (40, 10), (100, 10), (30, 10), (90, 10), (20, 10), (80, 10), (10, 10), (60, 10)})
-2026-05-08 09:57:18 [INFO] === END TEST: test_router_register_path_avoidance ===
-
-2026-05-08 09:57:18 [INFO] === START TEST: test_router_smooth_path ===
-2026-05-08 09:57:18 [INFO] [PASSED] Сглаженный путь не длиннее: 3 (Ожидалось: <= 4)
-2026-05-08 09:57:18 [INFO] [PASSED] Начало сохранено: (10, 10) (Ожидалось: (10, 10))
-2026-05-08 09:57:18 [INFO] [PASSED] Конец сохранён: (100, 50) (Ожидалось: (100, 50))
-2026-05-08 09:57:18 [INFO] === END TEST: test_router_smooth_path ===
-
-2026-05-08 09:57:18 [INFO] === START TEST: test_build_waypoint_chain ===
-2026-05-08 09:57:18 [INFO] [PASSED] Без waypoints — 2 точки: 2 (Ожидалось: 2)
-2026-05-08 09:57:18 [INFO] [PASSED] Первая = safe_start: (10, 10) (Ожидалось: (10, 10))
-2026-05-08 09:57:18 [INFO] [PASSED] Последняя = safe_end: (100, 100) (Ожидалось: (100, 100))
-2026-05-08 09:57:18 [INFO] [PASSED] С waypoint — 3 точки: 3 (Ожидалось: 3)
-2026-05-08 09:57:18 [INFO] [PASSED] Waypoint привязан к сетке: (60, 60) (Ожидалось: (60, 60))
-2026-05-08 09:57:18 [INFO] === END TEST: test_build_waypoint_chain ===
-
-2026-05-08 09:57:18 [INFO] === START TEST: test_route_through_points ===
-2026-05-08 09:57:18 [INFO] [PASSED] Путь найден: 10 (Ожидалось: > 0)
-2026-05-08 09:57:18 [INFO] [PASSED] Начало: (10, 10) (Ожидалось: (10, 10))
-2026-05-08 09:57:18 [INFO] [PASSED] Конец: (100, 10) (Ожидалось: (100, 10))
-2026-05-08 09:57:18 [INFO] === END TEST: test_route_through_points ===
-
-2026-05-08 09:57:18 [INFO] === START TEST: test_build_exempt_set ===
-2026-05-08 09:57:18 [INFO] [PASSED] exact_start в exempt: (10, 10) (Ожидалось: содержится в {(10, 10), (100, 10), (90, 10), (20, 10)})
-2026-05-08 09:57:18 [INFO] [PASSED] exact_end в exempt: (100, 10) (Ожидалось: содержится в {(10, 10), (100, 10), (90, 10), (20, 10)})
-2026-05-08 09:57:18 [INFO] [PASSED] safe_start в exempt: (20, 10) (Ожидалось: содержится в {(10, 10), (100, 10), (90, 10), (20, 10)})
-2026-05-08 09:57:18 [INFO] [PASSED] safe_end в exempt: (90, 10) (Ожидалось: содержится в {(10, 10), (100, 10), (90, 10), (20, 10)})
-2026-05-08 09:57:18 [INFO] === END TEST: test_build_exempt_set ===
-
-2026-05-08 09:57:18 [INFO] === START TEST: test_cleanup_path ===
-2026-05-08 09:57:18 [INFO] [PASSED] Дубликат удалён: 2 (Ожидалось: 2)
-2026-05-08 09:57:18 [INFO] [PASSED] Коллинеарная точка удалена: 2 (Ожидалось: 2)
-2026-05-08 09:57:18 [INFO] [PASSED] Сохранены крайние: [(10, 10), (50, 10)] (Ожидалось: [(10, 10), (50, 10)])
-2026-05-08 09:57:18 [INFO] === END TEST: test_cleanup_path ===
-
-2026-05-08 09:57:18 [INFO] === START TEST: test_line_clear ===
-2026-05-08 09:57:18 [INFO] [PASSED] Свободная линия: True (Ожидалось: is True)
-2026-05-08 09:57:18 [INFO] [PASSED] Заблокированная линия: False (Ожидалось: is False)
-2026-05-08 09:57:18 [INFO] === END TEST: test_line_clear ===
-
-2026-05-08 09:57:18 [INFO] === START TEST: test_find_path_journal ===
-2026-05-08 09:57:18 [INFO] [PASSED] Путь найден: 2 (Ожидалось: > 0)
-2026-05-08 09:57:18 [INFO] [PASSED] Журнал не пустой: 4 (Ожидалось: > 0)
-2026-05-08 09:57:18 [INFO] [PASSED] build_waypoints в журнале: 'build_waypoints' (Ожидалось: содержится в ['build_waypoints', 'route_segments', 'smooth_path', 'final_path'])
-2026-05-08 09:57:18 [INFO] [PASSED] route_segments в журнале: 'route_segments' (Ожидалось: содержится в ['build_waypoints', 'route_segments', 'smooth_path', 'final_path'])
-2026-05-08 09:57:18 [INFO] [PASSED] smooth_path в журнале: 'smooth_path' (Ожидалось: содержится в ['build_waypoints', 'route_segments', 'smooth_path', 'final_path'])
-2026-05-08 09:57:18 [INFO] [PASSED] final_path в журнале: 'final_path' (Ожидалось: содержится в ['build_waypoints', 'route_segments', 'smooth_path', 'final_path'])
-2026-05-08 09:57:18 [INFO] [PASSED] [build_waypoints] имеет context: True (Ожидалось: is True)
-2026-05-08 09:57:18 [INFO] [PASSED] [build_waypoints] имеет input: True (Ожидалось: is True)
-2026-05-08 09:57:18 [INFO] [PASSED] [build_waypoints] имеет output: True (Ожидалось: is True)
-2026-05-08 09:57:18 [INFO] [PASSED] [build_waypoints] имеет decision: True (Ожидалось: is True)
-2026-05-08 09:57:18 [INFO] [PASSED] [route_segments] имеет context: True (Ожидалось: is True)
-2026-05-08 09:57:18 [INFO] [PASSED] [route_segments] имеет input: True (Ожидалось: is True)
-2026-05-08 09:57:18 [INFO] [PASSED] [route_segments] имеет output: True (Ожидалось: is True)
-2026-05-08 09:57:18 [INFO] [PASSED] [route_segments] имеет decision: True (Ожидалось: is True)
-2026-05-08 09:57:18 [INFO] [PASSED] [smooth_path] имеет context: True (Ожидалось: is True)
-2026-05-08 09:57:18 [INFO] [PASSED] [smooth_path] имеет input: True (Ожидалось: is True)
-2026-05-08 09:57:18 [INFO] [PASSED] [smooth_path] имеет output: True (Ожидалось: is True)
-2026-05-08 09:57:18 [INFO] [PASSED] [smooth_path] имеет decision: True (Ожидалось: is True)
-2026-05-08 09:57:18 [INFO] [PASSED] [final_path] имеет context: True (Ожидалось: is True)
-2026-05-08 09:57:18 [INFO] [PASSED] [final_path] имеет input: True (Ожидалось: is True)
-2026-05-08 09:57:18 [INFO] [PASSED] [final_path] имеет output: True (Ожидалось: is True)
-2026-05-08 09:57:18 [INFO] [PASSED] [final_path] имеет decision: True (Ожидалось: is True)
-2026-05-08 09:57:18 [INFO] [PASSED] final_path.output.total_points: 2 (Ожидалось: 2)
-2026-05-08 09:57:18 [INFO] [PASSED] Результат с журналом = без: [(10, 10), (100, 10)] (Ожидалось: [(10, 10), (100, 10)])
-2026-05-08 09:57:18 [INFO] === END TEST: test_find_path_journal ===
-
-2026-05-08 09:57:18 [INFO] === START TEST: test_find_path_journal_no_path ===
-2026-05-08 09:57:18 [INFO] [PASSED] Путь пустой: 0 (Ожидалось: 0)
-2026-05-08 09:57:18 [INFO] [PASSED] Журнал не пустой: 2 (Ожидалось: > 0)
-2026-05-08 09:57:18 [INFO] [PASSED] raw_path_length = 0: 0 (Ожидалось: 0)
-2026-05-08 09:57:18 [INFO] [PASSED] decision = no_path_found: 'no_path_found' (Ожидалось: 'no_path_found')
-2026-05-08 09:57:18 [INFO] === END TEST: test_find_path_journal_no_path ===
-
-2026-05-08 09:57:18 [INFO] === START TEST: test_base_equipment_rect ===
-2026-05-08 09:57:18 [INFO] [PASSED] Прямоугольник компонента: PySide6.QtCore.QRectF(10.000000, 20.000000, 100.000000, 50.000000) (Ожидалось: PySide6.QtCore.QRectF(10.000000, 20.000000, 100.000000, 50.000000))
-2026-05-08 09:57:18 [INFO] [PASSED] Начальное состояние: 'off' (Ожидалось: 'off')
-2026-05-08 09:57:18 [INFO] === END TEST: test_base_equipment_rect ===
-
-2026-05-08 09:57:18 [INFO] === START TEST: test_tank_ports_update ===
-2026-05-08 09:57:18 [INFO] [PASSED] Порт freon_out существует: True (Ожидалось: is True)
-2026-05-08 09:57:18 [INFO] [PASSED] Порт water_out существует: True (Ожидалось: is True)
-2026-05-08 09:57:18 [INFO] [PASSED] freon_out после сдвига: (200, 390) (Ожидалось: (200, 390))
-2026-05-08 09:57:18 [INFO] [PASSED] water_lt_in после сдвига: (290, 200) (Ожидалось: (290, 200))
-2026-05-08 09:57:18 [INFO] [PASSED] water_ht_in после сдвига: (230, 200) (Ожидалось: (230, 200))
-2026-05-08 09:57:18 [INFO] [PASSED] water_out после сдвига: (320, 360) (Ожидалось: (320, 360))
-2026-05-08 09:57:18 [INFO] [PASSED] drain после сдвига: (260, 400) (Ожидалось: (260, 400))
-2026-05-08 09:57:18 [INFO] === END TEST: test_tank_ports_update ===
-
-2026-05-08 09:57:18 [INFO] === START TEST: test_pump_ports_update ===
-2026-05-08 09:57:18 [INFO] [PASSED] Порт in насоса: (100, 130) (Ожидалось: (100, 130))
-2026-05-08 09:57:18 [INFO] [PASSED] Порт out насоса: (150, 130) (Ожидалось: (150, 130))
-2026-05-08 09:57:18 [INFO] === END TEST: test_pump_ports_update ===
-
-2026-05-08 09:57:18 [INFO] === START TEST: test_external_port_label_pos ===
-2026-05-08 09:57:18 [INFO] [PASSED] Позиция надписи: 'bottom' (Ожидалось: 'bottom')
-2026-05-08 09:57:18 [INFO] [PASSED] Порт in внешнего штуцера: (50, 70) (Ожидалось: (50, 70))
-2026-05-08 09:57:18 [INFO] [PASSED] Порт out внешнего штуцера: (50, 70) (Ожидалось: (50, 70))
-2026-05-08 09:57:18 [INFO] === END TEST: test_external_port_label_pos ===
-
-2026-05-08 09:57:18 [INFO] === START TEST: test_cv_components_presence[C:\\Users\\user\\Documents\\GitHub\\laser-cooler-control\\tests\\test_data\\schemes\\scheme_00.yaml] ===
-2026-05-08 09:57:19 [INFO] [PASSED] Наличие рамок компонентов (scheme_00.yaml): 5 (Ожидалось: >= 1)
-2026-05-08 09:57:19 [INFO] === END TEST: test_cv_components_presence[C:\\Users\\user\\Documents\\GitHub\\laser-cooler-control\\tests\\test_data\\schemes\\scheme_00.yaml] ===
-
-2026-05-08 09:57:19 [INFO] === START TEST: test_cv_components_presence[C:\\Users\\user\\Documents\\GitHub\\laser-cooler-control\\tests\\test_data\\schemes\\scheme_01.yaml] ===
-2026-05-08 09:57:19 [INFO] [PASSED] Наличие рамок компонентов (scheme_01.yaml): 2 (Ожидалось: >= 1)
-2026-05-08 09:57:19 [INFO] === END TEST: test_cv_components_presence[C:\\Users\\user\\Documents\\GitHub\\laser-cooler-control\\tests\\test_data\\schemes\\scheme_01.yaml] ===
-
-2026-05-08 09:57:19 [INFO] === START TEST: test_cv_components_presence[C:\\Users\\user\\Documents\\GitHub\\laser-cooler-control\\tests\\test_data\\schemes\\scheme_02.yaml] ===
-2026-05-08 09:57:19 [INFO] [PASSED] Наличие рамок компонентов (scheme_02.yaml): 2 (Ожидалось: >= 1)
-2026-05-08 09:57:19 [INFO] === END TEST: test_cv_components_presence[C:\\Users\\user\\Documents\\GitHub\\laser-cooler-control\\tests\\test_data\\schemes\\scheme_02.yaml] ===
-
-2026-05-08 09:57:19 [INFO] === START TEST: test_cv_components_presence[C:\\Users\\user\\Documents\\GitHub\\laser-cooler-control\\tests\\test_data\\schemes\\scheme_03.yaml] ===
-2026-05-08 09:57:21 [INFO] [PASSED] Наличие рамок компонентов (scheme_03.yaml): 3 (Ожидалось: >= 1)
-2026-05-08 09:57:21 [INFO] === END TEST: test_cv_components_presence[C:\\Users\\user\\Documents\\GitHub\\laser-cooler-control\\tests\\test_data\\schemes\\scheme_03.yaml] ===
-
-2026-05-08 09:57:21 [INFO] === START TEST: test_cv_components_presence[C:\\Users\\user\\Documents\\GitHub\\laser-cooler-control\\tests\\test_data\\schemes\\scheme_04.yaml] ===
-2026-05-08 09:57:21 [INFO] [PASSED] Наличие рамок компонентов (scheme_04.yaml): 4 (Ожидалось: >= 1)
-2026-05-08 09:57:21 [INFO] === END TEST: test_cv_components_presence[C:\\Users\\user\\Documents\\GitHub\\laser-cooler-control\\tests\\test_data\\schemes\\scheme_04.yaml] ===
-
-2026-05-08 09:57:21 [INFO] === START TEST: test_cv_components_presence[C:\\Users\\user\\Documents\\GitHub\\laser-cooler-control\\tests\\test_data\\schemes\\scheme_05.yaml] ===
-2026-05-08 09:57:22 [INFO] [PASSED] Наличие рамок компонентов (scheme_05.yaml): 2 (Ожидалось: >= 1)
-2026-05-08 09:57:22 [INFO] === END TEST: test_cv_components_presence[C:\\Users\\user\\Documents\\GitHub\\laser-cooler-control\\tests\\test_data\\schemes\\scheme_05.yaml] ===
-
-2026-05-08 09:57:22 [INFO] === START TEST: test_cv_components_presence[C:\\Users\\user\\Documents\\GitHub\\laser-cooler-control\\tests\\test_data\\schemes\\scheme_06.yaml] ===
-2026-05-08 09:57:22 [INFO] [PASSED] Наличие рамок компонентов (scheme_06.yaml): 2 (Ожидалось: >= 1)
-2026-05-08 09:57:22 [INFO] === END TEST: test_cv_components_presence[C:\\Users\\user\\Documents\\GitHub\\laser-cooler-control\\tests\\test_data\\schemes\\scheme_06.yaml] ===
-
-2026-05-08 09:57:22 [INFO] === START TEST: test_cv_components_presence[C:\\Users\\user\\Documents\\GitHub\\laser-cooler-control\\tests\\test_data\\schemes\\scheme_07.yaml] ===
-2026-05-08 09:57:22 [INFO] [PASSED] Наличие рамок компонентов (scheme_07.yaml): 1 (Ожидалось: >= 1)
-2026-05-08 09:57:22 [INFO] === END TEST: test_cv_components_presence[C:\\Users\\user\\Documents\\GitHub\\laser-cooler-control\\tests\\test_data\\schemes\\scheme_07.yaml] ===
-
-2026-05-08 09:57:22 [INFO] === START TEST: test_cv_components_presence[C:\\Users\\user\\Documents\\GitHub\\laser-cooler-control\\tests\\test_data\\schemes\\scheme_08.yaml] ===
-2026-05-08 09:57:22 [INFO] [PASSED] Наличие рамок компонентов (scheme_08.yaml): 1 (Ожидалось: >= 1)
-2026-05-08 09:57:22 [INFO] === END TEST: test_cv_components_presence[C:\\Users\\user\\Documents\\GitHub\\laser-cooler-control\\tests\\test_data\\schemes\\scheme_08.yaml] ===
-
-2026-05-08 09:57:22 [INFO] === START TEST: test_cv_components_presence[C:\\Users\\user\\Documents\\GitHub\\laser-cooler-control\\tests\\test_data\\schemes\\scheme_09.yaml] ===
-2026-05-08 09:57:22 [INFO] [PASSED] Наличие рамок компонентов (scheme_09.yaml): 4 (Ожидалось: >= 1)
-2026-05-08 09:57:22 [INFO] === END TEST: test_cv_components_presence[C:\\Users\\user\\Documents\\GitHub\\laser-cooler-control\\tests\\test_data\\schemes\\scheme_09.yaml] ===
-
-2026-05-08 09:57:22 [INFO] === START TEST: test_cv_components_presence[C:\\Users\\user\\Documents\\GitHub\\laser-cooler-control\\tests\\test_data\\schemes\\scheme_10.yaml] ===
-2026-05-08 09:57:22 [INFO] [PASSED] Наличие рамок компонентов (scheme_10.yaml): 1 (Ожидалось: >= 1)
-2026-05-08 09:57:22 [INFO] === END TEST: test_cv_components_presence[C:\\Users\\user\\Documents\\GitHub\\laser-cooler-control\\tests\\test_data\\schemes\\scheme_10.yaml] ===
-
-2026-05-08 09:57:22 [INFO] === START TEST: test_cv_components_presence[C:\\Users\\user\\Documents\\GitHub\\laser-cooler-control\\tests\\test_data\\schemes\\scheme_11.yaml] ===
-2026-05-08 09:57:25 [INFO] [PASSED] Наличие рамок компонентов (scheme_11.yaml): 6 (Ожидалось: >= 1)
-2026-05-08 09:57:25 [INFO] === END TEST: test_cv_components_presence[C:\\Users\\user\\Documents\\GitHub\\laser-cooler-control\\tests\\test_data\\schemes\\scheme_11.yaml] ===
-
-2026-05-08 09:57:25 [INFO] === START TEST: test_cv_components_presence[C:\\Users\\user\\Documents\\GitHub\\laser-cooler-control\\tests\\test_data\\schemes\\scheme_12.yaml] ===
-2026-05-08 09:57:27 [INFO] [PASSED] Наличие рамок компонентов (scheme_12.yaml): 4 (Ожидалось: >= 1)
-2026-05-08 09:57:27 [INFO] === END TEST: test_cv_components_presence[C:\\Users\\user\\Documents\\GitHub\\laser-cooler-control\\tests\\test_data\\schemes\\scheme_12.yaml] ===
-
-2026-05-08 09:57:27 [INFO] === START TEST: test_cv_components_presence[C:\\Users\\user\\Documents\\GitHub\\laser-cooler-control\\tests\\test_data\\schemes\\scheme_13.yaml] ===
-2026-05-08 09:57:27 [INFO] [PASSED] Наличие рамок компонентов (scheme_13.yaml): 2 (Ожидалось: >= 1)
-2026-05-08 09:57:27 [INFO] === END TEST: test_cv_components_presence[C:\\Users\\user\\Documents\\GitHub\\laser-cooler-control\\tests\\test_data\\schemes\\scheme_13.yaml] ===
-
-2026-05-08 09:57:27 [INFO] === START TEST: test_cv_components_presence[C:\\Users\\user\\Documents\\GitHub\\laser-cooler-control\\tests\\test_data\\schemes\\scheme_14.yaml] ===
-2026-05-08 09:57:27 [INFO] [PASSED] Наличие рамок компонентов (scheme_14.yaml): 5 (Ожидалось: >= 1)
-2026-05-08 09:57:27 [INFO] === END TEST: test_cv_components_presence[C:\\Users\\user\\Documents\\GitHub\\laser-cooler-control\\tests\\test_data\\schemes\\scheme_14.yaml] ===
-
-2026-05-08 09:57:27 [INFO] === START TEST: test_cv_components_presence[C:\\Users\\user\\Documents\\GitHub\\laser-cooler-control\\tests\\test_data\\schemes\\scheme_15.yaml] ===
-2026-05-08 09:57:27 [INFO] [PASSED] Наличие рамок компонентов (scheme_15.yaml): 5 (Ожидалось: >= 1)
-2026-05-08 09:57:27 [INFO] === END TEST: test_cv_components_presence[C:\\Users\\user\\Documents\\GitHub\\laser-cooler-control\\tests\\test_data\\schemes\\scheme_15.yaml] ===
-
-2026-05-08 09:57:27 [INFO] === START TEST: test_cv_pipe_intersections[C:\\Users\\user\\Documents\\GitHub\\laser-cooler-control\\tests\\test_data\\schemes\\scheme_00.yaml] ===
-2026-05-08 09:57:27 [INFO] [PASSED] Пересечение труб и объектов (scheme_00.yaml): 0 (Ожидалось: 0)
-2026-05-08 09:57:27 [INFO] === END TEST: test_cv_pipe_intersections[C:\\Users\\user\\Documents\\GitHub\\laser-cooler-control\\tests\\test_data\\schemes\\scheme_00.yaml] ===
-
-2026-05-08 09:57:27 [INFO] === START TEST: test_cv_pipe_intersections[C:\\Users\\user\\Documents\\GitHub\\laser-cooler-control\\tests\\test_data\\schemes\\scheme_01.yaml] ===
-2026-05-08 09:57:27 [INFO] [PASSED] Пересечение труб и объектов (scheme_01.yaml): 0 (Ожидалось: 0)
-2026-05-08 09:57:27 [INFO] === END TEST: test_cv_pipe_intersections[C:\\Users\\user\\Documents\\GitHub\\laser-cooler-control\\tests\\test_data\\schemes\\scheme_01.yaml] ===
-
-2026-05-08 09:57:27 [INFO] === START TEST: test_cv_pipe_intersections[C:\\Users\\user\\Documents\\GitHub\\laser-cooler-control\\tests\\test_data\\schemes\\scheme_02.yaml] ===
-2026-05-08 09:57:27 [INFO] [PASSED] Пересечение труб и объектов (scheme_02.yaml): 0 (Ожидалось: 0)
-2026-05-08 09:57:27 [INFO] === END TEST: test_cv_pipe_intersections[C:\\Users\\user\\Documents\\GitHub\\laser-cooler-control\\tests\\test_data\\schemes\\scheme_02.yaml] ===
-
-2026-05-08 09:57:27 [INFO] === START TEST: test_cv_pipe_intersections[C:\\Users\\user\\Documents\\GitHub\\laser-cooler-control\\tests\\test_data\\schemes\\scheme_03.yaml] ===
-2026-05-08 09:57:27 [INFO] [PASSED] Пересечение труб и объектов (scheme_03.yaml): 0 (Ожидалось: 0)
-2026-05-08 09:57:27 [INFO] === END TEST: test_cv_pipe_intersections[C:\\Users\\user\\Documents\\GitHub\\laser-cooler-control\\tests\\test_data\\schemes\\scheme_03.yaml] ===
-
-2026-05-08 09:57:27 [INFO] === START TEST: test_cv_pipe_intersections[C:\\Users\\user\\Documents\\GitHub\\laser-cooler-control\\tests\\test_data\\schemes\\scheme_04.yaml] ===
-2026-05-08 09:57:27 [INFO] [PASSED] Пересечение труб и объектов (scheme_04.yaml): 0 (Ожидалось: 0)
-2026-05-08 09:57:27 [INFO] === END TEST: test_cv_pipe_intersections[C:\\Users\\user\\Documents\\GitHub\\laser-cooler-control\\tests\\test_data\\schemes\\scheme_04.yaml] ===
-
-2026-05-08 09:57:27 [INFO] === START TEST: test_cv_pipe_intersections[C:\\Users\\user\\Documents\\GitHub\\laser-cooler-control\\tests\\test_data\\schemes\\scheme_05.yaml] ===
-2026-05-08 09:57:27 [INFO] [PASSED] Пересечение труб и объектов (scheme_05.yaml): 0 (Ожидалось: 0)
-2026-05-08 09:57:27 [INFO] === END TEST: test_cv_pipe_intersections[C:\\Users\\user\\Documents\\GitHub\\laser-cooler-control\\tests\\test_data\\schemes\\scheme_05.yaml] ===
-
-2026-05-08 09:57:27 [INFO] === START TEST: test_cv_pipe_intersections[C:\\Users\\user\\Documents\\GitHub\\laser-cooler-control\\tests\\test_data\\schemes\\scheme_06.yaml] ===
-2026-05-08 09:57:27 [INFO] [PASSED] Пересечение труб и объектов (scheme_06.yaml): 0 (Ожидалось: 0)
-2026-05-08 09:57:27 [INFO] === END TEST: test_cv_pipe_intersections[C:\\Users\\user\\Documents\\GitHub\\laser-cooler-control\\tests\\test_data\\schemes\\scheme_06.yaml] ===
-
-2026-05-08 09:57:27 [INFO] === START TEST: test_cv_pipe_intersections[C:\\Users\\user\\Documents\\GitHub\\laser-cooler-control\\tests\\test_data\\schemes\\scheme_07.yaml] ===
-2026-05-08 09:57:27 [INFO] [PASSED] Пересечение труб и объектов (scheme_07.yaml): 0 (Ожидалось: 0)
-2026-05-08 09:57:27 [INFO] === END TEST: test_cv_pipe_intersections[C:\\Users\\user\\Documents\\GitHub\\laser-cooler-control\\tests\\test_data\\schemes\\scheme_07.yaml] ===
-
-2026-05-08 09:57:27 [INFO] === START TEST: test_cv_pipe_intersections[C:\\Users\\user\\Documents\\GitHub\\laser-cooler-control\\tests\\test_data\\schemes\\scheme_08.yaml] ===
-2026-05-08 09:57:27 [INFO] [PASSED] Пересечение труб и объектов (scheme_08.yaml): 0 (Ожидалось: 0)
-2026-05-08 09:57:27 [INFO] === END TEST: test_cv_pipe_intersections[C:\\Users\\user\\Documents\\GitHub\\laser-cooler-control\\tests\\test_data\\schemes\\scheme_08.yaml] ===
-
-2026-05-08 09:57:27 [INFO] === START TEST: test_cv_pipe_intersections[C:\\Users\\user\\Documents\\GitHub\\laser-cooler-control\\tests\\test_data\\schemes\\scheme_09.yaml] ===
-2026-05-08 09:57:27 [INFO] [PASSED] Пересечение труб и объектов (scheme_09.yaml): 0 (Ожидалось: 0)
-2026-05-08 09:57:27 [INFO] === END TEST: test_cv_pipe_intersections[C:\\Users\\user\\Documents\\GitHub\\laser-cooler-control\\tests\\test_data\\schemes\\scheme_09.yaml] ===
-
-2026-05-08 09:57:27 [INFO] === START TEST: test_cv_pipe_intersections[C:\\Users\\user\\Documents\\GitHub\\laser-cooler-control\\tests\\test_data\\schemes\\scheme_10.yaml] ===
-2026-05-08 09:57:27 [INFO] [PASSED] Пересечение труб и объектов (scheme_10.yaml): 0 (Ожидалось: 0)
-2026-05-08 09:57:27 [INFO] === END TEST: test_cv_pipe_intersections[C:\\Users\\user\\Documents\\GitHub\\laser-cooler-control\\tests\\test_data\\schemes\\scheme_10.yaml] ===
-
-2026-05-08 09:57:27 [INFO] === START TEST: test_cv_pipe_intersections[C:\\Users\\user\\Documents\\GitHub\\laser-cooler-control\\tests\\test_data\\schemes\\scheme_11.yaml] ===
-2026-05-08 09:57:27 [INFO] [PASSED] Пересечение труб и объектов (scheme_11.yaml): 0 (Ожидалось: 0)
-2026-05-08 09:57:27 [INFO] === END TEST: test_cv_pipe_intersections[C:\\Users\\user\\Documents\\GitHub\\laser-cooler-control\\tests\\test_data\\schemes\\scheme_11.yaml] ===
-
-2026-05-08 09:57:27 [INFO] === START TEST: test_cv_pipe_intersections[C:\\Users\\user\\Documents\\GitHub\\laser-cooler-control\\tests\\test_data\\schemes\\scheme_12.yaml] ===
-2026-05-08 09:57:27 [INFO] [PASSED] Пересечение труб и объектов (scheme_12.yaml): 0 (Ожидалось: 0)
-2026-05-08 09:57:27 [INFO] === END TEST: test_cv_pipe_intersections[C:\\Users\\user\\Documents\\GitHub\\laser-cooler-control\\tests\\test_data\\schemes\\scheme_12.yaml] ===
-
-2026-05-08 09:57:27 [INFO] === START TEST: test_cv_pipe_intersections[C:\\Users\\user\\Documents\\GitHub\\laser-cooler-control\\tests\\test_data\\schemes\\scheme_13.yaml] ===
-2026-05-08 09:57:27 [INFO] [PASSED] Пересечение труб и объектов (scheme_13.yaml): 0 (Ожидалось: 0)
-2026-05-08 09:57:27 [INFO] === END TEST: test_cv_pipe_intersections[C:\\Users\\user\\Documents\\GitHub\\laser-cooler-control\\tests\\test_data\\schemes\\scheme_13.yaml] ===
-
-2026-05-08 09:57:27 [INFO] === START TEST: test_cv_pipe_intersections[C:\\Users\\user\\Documents\\GitHub\\laser-cooler-control\\tests\\test_data\\schemes\\scheme_14.yaml] ===
-2026-05-08 09:57:27 [INFO] [PASSED] Пересечение труб и объектов (scheme_14.yaml): 0 (Ожидалось: 0)
-2026-05-08 09:57:27 [INFO] === END TEST: test_cv_pipe_intersections[C:\\Users\\user\\Documents\\GitHub\\laser-cooler-control\\tests\\test_data\\schemes\\scheme_14.yaml] ===
-
-2026-05-08 09:57:27 [INFO] === START TEST: test_cv_pipe_intersections[C:\\Users\\user\\Documents\\GitHub\\laser-cooler-control\\tests\\test_data\\schemes\\scheme_15.yaml] ===
-2026-05-08 09:57:27 [INFO] [PASSED] Пересечение труб и объектов (scheme_15.yaml): 0 (Ожидалось: 0)
-2026-05-08 09:57:27 [INFO] === END TEST: test_cv_pipe_intersections[C:\\Users\\user\\Documents\\GitHub\\laser-cooler-control\\tests\\test_data\\schemes\\scheme_15.yaml] ===
-
-2026-05-08 09:57:27 [INFO] === START TEST: test_cv_labels_ocr[C:\\Users\\user\\Documents\\GitHub\\laser-cooler-control\\tests\\test_data\\schemes\\scheme_00.yaml] ===
-2026-05-08 09:57:28 [INFO] [PASSED] Читаемость текста 'компрессор' (scheme_00.yaml): 100 (Ожидалось: > 55)
-2026-05-08 09:57:28 [ERROR] [FAILED] Читаемость текста 'конденсатор' (scheme_00.yaml): получено 15, ожидалось > 55
-2026-05-08 09:57:28 [INFO] === END TEST: test_cv_labels_ocr[C:\\Users\\user\\Documents\\GitHub\\laser-cooler-control\\tests\\test_data\\schemes\\scheme_00.yaml] ===
-
-2026-05-08 09:57:28 [INFO] === START TEST: test_cv_labels_ocr[C:\\Users\\user\\Documents\\GitHub\\laser-cooler-control\\tests\\test_data\\schemes\\scheme_01.yaml] ===
-2026-05-08 09:57:28 [INFO] [PASSED] Читаемость текста 'главный компрессор' (scheme_01.yaml): 100 (Ожидалось: > 55)
-2026-05-08 09:57:28 [INFO] [PASSED] Читаемость текста 'охлаждающий конденсатор' (scheme_01.yaml): 100 (Ожидалось: > 55)
-2026-05-08 09:57:28 [INFO] [PASSED] Читаемость текста 'электронный дроссель' (scheme_01.yaml): 100 (Ожидалось: > 55)
-2026-05-08 09:57:28 [INFO] [PASSED] Читаемость текста 'бак испарителя' (scheme_01.yaml): 100 (Ожидалось: > 55)
-2026-05-08 09:57:28 [INFO] === END TEST: test_cv_labels_ocr[C:\\Users\\user\\Documents\\GitHub\\laser-cooler-control\\tests\\test_data\\schemes\\scheme_01.yaml] ===
-
-2026-05-08 09:57:28 [INFO] === START TEST: test_cv_labels_ocr[C:\\Users\\user\\Documents\\GitHub\\laser-cooler-control\\tests\\test_data\\schemes\\scheme_02.yaml] ===
-2026-05-08 09:57:28 [INFO] [PASSED] Читаемость текста 'резервуар для воды' (scheme_02.yaml): 100 (Ожидалось: > 55)
-2026-05-08 09:57:28 [ERROR] [FAILED] Читаемость текста 'циркуляционный насос' (scheme_02.yaml): получено 40, ожидалось > 55
-2026-05-08 09:57:28 [INFO] === END TEST: test_cv_labels_ocr[C:\\Users\\user\\Documents\\GitHub\\laser-cooler-control\\tests\\test_data\\schemes\\scheme_02.yaml] ===
-
-2026-05-08 09:57:28 [INFO] === START TEST: test_cv_labels_ocr[C:\\Users\\user\\Documents\\GitHub\\laser-cooler-control\\tests\\test_data\\schemes\\scheme_03.yaml] ===
-2026-05-08 09:57:28 [INFO] [PASSED] Читаемость текста 'накопительная емкость' (scheme_03.yaml): 100 (Ожидалось: > 55)
-2026-05-08 09:57:28 [ERROR] [FAILED] Читаемость текста 'насос охлаждения лазера' (scheme_03.yaml): получено 34, ожидалось > 55
-2026-05-08 09:57:28 [INFO] === END TEST: test_cv_labels_ocr[C:\\Users\\user\\Documents\\GitHub\\laser-cooler-control\\tests\\test_data\\schemes\\scheme_03.yaml] ===
-
-2026-05-08 09:57:28 [INFO] === START TEST: test_cv_labels_ocr[C:\\Users\\user\\Documents\\GitHub\\laser-cooler-control\\tests\\test_data\\schemes\\scheme_04.yaml] ===
-2026-05-08 09:57:29 [INFO] [PASSED] Читаемость текста 'компрессор без байпаса' (scheme_04.yaml): 100 (Ожидалось: > 55)
-2026-05-08 09:57:29 [INFO] [PASSED] Читаемость текста 'радиатор конденсатора' (scheme_04.yaml): 73 (Ожидалось: > 55)
-2026-05-08 09:57:29 [INFO] [PASSED] Читаемость текста 'клапан трв' (scheme_04.yaml): 75 (Ожидалось: > 55)
-2026-05-08 09:57:29 [INFO] [PASSED] Читаемость текста 'бак-испаритель' (scheme_04.yaml): 100 (Ожидалось: > 55)
-2026-05-08 09:57:29 [INFO] [PASSED] Читаемость текста 'рабочий насос' (scheme_04.yaml): 100 (Ожидалось: > 55)
-2026-05-08 09:57:29 [INFO] [PASSED] Читаемость текста 'осевой вентилятор' (scheme_04.yaml): 100 (Ожидалось: > 55)
-2026-05-08 09:57:29 [INFO] === END TEST: test_cv_labels_ocr[C:\\Users\\user\\Documents\\GitHub\\laser-cooler-control\\tests\\test_data\\schemes\\scheme_04.yaml] ===
-
-2026-05-08 09:57:29 [INFO] === START TEST: test_cv_labels_ocr[C:\\Users\\user\\Documents\\GitHub\\laser-cooler-control\\tests\\test_data\\schemes\\scheme_05.yaml] ===
-2026-05-08 09:57:29 [INFO] [PASSED] Читаемость текста 'двойной конденсатор' (scheme_05.yaml): 100 (Ожидалось: > 55)
-2026-05-08 09:57:29 [INFO] [PASSED] Читаемость текста 'левый вентилятор' (scheme_05.yaml): 100 (Ожидалось: > 55)
-2026-05-08 09:57:29 [INFO] [PASSED] Читаемость текста 'правый вентилятор' (scheme_05.yaml): 100 (Ожидалось: > 55)
-2026-05-08 09:57:29 [INFO] === END TEST: test_cv_labels_ocr[C:\\Users\\user\\Documents\\GitHub\\laser-cooler-control\\tests\\test_data\\schemes\\scheme_05.yaml] ===
-
-2026-05-08 09:57:29 [INFO] === START TEST: test_cv_labels_ocr[C:\\Users\\user\\Documents\\GitHub\\laser-cooler-control\\tests\\test_data\\schemes\\scheme_06.yaml] ===
-2026-05-08 09:57:29 [INFO] [PASSED] Читаемость текста 'бак горячего контура' (scheme_06.yaml): 100 (Ожидалось: > 55)
-2026-05-08 09:57:29 [INFO] [PASSED] Читаемость текста 'электрический нагреватель' (scheme_06.yaml): 100 (Ожидалось: > 55)
-2026-05-08 09:57:29 [ERROR] [FAILED] Читаемость текста 'циркуляционный насос ht' (scheme_06.yaml): получено 36, ожидалось > 55
-2026-05-08 09:57:29 [INFO] === END TEST: test_cv_labels_ocr[C:\\Users\\user\\Documents\\GitHub\\laser-cooler-control\\tests\\test_data\\schemes\\scheme_06.yaml] ===
-
-2026-05-08 09:57:29 [INFO] === START TEST: test_cv_labels_ocr[C:\\Users\\user\\Documents\\GitHub\\laser-cooler-control\\tests\\test_data\\schemes\\scheme_07.yaml] ===
-2026-05-08 09:57:29 [INFO] [PASSED] Читаемость текста 'насос pump' (scheme_07.yaml): 67 (Ожидалось: > 55)
-2026-05-08 09:57:29 [INFO] === END TEST: test_cv_labels_ocr[C:\\Users\\user\\Documents\\GitHub\\laser-cooler-control\\tests\\test_data\\schemes\\scheme_07.yaml] ===
-
-2026-05-08 09:57:29 [INFO] === START TEST: test_cv_labels_ocr[C:\\Users\\user\\Documents\\GitHub\\laser-cooler-control\\tests\\test_data\\schemes\\scheme_08.yaml] ===
-2026-05-08 09:57:29 [INFO] [PASSED] Читаемость текста 'компрессор comp' (scheme_08.yaml): 80 (Ожидалось: > 55)
-2026-05-08 09:57:29 [INFO] [PASSED] Читаемость текста 'конденсатор cond' (scheme_08.yaml): 100 (Ожидалось: > 55)
-2026-05-08 09:57:29 [INFO] [PASSED] Читаемость текста 'дроссель thr' (scheme_08.yaml): 100 (Ожидалось: > 55)
-2026-05-08 09:57:29 [INFO] === END TEST: test_cv_labels_ocr[C:\\Users\\user\\Documents\\GitHub\\laser-cooler-control\\tests\\test_data\\schemes\\scheme_08.yaml] ===
-
-2026-05-08 09:57:29 [INFO] === START TEST: test_cv_labels_ocr[C:\\Users\\user\\Documents\\GitHub\\laser-cooler-control\\tests\\test_data\\schemes\\scheme_09.yaml] ===
-2026-05-08 09:57:30 [INFO] [PASSED] Читаемость текста 'компрессор comp1' (scheme_09.yaml): 77 (Ожидалось: > 55)
-2026-05-08 09:57:30 [INFO] [PASSED] Читаемость текста 'компрессор comp2' (scheme_09.yaml): 77 (Ожидалось: > 55)
-2026-05-08 09:57:30 [INFO] [PASSED] Читаемость текста 'конденсатор cond1' (scheme_09.yaml): 79 (Ожидалось: > 55)
-2026-05-08 09:57:30 [INFO] [PASSED] Читаемость текста 'конденсатор cond2' (scheme_09.yaml): 100 (Ожидалось: > 55)
-2026-05-08 09:57:30 [INFO] [PASSED] Читаемость текста 'бак tank1' (scheme_09.yaml): 100 (Ожидалось: > 55)
-2026-05-08 09:57:30 [INFO] [PASSED] Читаемость текста 'бак tank2' (scheme_09.yaml): 100 (Ожидалось: > 55)
-2026-05-08 09:57:30 [INFO] [PASSED] Читаемость текста 'насос pump1' (scheme_09.yaml): 62 (Ожидалось: > 55)
-2026-05-08 09:57:30 [INFO] === END TEST: test_cv_labels_ocr[C:\\Users\\user\\Documents\\GitHub\\laser-cooler-control\\tests\\test_data\\schemes\\scheme_09.yaml] ===
-
-2026-05-08 09:57:30 [INFO] === START TEST: test_cv_labels_ocr[C:\\Users\\user\\Documents\\GitHub\\laser-cooler-control\\tests\\test_data\\schemes\\scheme_10.yaml] ===
-2026-05-08 09:57:30 [INFO] [PASSED] Читаемость текста 'бак tank' (scheme_10.yaml): 100 (Ожидалось: > 55)
-2026-05-08 09:57:30 [INFO] === END TEST: test_cv_labels_ocr[C:\\Users\\user\\Documents\\GitHub\\laser-cooler-control\\tests\\test_data\\schemes\\scheme_10.yaml] ===
-
-2026-05-08 09:57:30 [INFO] === START TEST: test_cv_labels_ocr[C:\\Users\\user\\Documents\\GitHub\\laser-cooler-control\\tests\\test_data\\schemes\\scheme_11.yaml] ===
-2026-05-08 09:57:30 [INFO] [PASSED] Читаемость текста 'основной компрессор' (scheme_11.yaml): 100 (Ожидалось: > 55)
-2026-05-08 09:57:30 [INFO] [PASSED] Читаемость текста 'резервный компрессор' (scheme_11.yaml): 100 (Ожидалось: > 55)
-2026-05-08 09:57:30 [INFO] [PASSED] Читаемость текста 'блок конденсатора' (scheme_11.yaml): 100 (Ожидалось: > 55)
-2026-05-08 09:57:30 [INFO] [PASSED] Читаемость текста 'вентилятор охлаждения 1' (scheme_11.yaml): 100 (Ожидалось: > 55)
-2026-05-08 09:57:30 [INFO] [PASSED] Читаемость текста 'вентилятор охлаждения 2' (scheme_11.yaml): 100 (Ожидалось: > 55)
-2026-05-08 09:57:30 [INFO] [PASSED] Читаемость текста 'дроссель контура а' (scheme_11.yaml): 100 (Ожидалось: > 55)
-2026-05-08 09:57:30 [INFO] [PASSED] Читаемость текста 'дроссель контура б' (scheme_11.yaml): 94 (Ожидалось: > 55)
-2026-05-08 09:57:30 [ERROR] [FAILED] Читаемость текста 'накопительный бак (испаритель)' (scheme_11.yaml): получено 22, ожидалось > 55
-2026-05-08 09:57:30 [INFO] === END TEST: test_cv_labels_ocr[C:\\Users\\user\\Documents\\GitHub\\laser-cooler-control\\tests\\test_data\\schemes\\scheme_11.yaml] ===
-
-2026-05-08 09:57:30 [INFO] === START TEST: test_cv_labels_ocr[C:\\Users\\user\\Documents\\GitHub\\laser-cooler-control\\tests\\test_data\\schemes\\scheme_12.yaml] ===
-2026-05-08 09:57:30 [ERROR] [FAILED] Читаемость текста 'основной бак' (scheme_12.yaml): получено 15, ожидалось > 55
-2026-05-08 09:57:30 [INFO] === END TEST: test_cv_labels_ocr[C:\\Users\\user\\Documents\\GitHub\\laser-cooler-control\\tests\\test_data\\schemes\\scheme_12.yaml] ===
-
-2026-05-08 09:57:30 [INFO] === START TEST: test_cv_labels_ocr[C:\\Users\\user\\Documents\\GitHub\\laser-cooler-control\\tests\\test_data\\schemes\\scheme_13.yaml] ===
-2026-05-08 09:57:31 [INFO] [PASSED] Читаемость текста 'компрессор низкого давления' (scheme_13.yaml): 80 (Ожидалось: > 55)
-2026-05-08 09:57:31 [INFO] [PASSED] Читаемость текста 'промежуточный охладитель' (scheme_13.yaml): 59 (Ожидалось: > 55)
-2026-05-08 09:57:31 [INFO] [PASSED] Читаемость текста 'компрессор высокого давления' (scheme_13.yaml): 81 (Ожидалось: > 55)
-2026-05-08 09:57:31 [INFO] [PASSED] Читаемость текста 'главный конденсатор' (scheme_13.yaml): 100 (Ожидалось: > 55)
-2026-05-08 09:57:31 [ERROR] [FAILED] Читаемость текста 'трв' (scheme_13.yaml): получено 4, ожидалось > 55
-2026-05-08 09:57:31 [INFO] === END TEST: test_cv_labels_ocr[C:\\Users\\user\\Documents\\GitHub\\laser-cooler-control\\tests\\test_data\\schemes\\scheme_13.yaml] ===
-
-2026-05-08 09:57:31 [INFO] === START TEST: test_cv_labels_ocr[C:\\Users\\user\\Documents\\GitHub\\laser-cooler-control\\tests\\test_data\\schemes\\scheme_14.yaml] ===
-2026-05-08 09:57:31 [INFO] [PASSED] Читаемость текста 'спиральный компрессор' (scheme_14.yaml): 100 (Ожидалось: > 55)
-2026-05-08 09:57:31 [INFO] [PASSED] Читаемость текста 'микроканальный конденсатор' (scheme_14.yaml): 59 (Ожидалось: > 55)
-2026-05-08 09:57:31 [INFO] [PASSED] Читаемость текста 'осевой вентилятор' (scheme_14.yaml): 100 (Ожидалось: > 55)
-2026-05-08 09:57:31 [INFO] [PASSED] Читаемость текста 'электронный трв' (scheme_14.yaml): 85 (Ожидалось: > 55)
-2026-05-08 09:57:31 [INFO] [PASSED] Читаемость текста 'байпас горячего газа (10%)' (scheme_14.yaml): 100 (Ожидалось: > 55)
-2026-05-08 09:57:31 [INFO] [PASSED] Читаемость текста 'байпас горячего газа (50%)' (scheme_14.yaml): 93 (Ожидалось: > 55)
-2026-05-08 09:57:31 [INFO] [PASSED] Читаемость текста 'пластинчатый испаритель' (scheme_14.yaml): 100 (Ожидалось: > 55)
-2026-05-08 09:57:31 [INFO] === END TEST: test_cv_labels_ocr[C:\\Users\\user\\Documents\\GitHub\\laser-cooler-control\\tests\\test_data\\schemes\\scheme_14.yaml] ===
-
-2026-05-08 09:57:31 [INFO] === START TEST: test_cv_labels_ocr[C:\\Users\\user\\Documents\\GitHub\\laser-cooler-control\\tests\\test_data\\schemes\\scheme_15.yaml] ===
-2026-05-08 09:57:31 [INFO] [PASSED] Читаемость текста 'центробежный компрессор' (scheme_15.yaml): 61 (Ожидалось: > 55)
-2026-05-08 09:57:31 [ERROR] [FAILED] Читаемость текста 'промышленный конденсатор' (scheme_15.yaml): получено 20, ожидалось > 55
-2026-05-08 09:57:31 [INFO] === END TEST: test_cv_labels_ocr[C:\\Users\\user\\Documents\\GitHub\\laser-cooler-control\\tests\\test_data\\schemes\\scheme_15.yaml] ===
+2026-05-12 16:27:32 [INFO] === START TEST: test_controller_initial_state ===
+2026-05-12 16:27:32 [INFO] [PASSED] Режим при создании: <SystemMode.OFF: 'off'> (Ожидалось: <SystemMode.OFF: 'off'>)
+2026-05-12 16:27:32 [INFO] === END TEST: test_controller_initial_state ===
+
+2026-05-12 16:27:32 [INFO] === START TEST: test_controller_start_stop ===
+2026-05-12 16:27:32 [INFO] [PASSED] Режим после start(): <SystemMode.AUTO: 'auto'> (Ожидалось: <SystemMode.AUTO: 'auto'>)
+2026-05-12 16:27:32 [INFO] [PASSED] Количество сигналов после start(): 1 (Ожидалось: 1)
+2026-05-12 16:27:32 [INFO] [PASSED] Режим в сигнале: <SystemMode.AUTO: 'auto'> (Ожидалось: <SystemMode.AUTO: 'auto'>)
+2026-05-12 16:27:32 [INFO] [PASSED] ТЭН включен при старте: True (Ожидалось: is True)
+2026-05-12 16:27:32 [INFO] [PASSED] Клапан выключен при старте: False (Ожидалось: is False)
+2026-05-12 16:27:32 [INFO] [PASSED] Режим после stop(): <SystemMode.OFF: 'off'> (Ожидалось: <SystemMode.OFF: 'off'>)
+2026-05-12 16:27:32 [INFO] [PASSED] Количество сигналов после stop(): 2 (Ожидалось: 2)
+2026-05-12 16:27:32 [INFO] [PASSED] Режим в сигнале после stop(): <SystemMode.OFF: 'off'> (Ожидалось: <SystemMode.OFF: 'off'>)
+2026-05-12 16:27:32 [INFO] [PASSED] ТЭН выключен после stop(): False (Ожидалось: is False)
+2026-05-12 16:27:32 [INFO] === END TEST: test_controller_start_stop ===
+
+2026-05-12 16:27:32 [INFO] === START TEST: test_controller_set_mode ===
+2026-05-12 16:27:32 [INFO] [PASSED] Режим контроллера: <SystemMode.MANUAL: 'manual'> (Ожидалось: <SystemMode.MANUAL: 'manual'>)
+2026-05-12 16:27:32 [INFO] [PASSED] Режим в последнем сигнале: <SystemMode.MANUAL: 'manual'> (Ожидалось: <SystemMode.MANUAL: 'manual'>)
+2026-05-12 16:27:32 [INFO] === END TEST: test_controller_set_mode ===
+
+2026-05-12 16:27:32 [INFO] === START TEST: test_controller_manual_relay ===
+2026-05-12 16:27:32 [INFO] [PASSED] ТЭН включен вручную: True (Ожидалось: is True)
+2026-05-12 16:27:32 [INFO] [PASSED] Клапан включен вручную: True (Ожидалось: is True)
+2026-05-12 16:27:32 [INFO] === END TEST: test_controller_manual_relay ===
+
+2026-05-12 16:27:32 [INFO] === START TEST: test_system_mode_enum ===
+2026-05-12 16:27:32 [INFO] [PASSED] SystemMode.OFF: 'off' (Ожидалось: 'off')
+2026-05-12 16:27:32 [INFO] [PASSED] SystemMode.AUTO: 'auto' (Ожидалось: 'auto')
+2026-05-12 16:27:32 [INFO] [PASSED] SystemMode.MANUAL: 'manual' (Ожидалось: 'manual')
+2026-05-12 16:27:32 [INFO] === END TEST: test_system_mode_enum ===
+
+2026-05-12 16:27:32 [INFO] === START TEST: test_system_state_defaults ===
+2026-05-12 16:27:32 [INFO] [PASSED] Режим по умолчанию: <SystemMode.OFF: 'off'> (Ожидалось: <SystemMode.OFF: 'off'>)
+2026-05-12 16:27:32 [INFO] [PASSED] ТЭН по умолчанию: False (Ожидалось: is False)
+2026-05-12 16:27:32 [INFO] [PASSED] Клапан по умолчанию: False (Ожидалось: is False)
+2026-05-12 16:27:32 [INFO] [PASSED] Температура LT: 25.0 (Ожидалось: 25.0)
+2026-05-12 16:27:32 [INFO] [PASSED] Температура HT: 30.0 (Ожидалось: 30.0)
+2026-05-12 16:27:32 [INFO] [PASSED] Температура воздуха: 24.1 (Ожидалось: 24.1)
+2026-05-12 16:27:32 [INFO] [PASSED] Проток LT: 0.0 (Ожидалось: 0.0)
+2026-05-12 16:27:32 [INFO] [PASSED] Проток HT: 0.0 (Ожидалось: 0.0)
+2026-05-12 16:27:32 [INFO] [PASSED] Давление: 0.0 (Ожидалось: 0.0)
+2026-05-12 16:27:32 [INFO] [PASSED] Уровень воды: 0.85 (Ожидалось: 0.85)
+2026-05-12 16:27:32 [INFO] === END TEST: test_system_state_defaults ===
+
+2026-05-12 16:27:32 [INFO] === START TEST: test_system_state_initialization ===
+2026-05-12 16:27:32 [INFO] [PASSED] Режим: <SystemMode.AUTO: 'auto'> (Ожидалось: <SystemMode.AUTO: 'auto'>)
+2026-05-12 16:27:32 [INFO] [PASSED] ТЭН: True (Ожидалось: is True)
+2026-05-12 16:27:32 [INFO] [PASSED] Клапан: True (Ожидалось: is True)
+2026-05-12 16:27:32 [INFO] [PASSED] Температура LT: 20.5 (Ожидалось: 20.5)
+2026-05-12 16:27:32 [INFO] [PASSED] Проток LT: 15.0 (Ожидалось: 15.0)
+2026-05-12 16:27:32 [INFO] === END TEST: test_system_state_initialization ===
+
+2026-05-12 16:27:32 [INFO] === START TEST: test_mock_adapter_initial_state ===
+2026-05-12 16:27:32 [INFO] [PASSED] Реле pump: False (Ожидалось: is False)
+2026-05-12 16:27:32 [INFO] [PASSED] Реле compressor: False (Ожидалось: is False)
+2026-05-12 16:27:32 [INFO] [PASSED] Реле heater: False (Ожидалось: is False)
+2026-05-12 16:27:32 [INFO] [PASSED] Реле valve: False (Ожидалось: is False)
+2026-05-12 16:27:32 [INFO] [PASSED] Реле fan: False (Ожидалось: is False)
+2026-05-12 16:27:32 [INFO] === END TEST: test_mock_adapter_initial_state ===
+
+2026-05-12 16:27:32 [INFO] === START TEST: test_mock_adapter_set_get_relay ===
+2026-05-12 16:27:32 [INFO] [PASSED] Реле pump после включения: True (Ожидалось: is True)
+2026-05-12 16:27:32 [INFO] [PASSED] Несуществующее реле: False (Ожидалось: is False)
+2026-05-12 16:27:32 [INFO] === END TEST: test_mock_adapter_set_get_relay ===
+
+2026-05-12 16:27:32 [INFO] === START TEST: test_mock_adapter_sensors_running ===
+2026-05-12 16:27:32 [INFO] [PASSED] Проток LT (выкл): 0.0 (Ожидалось: 0.0)
+2026-05-12 16:27:32 [INFO] [PASSED] Проток HT (выкл): 0.0 (Ожидалось: 0.0)
+2026-05-12 16:27:32 [INFO] [PASSED] Давление (выкл): 0.0 (Ожидалось: 0.0)
+2026-05-12 16:27:32 [INFO] [PASSED] Температура воздуха (выкл): 24.1 (Ожидалось: 24.1)
+2026-05-12 16:27:32 [INFO] [PASSED] Проток LT (вкл): 14.5 (Ожидалось: > 0.0)
+2026-05-12 16:27:32 [INFO] [PASSED] Проток HT (вкл): 2.8 (Ожидалось: > 0.0)
+2026-05-12 16:27:32 [INFO] [PASSED] Давление (вкл): 3.1 (Ожидалось: > 0.0)
+2026-05-12 16:27:32 [INFO] [PASSED] Температура воздуха (вкл): 25.2 (Ожидалось: 25.2)
+2026-05-12 16:27:32 [INFO] === END TEST: test_mock_adapter_sensors_running ===
+
+2026-05-12 16:27:32 [INFO] === START TEST: test_label_placer_init_occupied_zones ===
+2026-05-12 16:27:32 [INFO] [PASSED] Количество зон: 2 (Ожидалось: 2)
+2026-05-12 16:27:32 [INFO] [PASSED] Тип элемента: 'QRectF' (Ожидалось: 'QRectF')
+2026-05-12 16:27:32 [INFO] === END TEST: test_label_placer_init_occupied_zones ===
+
+2026-05-12 16:27:32 [INFO] === START TEST: test_label_placer_build_candidate_areas ===
+2026-05-12 16:27:32 [INFO] [PASSED] Количество слотов: 4 (Ожидалось: 4)
+2026-05-12 16:27:32 [INFO] [PASSED] Наличие bottom: True (Ожидалось: is True)
+2026-05-12 16:27:32 [INFO] [PASSED] Наличие top: True (Ожидалось: is True)
+2026-05-12 16:27:32 [INFO] [PASSED] Наличие left: True (Ожидалось: is True)
+2026-05-12 16:27:32 [INFO] [PASSED] Наличие right: True (Ожидалось: is True)
+2026-05-12 16:27:32 [INFO] [PASSED] bottom.top > comp.bottom: 162.0 (Ожидалось: 162 ± 1)
+2026-05-12 16:27:32 [INFO] === END TEST: test_label_placer_build_candidate_areas ===
+
+2026-05-12 16:27:32 [INFO] === START TEST: test_label_placer_score_slot_empty ===
+2026-05-12 16:27:32 [INFO] [PASSED] bottom score (пустое поле): 0 (Ожидалось: 0)
+2026-05-12 16:27:32 [INFO] [PASSED] top score (пустое поле): 1 (Ожидалось: 1)
+2026-05-12 16:27:32 [INFO] === END TEST: test_label_placer_score_slot_empty ===
+
+2026-05-12 16:27:32 [INFO] === START TEST: test_label_placer_score_slot_with_pipes ===
+2026-05-12 16:27:32 [INFO] [PASSED] bottom score > top score (трубы внизу): 1950 (Ожидалось: > 1)
+2026-05-12 16:27:32 [INFO] === END TEST: test_label_placer_score_slot_with_pipes ===
+
+2026-05-12 16:27:32 [INFO] === START TEST: test_label_placer_select_best_slot ===
+2026-05-12 16:27:32 [INFO] [PASSED] Лучший слот (пустое поле): 'bottom' (Ожидалось: 'bottom')
+2026-05-12 16:27:32 [INFO] [PASSED] Scores содержит 4 слота: 4 (Ожидалось: 4)
+2026-05-12 16:27:32 [INFO] [PASSED] bottom score минимален: 0 (Ожидалось: 0)
+2026-05-12 16:27:32 [INFO] === END TEST: test_label_placer_select_best_slot ===
+
+2026-05-12 16:27:32 [INFO] === START TEST: test_label_placer_basic ===
+2026-05-12 16:27:32 [INFO] [PASSED] Позиция надписи бака: 'bottom' (Ожидалось: 'bottom')
+2026-05-12 16:27:32 [INFO] [PASSED] Позиция надписи насоса: 'bottom' (Ожидалось: 'bottom')
+2026-05-12 16:27:32 [INFO] [PASSED] Внешний порт исключён: False (Ожидалось: is False)
+2026-05-12 16:27:32 [INFO] === END TEST: test_label_placer_basic ===
+
+2026-05-12 16:27:32 [INFO] === START TEST: test_label_placer_avoid_pipes ===
+2026-05-12 16:27:32 [INFO] [PASSED] Надпись насоса (bottom занят): 'top' (Ожидалось: 'top')
+2026-05-12 16:27:32 [INFO] === END TEST: test_label_placer_avoid_pipes ===
+
+2026-05-12 16:27:32 [INFO] === START TEST: test_label_placer_avoid_pipes_right ===
+2026-05-12 16:27:32 [INFO] [PASSED] Надпись насоса (bottom+top заняты): 'right' (Ожидалось: 'right')
+2026-05-12 16:27:32 [INFO] === END TEST: test_label_placer_avoid_pipes_right ===
+
+2026-05-12 16:27:32 [INFO] === START TEST: test_label_placer_avoid_pipes_left ===
+2026-05-12 16:27:32 [INFO] [PASSED] Надпись насоса (bottom+top+right заняты): 'left' (Ожидалось: 'left')
+2026-05-12 16:27:32 [INFO] === END TEST: test_label_placer_avoid_pipes_left ===
+
+2026-05-12 16:27:32 [INFO] === START TEST: test_label_placer_journal ===
+2026-05-12 16:27:32 [INFO] [PASSED] Журнал не пустой: 3 (Ожидалось: > 0)
+2026-05-12 16:27:32 [INFO] [PASSED] Первый шаг: 'init_zones' (Ожидалось: 'init_zones')
+2026-05-12 16:27:32 [INFO] [PASSED] init_zones.input.comp_count: 3 (Ожидалось: 3)
+2026-05-12 16:27:32 [INFO] [PASSED] init_zones.output.occupied_rects_count: 3 (Ожидалось: 3)
+2026-05-12 16:27:32 [INFO] [PASSED] Количество select_slot записей: 2 (Ожидалось: 2)
+2026-05-12 16:27:32 [INFO] [PASSED] tank entry имеет scores: True (Ожидалось: is True)
+2026-05-12 16:27:32 [INFO] [PASSED] tank scores имеет 4 слота: 4 (Ожидалось: 4)
+2026-05-12 16:27:32 [INFO] [PASSED] tank decision.chosen: 'bottom' (Ожидалось: 'bottom')
+2026-05-12 16:27:32 [INFO] [PASSED] Выбранный слот = минимальный score: 0 (Ожидалось: 0)
+2026-05-12 16:27:32 [INFO] [PASSED] Результат с журналом = результат без: {'tank': 'bottom', 'pump': 'bottom'} (Ожидалось: {'tank': 'bottom', 'pump': 'bottom'})
+2026-05-12 16:27:32 [INFO] === END TEST: test_label_placer_journal ===
+
+2026-05-12 16:27:32 [INFO] === START TEST: test_label_placer_regression ===
+2026-05-12 16:27:32 [INFO] [PASSED] Результат совпадает с эталоном: {'tank': 'bottom', 'pump': 'bottom'} (Ожидалось: {'tank': 'bottom', 'pump': 'bottom'})
+2026-05-12 16:27:32 [INFO] [PASSED] Количество записей журнала: 3 (Ожидалось: 3)
+2026-05-12 16:27:32 [INFO] [PASSED] Шаг [0] совпадает: 'init_zones' (Ожидалось: 'init_zones')
+2026-05-12 16:27:32 [INFO] [PASSED] Шаг [1] совпадает: 'select_slot' (Ожидалось: 'select_slot')
+2026-05-12 16:27:32 [INFO] [PASSED] Решение [1] совпадает: 'bottom' (Ожидалось: 'bottom')
+2026-05-12 16:27:32 [INFO] [PASSED] Шаг [2] совпадает: 'select_slot' (Ожидалось: 'select_slot')
+2026-05-12 16:27:32 [INFO] [PASSED] Решение [2] совпадает: 'bottom' (Ожидалось: 'bottom')
+2026-05-12 16:27:32 [INFO] === END TEST: test_label_placer_regression ===
+
+2026-05-12 16:27:32 [INFO] === START TEST: test_layout_external_ports ===
+2026-05-12 16:27:32 [INFO] [PASSED] port_in правее основных: 700 (Ожидалось: > 650)
+2026-05-12 16:27:32 [INFO] [PASSED] port_out правее основных: 700 (Ожидалось: > 650)
+2026-05-12 16:27:32 [INFO] [PASSED] port_in выровнен по Y: 170 (Ожидалось: 170 ± 20)
+2026-05-12 16:27:32 [INFO] [PASSED] port_out выровнен по Y: 270 (Ожидалось: 270 ± 20)
+2026-05-12 16:27:32 [INFO] === END TEST: test_layout_external_ports ===
+
+2026-05-12 16:27:32 [INFO] === START TEST: test_layout_place_downstream ===
+2026-05-12 16:27:32 [INFO] [PASSED] Насос правее бака: 570 (Ожидалось: > 520)
+2026-05-12 16:27:32 [INFO] [PASSED] Насос на уровне water_out: 360 (Ожидалось: 360 ± 20)
+2026-05-12 16:27:32 [INFO] [PASSED] ТЭН на 50% высоты: 260 (Ожидалось: 260)
+2026-05-12 16:27:32 [INFO] === END TEST: test_layout_place_downstream ===
+
+2026-05-12 16:27:32 [INFO] === START TEST: test_layout_nudge_to_free ===
+2026-05-12 16:27:32 [INFO] [PASSED] Пересечение до сдвига: True (Ожидалось: is True)
+2026-05-12 16:27:32 [INFO] [PASSED] Нет пересечения после сдвига: False (Ожидалось: is False)
+2026-05-12 16:27:32 [INFO] [PASSED] pump2 сдвинулся с (300,300): True (Ожидалось: is True)
+2026-05-12 16:27:32 [INFO] === END TEST: test_layout_nudge_to_free ===
+
+2026-05-12 16:27:32 [INFO] === START TEST: test_layout_find_cycle ===
+2026-05-12 16:27:32 [INFO] [PASSED] Длина цикла: 4 (Ожидалось: 4)
+2026-05-12 16:27:32 [INFO] [PASSED] comp в цикле: 'comp' (Ожидалось: содержится в ['comp', 'cond', 'thr', 'evap'])
+2026-05-12 16:27:32 [INFO] [PASSED] cond в цикле: 'cond' (Ожидалось: содержится в ['comp', 'cond', 'thr', 'evap'])
+2026-05-12 16:27:32 [INFO] [PASSED] thr в цикле: 'thr' (Ожидалось: содержится в ['comp', 'cond', 'thr', 'evap'])
+2026-05-12 16:27:32 [INFO] [PASSED] evap в цикле: 'evap' (Ожидалось: содержится в ['comp', 'cond', 'thr', 'evap'])
+2026-05-12 16:27:32 [INFO] === END TEST: test_layout_find_cycle ===
+
+2026-05-12 16:27:32 [INFO] === START TEST: test_layout_cycle_rect_positions ===
+2026-05-12 16:27:32 [INFO] [PASSED] Количество позиций (n=4): 4 (Ожидалось: 4)
+2026-05-12 16:27:32 [INFO] [PASSED] Позиция 0 (bottom-left): (0.12, 0.82) (Ожидалось: (0.12, 0.82))
+2026-05-12 16:27:32 [INFO] [PASSED] Позиция 1 (top-left): (0.12, 0.22) (Ожидалось: (0.12, 0.22))
+2026-05-12 16:27:32 [INFO] [PASSED] Позиция 2 (top-center): (0.32, 0.12) (Ожидалось: (0.32, 0.12))
+2026-05-12 16:27:32 [INFO] [PASSED] Позиция 3 (center): (0.5, 0.5) (Ожидалось: (0.5, 0.5))
+2026-05-12 16:27:32 [INFO] [PASSED] Количество позиций (n=5): 5 (Ожидалось: 5)
+2026-05-12 16:27:32 [INFO] [PASSED] 5-я позиция уникальна: True (Ожидалось: is True)
+2026-05-12 16:27:32 [INFO] === END TEST: test_layout_cycle_rect_positions ===
+
+2026-05-12 16:27:32 [INFO] === START TEST: test_layout_place_bypass ===
+2026-05-12 16:27:32 [INFO] [PASSED] X клапана байпаса: 440 (Ожидалось: 440)
+2026-05-12 16:27:32 [INFO] [PASSED] Y клапана байпаса: 270 (Ожидалось: 270)
+2026-05-12 16:27:32 [INFO] === END TEST: test_layout_place_bypass ===
+
+2026-05-12 16:27:32 [INFO] === START TEST: test_layout_freon_cycle_integration ===
+2026-05-12 16:27:32 [INFO] [PASSED] Компонент comp размещён: True (Ожидалось: is True)
+2026-05-12 16:27:32 [INFO] [PASSED] Компонент cond размещён: True (Ожидалось: is True)
+2026-05-12 16:27:32 [INFO] [PASSED] Компонент thr размещён: True (Ожидалось: is True)
+2026-05-12 16:27:32 [INFO] [PASSED] Компонент evap размещён: True (Ожидалось: is True)
+2026-05-12 16:27:32 [INFO] [PASSED] Компрессор левее бака: 130 (Ожидалось: < 440)
+2026-05-12 16:27:32 [INFO] [PASSED] Компрессор ниже конденсатора: 410 (Ожидалось: > 80)
+2026-05-12 16:27:32 [INFO] === END TEST: test_layout_freon_cycle_integration ===
+
+2026-05-12 16:27:32 [INFO] === START TEST: test_layout_journal ===
+2026-05-12 16:27:32 [INFO] [PASSED] separate_components в журнале: 'separate_components' (Ожидалось: содержится в ['separate_components', 'build_adjacency', 'place_freon_cycle', 'place_mechanical', 'place_bypass', 'place_water_circuit', 'place_remaining', 'place_external_ports'])
+2026-05-12 16:27:32 [INFO] [PASSED] build_adjacency в журнале: 'build_adjacency' (Ожидалось: содержится в ['separate_components', 'build_adjacency', 'place_freon_cycle', 'place_mechanical', 'place_bypass', 'place_water_circuit', 'place_remaining', 'place_external_ports'])
+2026-05-12 16:27:32 [INFO] [PASSED] place_freon_cycle в журнале: 'place_freon_cycle' (Ожидалось: содержится в ['separate_components', 'build_adjacency', 'place_freon_cycle', 'place_mechanical', 'place_bypass', 'place_water_circuit', 'place_remaining', 'place_external_ports'])
+2026-05-12 16:27:32 [INFO] [PASSED] place_mechanical в журнале: 'place_mechanical' (Ожидалось: содержится в ['separate_components', 'build_adjacency', 'place_freon_cycle', 'place_mechanical', 'place_bypass', 'place_water_circuit', 'place_remaining', 'place_external_ports'])
+2026-05-12 16:27:32 [INFO] [PASSED] place_bypass в журнале: 'place_bypass' (Ожидалось: содержится в ['separate_components', 'build_adjacency', 'place_freon_cycle', 'place_mechanical', 'place_bypass', 'place_water_circuit', 'place_remaining', 'place_external_ports'])
+2026-05-12 16:27:32 [INFO] [PASSED] place_water_circuit в журнале: 'place_water_circuit' (Ожидалось: содержится в ['separate_components', 'build_adjacency', 'place_freon_cycle', 'place_mechanical', 'place_bypass', 'place_water_circuit', 'place_remaining', 'place_external_ports'])
+2026-05-12 16:27:32 [INFO] [PASSED] place_external_ports в журнале: 'place_external_ports' (Ожидалось: содержится в ['separate_components', 'build_adjacency', 'place_freon_cycle', 'place_mechanical', 'place_bypass', 'place_water_circuit', 'place_remaining', 'place_external_ports'])
+2026-05-12 16:27:32 [INFO] [PASSED] [separate_components] имеет context: True (Ожидалось: is True)
+2026-05-12 16:27:32 [INFO] [PASSED] [separate_components] имеет input: True (Ожидалось: is True)
+2026-05-12 16:27:32 [INFO] [PASSED] [separate_components] имеет output: True (Ожидалось: is True)
+2026-05-12 16:27:32 [INFO] [PASSED] [separate_components] имеет decision: True (Ожидалось: is True)
+2026-05-12 16:27:32 [INFO] [PASSED] [build_adjacency] имеет context: True (Ожидалось: is True)
+2026-05-12 16:27:32 [INFO] [PASSED] [build_adjacency] имеет input: True (Ожидалось: is True)
+2026-05-12 16:27:32 [INFO] [PASSED] [build_adjacency] имеет output: True (Ожидалось: is True)
+2026-05-12 16:27:32 [INFO] [PASSED] [build_adjacency] имеет decision: True (Ожидалось: is True)
+2026-05-12 16:27:32 [INFO] [PASSED] [place_freon_cycle] имеет context: True (Ожидалось: is True)
+2026-05-12 16:27:32 [INFO] [PASSED] [place_freon_cycle] имеет input: True (Ожидалось: is True)
+2026-05-12 16:27:32 [INFO] [PASSED] [place_freon_cycle] имеет output: True (Ожидалось: is True)
+2026-05-12 16:27:32 [INFO] [PASSED] [place_freon_cycle] имеет decision: True (Ожидалось: is True)
+2026-05-12 16:27:32 [INFO] [PASSED] [place_mechanical] имеет context: True (Ожидалось: is True)
+2026-05-12 16:27:32 [INFO] [PASSED] [place_mechanical] имеет input: True (Ожидалось: is True)
+2026-05-12 16:27:32 [INFO] [PASSED] [place_mechanical] имеет output: True (Ожидалось: is True)
+2026-05-12 16:27:32 [INFO] [PASSED] [place_mechanical] имеет decision: True (Ожидалось: is True)
+2026-05-12 16:27:32 [INFO] [PASSED] [place_bypass] имеет context: True (Ожидалось: is True)
+2026-05-12 16:27:32 [INFO] [PASSED] [place_bypass] имеет input: True (Ожидалось: is True)
+2026-05-12 16:27:32 [INFO] [PASSED] [place_bypass] имеет output: True (Ожидалось: is True)
+2026-05-12 16:27:32 [INFO] [PASSED] [place_bypass] имеет decision: True (Ожидалось: is True)
+2026-05-12 16:27:32 [INFO] [PASSED] [place_water_circuit] имеет context: True (Ожидалось: is True)
+2026-05-12 16:27:32 [INFO] [PASSED] [place_water_circuit] имеет input: True (Ожидалось: is True)
+2026-05-12 16:27:32 [INFO] [PASSED] [place_water_circuit] имеет output: True (Ожидалось: is True)
+2026-05-12 16:27:32 [INFO] [PASSED] [place_water_circuit] имеет decision: True (Ожидалось: is True)
+2026-05-12 16:27:32 [INFO] [PASSED] [place_remaining] имеет context: True (Ожидалось: is True)
+2026-05-12 16:27:32 [INFO] [PASSED] [place_remaining] имеет input: True (Ожидалось: is True)
+2026-05-12 16:27:32 [INFO] [PASSED] [place_remaining] имеет output: True (Ожидалось: is True)
+2026-05-12 16:27:32 [INFO] [PASSED] [place_remaining] имеет decision: True (Ожидалось: is True)
+2026-05-12 16:27:32 [INFO] [PASSED] [place_external_ports] имеет context: True (Ожидалось: is True)
+2026-05-12 16:27:32 [INFO] [PASSED] [place_external_ports] имеет input: True (Ожидалось: is True)
+2026-05-12 16:27:32 [INFO] [PASSED] [place_external_ports] имеет output: True (Ожидалось: is True)
+2026-05-12 16:27:32 [INFO] [PASSED] [place_external_ports] имеет decision: True (Ожидалось: is True)
+2026-05-12 16:27:32 [INFO] [PASSED] main_count: 4 (Ожидалось: 4)
+2026-05-12 16:27:32 [INFO] [PASSED] ext_port_count: 1 (Ожидалось: 1)
+2026-05-12 16:27:32 [INFO] [PASSED] Цикл найден: True (Ожидалось: is True)
+2026-05-12 16:27:32 [INFO] [PASSED] Длина цикла: 4 (Ожидалось: 4)
+2026-05-12 16:27:32 [INFO] [PASSED] Без журнала = None: True (Ожидалось: is True)
+2026-05-12 16:27:32 [INFO] === END TEST: test_layout_journal ===
+
+2026-05-12 16:27:32 [INFO] === START TEST: test_layout_journal_regression ===
+2026-05-12 16:27:32 [INFO] [PASSED] Количество шагов: 8 (Ожидалось: 8)
+2026-05-12 16:27:32 [INFO] [PASSED] Шаг [0]: 'separate_components' (Ожидалось: 'separate_components')
+2026-05-12 16:27:32 [INFO] [PASSED] Decision [0]: None (Ожидалось: None)
+2026-05-12 16:27:32 [INFO] [PASSED] Шаг [1]: 'build_adjacency' (Ожидалось: 'build_adjacency')
+2026-05-12 16:27:32 [INFO] [PASSED] Decision [1]: None (Ожидалось: None)
+2026-05-12 16:27:32 [INFO] [PASSED] Шаг [2]: 'place_freon_cycle' (Ожидалось: 'place_freon_cycle')
+2026-05-12 16:27:32 [INFO] [PASSED] Decision [2]: {'found_cycle': True, 'cycle_length': 4} (Ожидалось: {'found_cycle': True, 'cycle_length': 4})
+2026-05-12 16:27:32 [INFO] [PASSED] Шаг [3]: 'place_mechanical' (Ожидалось: 'place_mechanical')
+2026-05-12 16:27:32 [INFO] [PASSED] Decision [3]: None (Ожидалось: None)
+2026-05-12 16:27:32 [INFO] [PASSED] Шаг [4]: 'place_bypass' (Ожидалось: 'place_bypass')
+2026-05-12 16:27:32 [INFO] [PASSED] Decision [4]: None (Ожидалось: None)
+2026-05-12 16:27:32 [INFO] [PASSED] Шаг [5]: 'place_water_circuit' (Ожидалось: 'place_water_circuit')
+2026-05-12 16:27:32 [INFO] [PASSED] Decision [5]: None (Ожидалось: None)
+2026-05-12 16:27:32 [INFO] [PASSED] Шаг [6]: 'place_remaining' (Ожидалось: 'place_remaining')
+2026-05-12 16:27:32 [INFO] [PASSED] Decision [6]: None (Ожидалось: None)
+2026-05-12 16:27:32 [INFO] [PASSED] Шаг [7]: 'place_external_ports' (Ожидалось: 'place_external_ports')
+2026-05-12 16:27:32 [INFO] [PASSED] Decision [7]: {'skipped': True, 'reason': 'no external ports'} (Ожидалось: {'skipped': True, 'reason': 'no external ports'})
+2026-05-12 16:27:32 [INFO] === END TEST: test_layout_journal_regression ===
+
+2026-05-12 16:27:32 [INFO] === START TEST: test_astar_simple_path ===
+2026-05-12 16:27:32 [INFO] [PASSED] Путь найден: 2 (Ожидалось: > 0)
+2026-05-12 16:27:32 [INFO] [PASSED] Начало пути: (10, 10) (Ожидалось: (10, 10))
+2026-05-12 16:27:32 [INFO] [PASSED] Конец пути: (100, 10) (Ожидалось: (100, 10))
+2026-05-12 16:27:32 [INFO] === END TEST: test_astar_simple_path ===
+
+2026-05-12 16:27:32 [INFO] === START TEST: test_astar_obstacle_avoidance ===
+2026-05-12 16:27:32 [INFO] [PASSED] Путь найден с обходом: 4 (Ожидалось: > 0)
+2026-05-12 16:27:32 [INFO] [PASSED] Путь не прямой (> 2 точек): 4 (Ожидалось: > 2)
+2026-05-12 16:27:32 [INFO] [PASSED] Начало пути: (10, 100) (Ожидалось: (10, 100))
+2026-05-12 16:27:32 [INFO] [PASSED] Конец пути: (100, 100) (Ожидалось: (100, 100))
+2026-05-12 16:27:32 [INFO] [PASSED] Точка (10, 60) не заблокирована: False (Ожидалось: is False)
+2026-05-12 16:27:32 [INFO] [PASSED] Точка (100, 60) не заблокирована: False (Ожидалось: is False)
+2026-05-12 16:27:32 [INFO] === END TEST: test_astar_obstacle_avoidance ===
+
+2026-05-12 16:27:32 [INFO] === START TEST: test_get_escape_point ===
+2026-05-12 16:27:32 [INFO] [PASSED] Exact на сетке: 0 (Ожидалось: 0)
+2026-05-12 16:27:32 [INFO] [PASSED] Safe левее exact (левая грань): 80 (Ожидалось: < 100)
+2026-05-12 16:27:32 [INFO] [PASSED] Safe.y == Exact.y: 130 (Ожидалось: 130)
+2026-05-12 16:27:32 [INFO] === END TEST: test_get_escape_point ===
+
+2026-05-12 16:27:32 [INFO] === START TEST: test_router_register_path_avoidance ===
+2026-05-12 16:27:32 [INFO] [PASSED] (50, 10) в drawn_cells: (50, 10) (Ожидалось: содержится в {(70, 10), (50, 10), (40, 10), (100, 10), (30, 10), (90, 10), (20, 10), (80, 10), (10, 10), (60, 10)})
+2026-05-12 16:27:32 [INFO] === END TEST: test_router_register_path_avoidance ===
+
+2026-05-12 16:27:32 [INFO] === START TEST: test_router_smooth_path ===
+2026-05-12 16:27:32 [INFO] [PASSED] Сглаженный путь не длиннее: 3 (Ожидалось: <= 4)
+2026-05-12 16:27:32 [INFO] [PASSED] Начало сохранено: (10, 10) (Ожидалось: (10, 10))
+2026-05-12 16:27:32 [INFO] [PASSED] Конец сохранён: (100, 50) (Ожидалось: (100, 50))
+2026-05-12 16:27:32 [INFO] === END TEST: test_router_smooth_path ===
+
+2026-05-12 16:27:32 [INFO] === START TEST: test_build_waypoint_chain ===
+2026-05-12 16:27:32 [INFO] [PASSED] Без waypoints — 2 точки: 2 (Ожидалось: 2)
+2026-05-12 16:27:32 [INFO] [PASSED] Первая = safe_start: (10, 10) (Ожидалось: (10, 10))
+2026-05-12 16:27:32 [INFO] [PASSED] Последняя = safe_end: (100, 100) (Ожидалось: (100, 100))
+2026-05-12 16:27:32 [INFO] [PASSED] С waypoint — 3 точки: 3 (Ожидалось: 3)
+2026-05-12 16:27:32 [INFO] [PASSED] Waypoint привязан к сетке: (60, 60) (Ожидалось: (60, 60))
+2026-05-12 16:27:32 [INFO] === END TEST: test_build_waypoint_chain ===
+
+2026-05-12 16:27:32 [INFO] === START TEST: test_route_through_points ===
+2026-05-12 16:27:32 [INFO] [PASSED] Путь найден: 10 (Ожидалось: > 0)
+2026-05-12 16:27:32 [INFO] [PASSED] Начало: (10, 10) (Ожидалось: (10, 10))
+2026-05-12 16:27:32 [INFO] [PASSED] Конец: (100, 10) (Ожидалось: (100, 10))
+2026-05-12 16:27:32 [INFO] === END TEST: test_route_through_points ===
+
+2026-05-12 16:27:32 [INFO] === START TEST: test_build_exempt_set ===
+2026-05-12 16:27:32 [INFO] [PASSED] exact_start в exempt: (10, 10) (Ожидалось: содержится в {(10, 10), (100, 10), (90, 10), (20, 10)})
+2026-05-12 16:27:32 [INFO] [PASSED] exact_end в exempt: (100, 10) (Ожидалось: содержится в {(10, 10), (100, 10), (90, 10), (20, 10)})
+2026-05-12 16:27:32 [INFO] [PASSED] safe_start в exempt: (20, 10) (Ожидалось: содержится в {(10, 10), (100, 10), (90, 10), (20, 10)})
+2026-05-12 16:27:32 [INFO] [PASSED] safe_end в exempt: (90, 10) (Ожидалось: содержится в {(10, 10), (100, 10), (90, 10), (20, 10)})
+2026-05-12 16:27:32 [INFO] === END TEST: test_build_exempt_set ===
+
+2026-05-12 16:27:32 [INFO] === START TEST: test_cleanup_path ===
+2026-05-12 16:27:32 [INFO] [PASSED] Дубликат удалён: 2 (Ожидалось: 2)
+2026-05-12 16:27:32 [INFO] [PASSED] Коллинеарная точка удалена: 2 (Ожидалось: 2)
+2026-05-12 16:27:32 [INFO] [PASSED] Сохранены крайние: [(10, 10), (50, 10)] (Ожидалось: [(10, 10), (50, 10)])
+2026-05-12 16:27:32 [INFO] === END TEST: test_cleanup_path ===
+
+2026-05-12 16:27:32 [INFO] === START TEST: test_line_clear ===
+2026-05-12 16:27:32 [INFO] [PASSED] Свободная линия: True (Ожидалось: is True)
+2026-05-12 16:27:32 [INFO] [PASSED] Заблокированная линия: False (Ожидалось: is False)
+2026-05-12 16:27:32 [INFO] === END TEST: test_line_clear ===
+
+2026-05-12 16:27:32 [INFO] === START TEST: test_find_path_journal ===
+2026-05-12 16:27:32 [INFO] [PASSED] Путь найден: 2 (Ожидалось: > 0)
+2026-05-12 16:27:32 [INFO] [PASSED] Журнал не пустой: 4 (Ожидалось: > 0)
+2026-05-12 16:27:32 [INFO] [PASSED] build_waypoints в журнале: 'build_waypoints' (Ожидалось: содержится в ['build_waypoints', 'route_segments', 'smooth_path', 'final_path'])
+2026-05-12 16:27:32 [INFO] [PASSED] route_segments в журнале: 'route_segments' (Ожидалось: содержится в ['build_waypoints', 'route_segments', 'smooth_path', 'final_path'])
+2026-05-12 16:27:32 [INFO] [PASSED] smooth_path в журнале: 'smooth_path' (Ожидалось: содержится в ['build_waypoints', 'route_segments', 'smooth_path', 'final_path'])
+2026-05-12 16:27:32 [INFO] [PASSED] final_path в журнале: 'final_path' (Ожидалось: содержится в ['build_waypoints', 'route_segments', 'smooth_path', 'final_path'])
+2026-05-12 16:27:32 [INFO] [PASSED] [build_waypoints] имеет context: True (Ожидалось: is True)
+2026-05-12 16:27:32 [INFO] [PASSED] [build_waypoints] имеет input: True (Ожидалось: is True)
+2026-05-12 16:27:32 [INFO] [PASSED] [build_waypoints] имеет output: True (Ожидалось: is True)
+2026-05-12 16:27:32 [INFO] [PASSED] [build_waypoints] имеет decision: True (Ожидалось: is True)
+2026-05-12 16:27:32 [INFO] [PASSED] [route_segments] имеет context: True (Ожидалось: is True)
+2026-05-12 16:27:32 [INFO] [PASSED] [route_segments] имеет input: True (Ожидалось: is True)
+2026-05-12 16:27:32 [INFO] [PASSED] [route_segments] имеет output: True (Ожидалось: is True)
+2026-05-12 16:27:32 [INFO] [PASSED] [route_segments] имеет decision: True (Ожидалось: is True)
+2026-05-12 16:27:32 [INFO] [PASSED] [smooth_path] имеет context: True (Ожидалось: is True)
+2026-05-12 16:27:32 [INFO] [PASSED] [smooth_path] имеет input: True (Ожидалось: is True)
+2026-05-12 16:27:32 [INFO] [PASSED] [smooth_path] имеет output: True (Ожидалось: is True)
+2026-05-12 16:27:32 [INFO] [PASSED] [smooth_path] имеет decision: True (Ожидалось: is True)
+2026-05-12 16:27:32 [INFO] [PASSED] [final_path] имеет context: True (Ожидалось: is True)
+2026-05-12 16:27:32 [INFO] [PASSED] [final_path] имеет input: True (Ожидалось: is True)
+2026-05-12 16:27:32 [INFO] [PASSED] [final_path] имеет output: True (Ожидалось: is True)
+2026-05-12 16:27:32 [INFO] [PASSED] [final_path] имеет decision: True (Ожидалось: is True)
+2026-05-12 16:27:32 [INFO] [PASSED] final_path.output.total_points: 2 (Ожидалось: 2)
+2026-05-12 16:27:32 [INFO] [PASSED] Результат с журналом = без: [(10, 10), (100, 10)] (Ожидалось: [(10, 10), (100, 10)])
+2026-05-12 16:27:32 [INFO] === END TEST: test_find_path_journal ===
+
+2026-05-12 16:27:32 [INFO] === START TEST: test_find_path_journal_no_path ===
+2026-05-12 16:27:32 [INFO] [PASSED] Путь пустой: 0 (Ожидалось: 0)
+2026-05-12 16:27:32 [INFO] [PASSED] Журнал не пустой: 2 (Ожидалось: > 0)
+2026-05-12 16:27:32 [INFO] [PASSED] raw_path_length = 0: 0 (Ожидалось: 0)
+2026-05-12 16:27:32 [INFO] [PASSED] decision = no_path_found: 'no_path_found' (Ожидалось: 'no_path_found')
+2026-05-12 16:27:32 [INFO] === END TEST: test_find_path_journal_no_path ===
+
+2026-05-12 16:27:32 [INFO] === START TEST: test_base_equipment_rect ===
+2026-05-12 16:27:32 [INFO] [PASSED] Прямоугольник компонента: PySide6.QtCore.QRectF(10.000000, 20.000000, 100.000000, 50.000000) (Ожидалось: PySide6.QtCore.QRectF(10.000000, 20.000000, 100.000000, 50.000000))
+2026-05-12 16:27:32 [INFO] [PASSED] Начальное состояние: 'off' (Ожидалось: 'off')
+2026-05-12 16:27:32 [INFO] === END TEST: test_base_equipment_rect ===
+
+2026-05-12 16:27:32 [INFO] === START TEST: test_tank_ports_update ===
+2026-05-12 16:27:32 [INFO] [PASSED] Порт freon_out существует: True (Ожидалось: is True)
+2026-05-12 16:27:32 [INFO] [PASSED] Порт water_out существует: True (Ожидалось: is True)
+2026-05-12 16:27:32 [INFO] [PASSED] freon_out после сдвига: (200, 390) (Ожидалось: (200, 390))
+2026-05-12 16:27:32 [INFO] [PASSED] water_lt_in после сдвига: (290, 200) (Ожидалось: (290, 200))
+2026-05-12 16:27:32 [INFO] [PASSED] water_ht_in после сдвига: (230, 200) (Ожидалось: (230, 200))
+2026-05-12 16:27:32 [INFO] [PASSED] water_out после сдвига: (320, 360) (Ожидалось: (320, 360))
+2026-05-12 16:27:32 [INFO] [PASSED] drain после сдвига: (260, 400) (Ожидалось: (260, 400))
+2026-05-12 16:27:32 [INFO] === END TEST: test_tank_ports_update ===
+
+2026-05-12 16:27:32 [INFO] === START TEST: test_pump_ports_update ===
+2026-05-12 16:27:32 [INFO] [PASSED] Порт in насоса: (100, 130) (Ожидалось: (100, 130))
+2026-05-12 16:27:32 [INFO] [PASSED] Порт out насоса: (150, 130) (Ожидалось: (150, 130))
+2026-05-12 16:27:32 [INFO] === END TEST: test_pump_ports_update ===
+
+2026-05-12 16:27:32 [INFO] === START TEST: test_external_port_label_pos ===
+2026-05-12 16:27:32 [INFO] [PASSED] Позиция надписи: 'bottom' (Ожидалось: 'bottom')
+2026-05-12 16:27:32 [INFO] [PASSED] Порт in внешнего штуцера: (50, 70) (Ожидалось: (50, 70))
+2026-05-12 16:27:32 [INFO] [PASSED] Порт out внешнего штуцера: (50, 70) (Ожидалось: (50, 70))
+2026-05-12 16:27:32 [INFO] === END TEST: test_external_port_label_pos ===
+
+2026-05-12 16:27:32 [INFO] === START TEST: test_cv_components_presence[C:\\Users\\user\\Documents\\GitHub\\laser-cooler-control\\tests\\test_data\\schemes\\neg_circular_water.yaml] ===
+2026-05-12 16:27:33 [INFO] [PASSED] Наложение компонентов (neg_circular_water.yaml): 0 (Ожидалось: 0)
+2026-05-12 16:27:33 [INFO] [PASSED] Все компоненты отрисованы (neg_circular_water.yaml): 2 (Ожидалось: 2)
+2026-05-12 16:27:33 [INFO] === END TEST: test_cv_components_presence[C:\\Users\\user\\Documents\\GitHub\\laser-cooler-control\\tests\\test_data\\schemes\\neg_circular_water.yaml] ===
+
+2026-05-12 16:27:33 [INFO] === START TEST: test_cv_components_presence[C:\\Users\\user\\Documents\\GitHub\\laser-cooler-control\\tests\\test_data\\schemes\\neg_direction_error.yaml] ===
+2026-05-12 16:27:33 [INFO] [PASSED] Наложение компонентов (neg_direction_error.yaml): 0 (Ожидалось: 0)
+2026-05-12 16:27:33 [INFO] [PASSED] Все компоненты отрисованы (neg_direction_error.yaml): 2 (Ожидалось: 2)
+2026-05-12 16:27:33 [INFO] === END TEST: test_cv_components_presence[C:\\Users\\user\\Documents\\GitHub\\laser-cooler-control\\tests\\test_data\\schemes\\neg_direction_error.yaml] ===
+
+2026-05-12 16:27:33 [INFO] === START TEST: test_cv_components_presence[C:\\Users\\user\\Documents\\GitHub\\laser-cooler-control\\tests\\test_data\\schemes\\neg_duplicate_ids.yaml] ===
+2026-05-12 16:27:33 [INFO] [PASSED] Наложение компонентов (neg_duplicate_ids.yaml): 0 (Ожидалось: 0)
+2026-05-12 16:27:33 [INFO] [PASSED] Все компоненты отрисованы (neg_duplicate_ids.yaml): 1 (Ожидалось: 1)
+2026-05-12 16:27:33 [INFO] === END TEST: test_cv_components_presence[C:\\Users\\user\\Documents\\GitHub\\laser-cooler-control\\tests\\test_data\\schemes\\neg_duplicate_ids.yaml] ===
+
+2026-05-12 16:27:33 [INFO] === START TEST: test_cv_components_presence[C:\\Users\\user\\Documents\\GitHub\\laser-cooler-control\\tests\\test_data\\schemes\\neg_empty.yaml] ===
+2026-05-12 16:27:33 [INFO] === END TEST: test_cv_components_presence[C:\\Users\\user\\Documents\\GitHub\\laser-cooler-control\\tests\\test_data\\schemes\\neg_empty.yaml] ===
+
+2026-05-12 16:27:33 [INFO] === START TEST: test_cv_components_presence[C:\\Users\\user\\Documents\\GitHub\\laser-cooler-control\\tests\\test_data\\schemes\\neg_ghost_comp.yaml] ===
+2026-05-12 16:27:34 [INFO] [PASSED] Наложение компонентов (neg_ghost_comp.yaml): 0 (Ожидалось: 0)
+2026-05-12 16:27:34 [INFO] [PASSED] Все компоненты отрисованы (neg_ghost_comp.yaml): 1 (Ожидалось: 1)
+2026-05-12 16:27:34 [INFO] === END TEST: test_cv_components_presence[C:\\Users\\user\\Documents\\GitHub\\laser-cooler-control\\tests\\test_data\\schemes\\neg_ghost_comp.yaml] ===
+
+2026-05-12 16:27:34 [INFO] === START TEST: test_cv_components_presence[C:\\Users\\user\\Documents\\GitHub\\laser-cooler-control\\tests\\test_data\\schemes\\neg_invalid_syntax.yaml] ===
+2026-05-12 16:27:34 [INFO] === END TEST: test_cv_components_presence[C:\\Users\\user\\Documents\\GitHub\\laser-cooler-control\\tests\\test_data\\schemes\\neg_invalid_syntax.yaml] ===
+
+2026-05-12 16:27:34 [INFO] === START TEST: test_cv_components_presence[C:\\Users\\user\\Documents\\GitHub\\laser-cooler-control\\tests\\test_data\\schemes\\neg_many_to_one.yaml] ===
+2026-05-12 16:27:34 [INFO] [PASSED] Наложение компонентов (neg_many_to_one.yaml): 0 (Ожидалось: 0)
+2026-05-12 16:27:34 [INFO] [PASSED] Все компоненты отрисованы (neg_many_to_one.yaml): 3 (Ожидалось: 3)
+2026-05-12 16:27:34 [INFO] === END TEST: test_cv_components_presence[C:\\Users\\user\\Documents\\GitHub\\laser-cooler-control\\tests\\test_data\\schemes\\neg_many_to_one.yaml] ===
+
+2026-05-12 16:27:34 [INFO] === START TEST: test_cv_components_presence[C:\\Users\\user\\Documents\\GitHub\\laser-cooler-control\\tests\\test_data\\schemes\\neg_media_mismatch.yaml] ===
+2026-05-12 16:27:34 [INFO] [PASSED] Наложение компонентов (neg_media_mismatch.yaml): 0 (Ожидалось: 0)
+2026-05-12 16:27:34 [INFO] [PASSED] Все компоненты отрисованы (neg_media_mismatch.yaml): 2 (Ожидалось: 2)
+2026-05-12 16:27:34 [INFO] === END TEST: test_cv_components_presence[C:\\Users\\user\\Documents\\GitHub\\laser-cooler-control\\tests\\test_data\\schemes\\neg_media_mismatch.yaml] ===
+
+2026-05-12 16:27:34 [INFO] === START TEST: test_cv_components_presence[C:\\Users\\user\\Documents\\GitHub\\laser-cooler-control\\tests\\test_data\\schemes\\neg_missing_fields.yaml] ===
+2026-05-12 16:27:34 [INFO] === END TEST: test_cv_components_presence[C:\\Users\\user\\Documents\\GitHub\\laser-cooler-control\\tests\\test_data\\schemes\\neg_missing_fields.yaml] ===
+
+2026-05-12 16:27:34 [INFO] === START TEST: test_cv_components_presence[C:\\Users\\user\\Documents\\GitHub\\laser-cooler-control\\tests\\test_data\\schemes\\neg_missing_target.yaml] ===
+2026-05-12 16:27:34 [INFO] === END TEST: test_cv_components_presence[C:\\Users\\user\\Documents\\GitHub\\laser-cooler-control\\tests\\test_data\\schemes\\neg_missing_target.yaml] ===
+
+2026-05-12 16:27:34 [INFO] === START TEST: test_cv_components_presence[C:\\Users\\user\\Documents\\GitHub\\laser-cooler-control\\tests\\test_data\\schemes\\neg_self_loop.yaml] ===
+2026-05-12 16:27:34 [INFO] [PASSED] Наложение компонентов (neg_self_loop.yaml): 0 (Ожидалось: 0)
+2026-05-12 16:27:34 [INFO] [PASSED] Все компоненты отрисованы (neg_self_loop.yaml): 1 (Ожидалось: 1)
+2026-05-12 16:27:34 [INFO] === END TEST: test_cv_components_presence[C:\\Users\\user\\Documents\\GitHub\\laser-cooler-control\\tests\\test_data\\schemes\\neg_self_loop.yaml] ===
+
+2026-05-12 16:27:34 [INFO] === START TEST: test_cv_components_presence[C:\\Users\\user\\Documents\\GitHub\\laser-cooler-control\\tests\\test_data\\schemes\\neg_unreachable.yaml] ===
+2026-05-12 16:27:34 [INFO] [PASSED] Наложение компонентов (neg_unreachable.yaml): 0 (Ожидалось: 0)
+2026-05-12 16:27:34 [INFO] [PASSED] Все компоненты отрисованы (neg_unreachable.yaml): 9 (Ожидалось: 9)
+2026-05-12 16:27:34 [INFO] === END TEST: test_cv_components_presence[C:\\Users\\user\\Documents\\GitHub\\laser-cooler-control\\tests\\test_data\\schemes\\neg_unreachable.yaml] ===
+
+2026-05-12 16:27:34 [INFO] === START TEST: test_cv_components_presence[C:\\Users\\user\\Documents\\GitHub\\laser-cooler-control\\tests\\test_data\\schemes\\pos_avg_bypass.yaml] ===
+2026-05-12 16:27:35 [INFO] [PASSED] Наложение компонентов (pos_avg_bypass.yaml): 0 (Ожидалось: 0)
+2026-05-12 16:27:35 [INFO] [PASSED] Все компоненты отрисованы (pos_avg_bypass.yaml): 6 (Ожидалось: 6)
+2026-05-12 16:27:35 [INFO] === END TEST: test_cv_components_presence[C:\\Users\\user\\Documents\\GitHub\\laser-cooler-control\\tests\\test_data\\schemes\\pos_avg_bypass.yaml] ===
+
+2026-05-12 16:27:35 [INFO] === START TEST: test_cv_components_presence[C:\\Users\\user\\Documents\\GitHub\\laser-cooler-control\\tests\\test_data\\schemes\\pos_avg_dual_pump.yaml] ===
+2026-05-12 16:27:35 [INFO] [PASSED] Наложение компонентов (pos_avg_dual_pump.yaml): 0 (Ожидалось: 0)
+2026-05-12 16:27:35 [INFO] [PASSED] Все компоненты отрисованы (pos_avg_dual_pump.yaml): 6 (Ожидалось: 6)
+2026-05-12 16:27:35 [INFO] === END TEST: test_cv_components_presence[C:\\Users\\user\\Documents\\GitHub\\laser-cooler-control\\tests\\test_data\\schemes\\pos_avg_dual_pump.yaml] ===
+
+2026-05-12 16:27:35 [INFO] === START TEST: test_cv_components_presence[C:\\Users\\user\\Documents\\GitHub\\laser-cooler-control\\tests\\test_data\\schemes\\pos_avg_heating.yaml] ===
+2026-05-12 16:27:35 [INFO] [PASSED] Наложение компонентов (pos_avg_heating.yaml): 0 (Ожидалось: 0)
+2026-05-12 16:27:35 [INFO] [PASSED] Все компоненты отрисованы (pos_avg_heating.yaml): 6 (Ожидалось: 6)
+2026-05-12 16:27:35 [INFO] === END TEST: test_cv_components_presence[C:\\Users\\user\\Documents\\GitHub\\laser-cooler-control\\tests\\test_data\\schemes\\pos_avg_heating.yaml] ===
+
+2026-05-12 16:27:35 [INFO] === START TEST: test_cv_components_presence[C:\\Users\\user\\Documents\\GitHub\\laser-cooler-control\\tests\\test_data\\schemes\\pos_avg_large.yaml] ===
+2026-05-12 16:27:35 [INFO] [PASSED] Наложение компонентов (pos_avg_large.yaml): 0 (Ожидалось: 0)
+2026-05-12 16:27:35 [INFO] [PASSED] Все компоненты отрисованы (pos_avg_large.yaml): 9 (Ожидалось: 9)
+2026-05-12 16:27:35 [INFO] === END TEST: test_cv_components_presence[C:\\Users\\user\\Documents\\GitHub\\laser-cooler-control\\tests\\test_data\\schemes\\pos_avg_large.yaml] ===
+
+2026-05-12 16:27:35 [INFO] === START TEST: test_cv_components_presence[C:\\Users\\user\\Documents\\GitHub\\laser-cooler-control\\tests\\test_data\\schemes\\pos_avg_standard.yaml] ===
+2026-05-12 16:27:35 [INFO] [PASSED] Наложение компонентов (pos_avg_standard.yaml): 0 (Ожидалось: 0)
+2026-05-12 16:27:35 [INFO] [PASSED] Все компоненты отрисованы (pos_avg_standard.yaml): 6 (Ожидалось: 6)
+2026-05-12 16:27:35 [INFO] === END TEST: test_cv_components_presence[C:\\Users\\user\\Documents\\GitHub\\laser-cooler-control\\tests\\test_data\\schemes\\pos_avg_standard.yaml] ===
+
+2026-05-12 16:27:35 [INFO] === START TEST: test_cv_components_presence[C:\\Users\\user\\Documents\\GitHub\\laser-cooler-control\\tests\\test_data\\schemes\\pos_bypass_valve.yaml] ===
+2026-05-12 16:27:36 [INFO] [PASSED] Наложение компонентов (pos_bypass_valve.yaml): 0 (Ожидалось: 0)
+2026-05-12 16:27:36 [INFO] [PASSED] Все компоненты отрисованы (pos_bypass_valve.yaml): 5 (Ожидалось: 5)
+2026-05-12 16:27:36 [INFO] === END TEST: test_cv_components_presence[C:\\Users\\user\\Documents\\GitHub\\laser-cooler-control\\tests\\test_data\\schemes\\pos_bypass_valve.yaml] ===
+
+2026-05-12 16:27:36 [INFO] === START TEST: test_cv_components_presence[C:\\Users\\user\\Documents\\GitHub\\laser-cooler-control\\tests\\test_data\\schemes\\pos_drain_valve.yaml] ===
+2026-05-12 16:27:36 [INFO] [PASSED] Наложение компонентов (pos_drain_valve.yaml): 0 (Ожидалось: 0)
+2026-05-12 16:27:36 [INFO] [PASSED] Все компоненты отрисованы (pos_drain_valve.yaml): 2 (Ожидалось: 2)
+2026-05-12 16:27:36 [INFO] === END TEST: test_cv_components_presence[C:\\Users\\user\\Documents\\GitHub\\laser-cooler-control\\tests\\test_data\\schemes\\pos_drain_valve.yaml] ===
+
+2026-05-12 16:27:36 [INFO] === START TEST: test_cv_components_presence[C:\\Users\\user\\Documents\\GitHub\\laser-cooler-control\\tests\\test_data\\schemes\\pos_empty_names.yaml] ===
+2026-05-12 16:27:36 [INFO] [PASSED] Наложение компонентов (pos_empty_names.yaml): 0 (Ожидалось: 0)
+2026-05-12 16:27:36 [INFO] [PASSED] Все компоненты отрисованы (pos_empty_names.yaml): 1 (Ожидалось: 1)
+2026-05-12 16:27:36 [INFO] === END TEST: test_cv_components_presence[C:\\Users\\user\\Documents\\GitHub\\laser-cooler-control\\tests\\test_data\\schemes\\pos_empty_names.yaml] ===
+
+2026-05-12 16:27:36 [INFO] === START TEST: test_cv_components_presence[C:\\Users\\user\\Documents\\GitHub\\laser-cooler-control\\tests\\test_data\\schemes\\pos_extreme_density.yaml] ===
+2026-05-12 16:27:36 [ERROR] [FAILED] Наложение компонентов (pos_extreme_density.yaml): получено 48, ожидалось 0
+2026-05-12 16:27:36 [INFO] === END TEST: test_cv_components_presence[C:\\Users\\user\\Documents\\GitHub\\laser-cooler-control\\tests\\test_data\\schemes\\pos_extreme_density.yaml] ===
+
+2026-05-12 16:27:36 [INFO] === START TEST: test_cv_components_presence[C:\\Users\\user\\Documents\\GitHub\\laser-cooler-control\\tests\\test_data\\schemes\\pos_freon_basic.yaml] ===
+2026-05-12 16:27:36 [INFO] [PASSED] Наложение компонентов (pos_freon_basic.yaml): 0 (Ожидалось: 0)
+2026-05-12 16:27:36 [INFO] [PASSED] Все компоненты отрисованы (pos_freon_basic.yaml): 4 (Ожидалось: 4)
+2026-05-12 16:27:36 [INFO] === END TEST: test_cv_components_presence[C:\\Users\\user\\Documents\\GitHub\\laser-cooler-control\\tests\\test_data\\schemes\\pos_freon_basic.yaml] ===
+
+2026-05-12 16:27:36 [INFO] === START TEST: test_cv_components_presence[C:\\Users\\user\\Documents\\GitHub\\laser-cooler-control\\tests\\test_data\\schemes\\pos_full_standard.yaml] ===
+2026-05-12 16:27:37 [INFO] [PASSED] Наложение компонентов (pos_full_standard.yaml): 0 (Ожидалось: 0)
+2026-05-12 16:27:37 [INFO] [PASSED] Все компоненты отрисованы (pos_full_standard.yaml): 5 (Ожидалось: 5)
+2026-05-12 16:27:37 [INFO] === END TEST: test_cv_components_presence[C:\\Users\\user\\Documents\\GitHub\\laser-cooler-control\\tests\\test_data\\schemes\\pos_full_standard.yaml] ===
+
+2026-05-12 16:27:37 [INFO] === START TEST: test_cv_components_presence[C:\\Users\\user\\Documents\\GitHub\\laser-cooler-control\\tests\\test_data\\schemes\\pos_heating.yaml] ===
+2026-05-12 16:27:37 [INFO] [PASSED] Наложение компонентов (pos_heating.yaml): 0 (Ожидалось: 0)
+2026-05-12 16:27:37 [INFO] [PASSED] Все компоненты отрисованы (pos_heating.yaml): 3 (Ожидалось: 3)
+2026-05-12 16:27:37 [INFO] === END TEST: test_cv_components_presence[C:\\Users\\user\\Documents\\GitHub\\laser-cooler-control\\tests\\test_data\\schemes\\pos_heating.yaml] ===
+
+2026-05-12 16:27:37 [INFO] === START TEST: test_cv_components_presence[C:\\Users\\user\\Documents\\GitHub\\laser-cooler-control\\tests\\test_data\\schemes\\pos_long_labels.yaml] ===
+2026-05-12 16:27:37 [INFO] [PASSED] Наложение компонентов (pos_long_labels.yaml): 0 (Ожидалось: 0)
+2026-05-12 16:27:37 [INFO] [PASSED] Все компоненты отрисованы (pos_long_labels.yaml): 2 (Ожидалось: 2)
+2026-05-12 16:27:37 [INFO] === END TEST: test_cv_components_presence[C:\\Users\\user\\Documents\\GitHub\\laser-cooler-control\\tests\\test_data\\schemes\\pos_long_labels.yaml] ===
+
+2026-05-12 16:27:37 [INFO] === START TEST: test_cv_components_presence[C:\\Users\\user\\Documents\\GitHub\\laser-cooler-control\\tests\\test_data\\schemes\\pos_many_connections.yaml] ===
+2026-05-12 16:27:39 [INFO] [PASSED] Наложение компонентов (pos_many_connections.yaml): 0 (Ожидалось: 0)
+2026-05-12 16:27:39 [INFO] [PASSED] Все компоненты отрисованы (pos_many_connections.yaml): 8 (Ожидалось: 8)
+2026-05-12 16:27:39 [INFO] === END TEST: test_cv_components_presence[C:\\Users\\user\\Documents\\GitHub\\laser-cooler-control\\tests\\test_data\\schemes\\pos_many_connections.yaml] ===
+
+2026-05-12 16:27:39 [INFO] === START TEST: test_cv_components_presence[C:\\Users\\user\\Documents\\GitHub\\laser-cooler-control\\tests\\test_data\\schemes\\pos_max_density.yaml] ===
+2026-05-12 16:27:40 [INFO] [PASSED] Наложение компонентов (pos_max_density.yaml): 0 (Ожидалось: 0)
+2026-05-12 16:27:40 [INFO] [PASSED] Все компоненты отрисованы (pos_max_density.yaml): 13 (Ожидалось: 13)
+2026-05-12 16:27:40 [INFO] === END TEST: test_cv_components_presence[C:\\Users\\user\\Documents\\GitHub\\laser-cooler-control\\tests\\test_data\\schemes\\pos_max_density.yaml] ===
+
+2026-05-12 16:27:40 [INFO] === START TEST: test_cv_components_presence[C:\\Users\\user\\Documents\\GitHub\\laser-cooler-control\\tests\\test_data\\schemes\\pos_mechanical_fan.yaml] ===
+2026-05-12 16:27:40 [INFO] [PASSED] Наложение компонентов (pos_mechanical_fan.yaml): 0 (Ожидалось: 0)
+2026-05-12 16:27:40 [INFO] [PASSED] Все компоненты отрисованы (pos_mechanical_fan.yaml): 5 (Ожидалось: 5)
+2026-05-12 16:27:40 [INFO] === END TEST: test_cv_components_presence[C:\\Users\\user\\Documents\\GitHub\\laser-cooler-control\\tests\\test_data\\schemes\\pos_mechanical_fan.yaml] ===
+
+2026-05-12 16:27:40 [INFO] === START TEST: test_cv_components_presence[C:\\Users\\user\\Documents\\GitHub\\laser-cooler-control\\tests\\test_data\\schemes\\pos_minimal.yaml] ===
+2026-05-12 16:27:40 [INFO] [PASSED] Наложение компонентов (pos_minimal.yaml): 0 (Ожидалось: 0)
+2026-05-12 16:27:40 [INFO] [PASSED] Все компоненты отрисованы (pos_minimal.yaml): 1 (Ожидалось: 1)
+2026-05-12 16:27:40 [INFO] === END TEST: test_cv_components_presence[C:\\Users\\user\\Documents\\GitHub\\laser-cooler-control\\tests\\test_data\\schemes\\pos_minimal.yaml] ===
+
+2026-05-12 16:27:40 [INFO] === START TEST: test_cv_components_presence[C:\\Users\\user\\Documents\\GitHub\\laser-cooler-control\\tests\\test_data\\schemes\\pos_multi_comp.yaml] ===
+2026-05-12 16:27:40 [INFO] [PASSED] Наложение компонентов (pos_multi_comp.yaml): 0 (Ожидалось: 0)
+2026-05-12 16:27:40 [INFO] [PASSED] Все компоненты отрисованы (pos_multi_comp.yaml): 5 (Ожидалось: 5)
+2026-05-12 16:27:40 [INFO] === END TEST: test_cv_components_presence[C:\\Users\\user\\Documents\\GitHub\\laser-cooler-control\\tests\\test_data\\schemes\\pos_multi_comp.yaml] ===
+
+2026-05-12 16:27:40 [INFO] === START TEST: test_cv_components_presence[C:\\Users\\user\\Documents\\GitHub\\laser-cooler-control\\tests\\test_data\\schemes\\pos_multi_cycles.yaml] ===
+2026-05-12 16:27:42 [INFO] [PASSED] Наложение компонентов (pos_multi_cycles.yaml): 0 (Ожидалось: 0)
+2026-05-12 16:27:42 [INFO] [PASSED] Все компоненты отрисованы (pos_multi_cycles.yaml): 8 (Ожидалось: 8)
+2026-05-12 16:27:42 [INFO] === END TEST: test_cv_components_presence[C:\\Users\\user\\Documents\\GitHub\\laser-cooler-control\\tests\\test_data\\schemes\\pos_multi_cycles.yaml] ===
+
+2026-05-12 16:27:42 [INFO] === START TEST: test_cv_components_presence[C:\\Users\\user\\Documents\\GitHub\\laser-cooler-control\\tests\\test_data\\schemes\\pos_multi_ext_port.yaml] ===
+2026-05-12 16:27:43 [INFO] [PASSED] Наложение компонентов (pos_multi_ext_port.yaml): 0 (Ожидалось: 0)
+2026-05-12 16:27:43 [INFO] [PASSED] Все компоненты отрисованы (pos_multi_ext_port.yaml): 2 (Ожидалось: 2)
+2026-05-12 16:27:43 [INFO] === END TEST: test_cv_components_presence[C:\\Users\\user\\Documents\\GitHub\\laser-cooler-control\\tests\\test_data\\schemes\\pos_multi_ext_port.yaml] ===
+
+2026-05-12 16:27:43 [INFO] === START TEST: test_cv_components_presence[C:\\Users\\user\\Documents\\GitHub\\laser-cooler-control\\tests\\test_data\\schemes\\pos_multi_fan.yaml] ===
+2026-05-12 16:27:43 [INFO] [PASSED] Наложение компонентов (pos_multi_fan.yaml): 0 (Ожидалось: 0)
+2026-05-12 16:27:43 [INFO] [PASSED] Все компоненты отрисованы (pos_multi_fan.yaml): 3 (Ожидалось: 3)
+2026-05-12 16:27:43 [INFO] === END TEST: test_cv_components_presence[C:\\Users\\user\\Documents\\GitHub\\laser-cooler-control\\tests\\test_data\\schemes\\pos_multi_fan.yaml] ===
+
+2026-05-12 16:27:43 [INFO] === START TEST: test_cv_components_presence[C:\\Users\\user\\Documents\\GitHub\\laser-cooler-control\\tests\\test_data\\schemes\\pos_multi_pump.yaml] ===
+2026-05-12 16:27:45 [INFO] [PASSED] Наложение компонентов (pos_multi_pump.yaml): 0 (Ожидалось: 0)
+2026-05-12 16:27:45 [INFO] [PASSED] Все компоненты отрисованы (pos_multi_pump.yaml): 3 (Ожидалось: 3)
+2026-05-12 16:27:45 [INFO] === END TEST: test_cv_components_presence[C:\\Users\\user\\Documents\\GitHub\\laser-cooler-control\\tests\\test_data\\schemes\\pos_multi_pump.yaml] ===
+
+2026-05-12 16:27:45 [INFO] === START TEST: test_cv_components_presence[C:\\Users\\user\\Documents\\GitHub\\laser-cooler-control\\tests\\test_data\\schemes\\pos_no_tank.yaml] ===
+2026-05-12 16:27:45 [INFO] [PASSED] Наложение компонентов (pos_no_tank.yaml): 0 (Ожидалось: 0)
+2026-05-12 16:27:45 [INFO] [PASSED] Все компоненты отрисованы (pos_no_tank.yaml): 3 (Ожидалось: 3)
+2026-05-12 16:27:45 [INFO] === END TEST: test_cv_components_presence[C:\\Users\\user\\Documents\\GitHub\\laser-cooler-control\\tests\\test_data\\schemes\\pos_no_tank.yaml] ===
+
+2026-05-12 16:27:45 [INFO] === START TEST: test_cv_components_presence[C:\\Users\\user\\Documents\\GitHub\\laser-cooler-control\\tests\\test_data\\schemes\\pos_no_throttle.yaml] ===
+2026-05-12 16:27:45 [INFO] [PASSED] Наложение компонентов (pos_no_throttle.yaml): 0 (Ожидалось: 0)
+2026-05-12 16:27:45 [ERROR] [FAILED] Все компоненты отрисованы (pos_no_throttle.yaml): получено 2, ожидалось 3
+2026-05-12 16:27:45 [INFO] === END TEST: test_cv_components_presence[C:\\Users\\user\\Documents\\GitHub\\laser-cooler-control\\tests\\test_data\\schemes\\pos_no_throttle.yaml] ===
+
+2026-05-12 16:27:45 [INFO] === START TEST: test_cv_components_presence[C:\\Users\\user\\Documents\\GitHub\\laser-cooler-control\\tests\\test_data\\schemes\\pos_pipe_crossing.yaml] ===
+2026-05-12 16:27:48 [INFO] [PASSED] Наложение компонентов (pos_pipe_crossing.yaml): 0 (Ожидалось: 0)
+2026-05-12 16:27:48 [INFO] [PASSED] Все компоненты отрисованы (pos_pipe_crossing.yaml): 3 (Ожидалось: 3)
+2026-05-12 16:27:48 [INFO] === END TEST: test_cv_components_presence[C:\\Users\\user\\Documents\\GitHub\\laser-cooler-control\\tests\\test_data\\schemes\\pos_pipe_crossing.yaml] ===
+
+2026-05-12 16:27:48 [INFO] === START TEST: test_cv_components_presence[C:\\Users\\user\\Documents\\GitHub\\laser-cooler-control\\tests\\test_data\\schemes\\pos_shared_fan.yaml] ===
+2026-05-12 16:27:48 [INFO] [PASSED] Наложение компонентов (pos_shared_fan.yaml): 0 (Ожидалось: 0)
+2026-05-12 16:27:48 [INFO] [PASSED] Все компоненты отрисованы (pos_shared_fan.yaml): 3 (Ожидалось: 3)
+2026-05-12 16:27:48 [INFO] === END TEST: test_cv_components_presence[C:\\Users\\user\\Documents\\GitHub\\laser-cooler-control\\tests\\test_data\\schemes\\pos_shared_fan.yaml] ===
+
+2026-05-12 16:27:48 [INFO] === START TEST: test_cv_components_presence[C:\\Users\\user\\Documents\\GitHub\\laser-cooler-control\\tests\\test_data\\schemes\\pos_special_chars.yaml] ===
+2026-05-12 16:27:48 [INFO] [PASSED] Наложение компонентов (pos_special_chars.yaml): 0 (Ожидалось: 0)
+2026-05-12 16:27:48 [INFO] [PASSED] Все компоненты отрисованы (pos_special_chars.yaml): 1 (Ожидалось: 1)
+2026-05-12 16:27:48 [INFO] === END TEST: test_cv_components_presence[C:\\Users\\user\\Documents\\GitHub\\laser-cooler-control\\tests\\test_data\\schemes\\pos_special_chars.yaml] ===
+
+2026-05-12 16:27:48 [INFO] === START TEST: test_cv_components_presence[C:\\Users\\user\\Documents\\GitHub\\laser-cooler-control\\tests\\test_data\\schemes\\pos_water_basic.yaml] ===
+2026-05-12 16:27:48 [INFO] [PASSED] Наложение компонентов (pos_water_basic.yaml): 0 (Ожидалось: 0)
+2026-05-12 16:27:48 [INFO] [PASSED] Все компоненты отрисованы (pos_water_basic.yaml): 2 (Ожидалось: 2)
+2026-05-12 16:27:48 [INFO] === END TEST: test_cv_components_presence[C:\\Users\\user\\Documents\\GitHub\\laser-cooler-control\\tests\\test_data\\schemes\\pos_water_basic.yaml] ===
+
+2026-05-12 16:27:48 [INFO] === START TEST: test_cv_components_presence[C:\\Users\\user\\Documents\\GitHub\\laser-cooler-control\\tests\\test_data\\schemes\\pos_yaml_reversed.yaml] ===
+2026-05-12 16:27:48 [INFO] [PASSED] Наложение компонентов (pos_yaml_reversed.yaml): 0 (Ожидалось: 0)
+2026-05-12 16:27:48 [INFO] [PASSED] Все компоненты отрисованы (pos_yaml_reversed.yaml): 2 (Ожидалось: 2)
+2026-05-12 16:27:48 [INFO] === END TEST: test_cv_components_presence[C:\\Users\\user\\Documents\\GitHub\\laser-cooler-control\\tests\\test_data\\schemes\\pos_yaml_reversed.yaml] ===
+
+2026-05-12 16:27:48 [INFO] === START TEST: test_cv_pipe_intersections[C:\\Users\\user\\Documents\\GitHub\\laser-cooler-control\\tests\\test_data\\schemes\\neg_circular_water.yaml] ===
+2026-05-12 16:27:49 [INFO] [PASSED] Пересечение труб и объектов (neg_circular_water.yaml): 0 (Ожидалось: 0)
+2026-05-12 16:27:49 [INFO] === END TEST: test_cv_pipe_intersections[C:\\Users\\user\\Documents\\GitHub\\laser-cooler-control\\tests\\test_data\\schemes\\neg_circular_water.yaml] ===
+
+2026-05-12 16:27:49 [INFO] === START TEST: test_cv_pipe_intersections[C:\\Users\\user\\Documents\\GitHub\\laser-cooler-control\\tests\\test_data\\schemes\\neg_direction_error.yaml] ===
+2026-05-12 16:27:49 [INFO] [PASSED] Пересечение труб и объектов (neg_direction_error.yaml): 0 (Ожидалось: 0)
+2026-05-12 16:27:49 [INFO] === END TEST: test_cv_pipe_intersections[C:\\Users\\user\\Documents\\GitHub\\laser-cooler-control\\tests\\test_data\\schemes\\neg_direction_error.yaml] ===
+
+2026-05-12 16:27:49 [INFO] === START TEST: test_cv_pipe_intersections[C:\\Users\\user\\Documents\\GitHub\\laser-cooler-control\\tests\\test_data\\schemes\\neg_duplicate_ids.yaml] ===
+2026-05-12 16:27:49 [INFO] [PASSED] Пересечение труб и объектов (neg_duplicate_ids.yaml): 0 (Ожидалось: 0)
+2026-05-12 16:27:49 [INFO] === END TEST: test_cv_pipe_intersections[C:\\Users\\user\\Documents\\GitHub\\laser-cooler-control\\tests\\test_data\\schemes\\neg_duplicate_ids.yaml] ===
+
+2026-05-12 16:27:49 [INFO] === START TEST: test_cv_pipe_intersections[C:\\Users\\user\\Documents\\GitHub\\laser-cooler-control\\tests\\test_data\\schemes\\neg_empty.yaml] ===
+2026-05-12 16:27:49 [INFO] === END TEST: test_cv_pipe_intersections[C:\\Users\\user\\Documents\\GitHub\\laser-cooler-control\\tests\\test_data\\schemes\\neg_empty.yaml] ===
+
+2026-05-12 16:27:49 [INFO] === START TEST: test_cv_pipe_intersections[C:\\Users\\user\\Documents\\GitHub\\laser-cooler-control\\tests\\test_data\\schemes\\neg_ghost_comp.yaml] ===
+2026-05-12 16:27:49 [INFO] [PASSED] Пересечение труб и объектов (neg_ghost_comp.yaml): 0 (Ожидалось: 0)
+2026-05-12 16:27:49 [INFO] === END TEST: test_cv_pipe_intersections[C:\\Users\\user\\Documents\\GitHub\\laser-cooler-control\\tests\\test_data\\schemes\\neg_ghost_comp.yaml] ===
+
+2026-05-12 16:27:49 [INFO] === START TEST: test_cv_pipe_intersections[C:\\Users\\user\\Documents\\GitHub\\laser-cooler-control\\tests\\test_data\\schemes\\neg_invalid_syntax.yaml] ===
+2026-05-12 16:27:49 [INFO] === END TEST: test_cv_pipe_intersections[C:\\Users\\user\\Documents\\GitHub\\laser-cooler-control\\tests\\test_data\\schemes\\neg_invalid_syntax.yaml] ===
+
+2026-05-12 16:27:49 [INFO] === START TEST: test_cv_pipe_intersections[C:\\Users\\user\\Documents\\GitHub\\laser-cooler-control\\tests\\test_data\\schemes\\neg_many_to_one.yaml] ===
+2026-05-12 16:27:50 [INFO] [PASSED] Пересечение труб и объектов (neg_many_to_one.yaml): 0 (Ожидалось: 0)
+2026-05-12 16:27:50 [INFO] === END TEST: test_cv_pipe_intersections[C:\\Users\\user\\Documents\\GitHub\\laser-cooler-control\\tests\\test_data\\schemes\\neg_many_to_one.yaml] ===
+
+2026-05-12 16:27:50 [INFO] === START TEST: test_cv_pipe_intersections[C:\\Users\\user\\Documents\\GitHub\\laser-cooler-control\\tests\\test_data\\schemes\\neg_media_mismatch.yaml] ===
+2026-05-12 16:27:50 [INFO] [PASSED] Пересечение труб и объектов (neg_media_mismatch.yaml): 0 (Ожидалось: 0)
+2026-05-12 16:27:50 [INFO] === END TEST: test_cv_pipe_intersections[C:\\Users\\user\\Documents\\GitHub\\laser-cooler-control\\tests\\test_data\\schemes\\neg_media_mismatch.yaml] ===
+
+2026-05-12 16:27:50 [INFO] === START TEST: test_cv_pipe_intersections[C:\\Users\\user\\Documents\\GitHub\\laser-cooler-control\\tests\\test_data\\schemes\\neg_missing_fields.yaml] ===
+2026-05-12 16:27:50 [INFO] === END TEST: test_cv_pipe_intersections[C:\\Users\\user\\Documents\\GitHub\\laser-cooler-control\\tests\\test_data\\schemes\\neg_missing_fields.yaml] ===
+
+2026-05-12 16:27:50 [INFO] === START TEST: test_cv_pipe_intersections[C:\\Users\\user\\Documents\\GitHub\\laser-cooler-control\\tests\\test_data\\schemes\\neg_missing_target.yaml] ===
+2026-05-12 16:27:50 [INFO] === END TEST: test_cv_pipe_intersections[C:\\Users\\user\\Documents\\GitHub\\laser-cooler-control\\tests\\test_data\\schemes\\neg_missing_target.yaml] ===
+
+2026-05-12 16:27:50 [INFO] === START TEST: test_cv_pipe_intersections[C:\\Users\\user\\Documents\\GitHub\\laser-cooler-control\\tests\\test_data\\schemes\\neg_self_loop.yaml] ===
+2026-05-12 16:27:50 [INFO] [PASSED] Пересечение труб и объектов (neg_self_loop.yaml): 0 (Ожидалось: 0)
+2026-05-12 16:27:50 [INFO] === END TEST: test_cv_pipe_intersections[C:\\Users\\user\\Documents\\GitHub\\laser-cooler-control\\tests\\test_data\\schemes\\neg_self_loop.yaml] ===
+
+2026-05-12 16:27:50 [INFO] === START TEST: test_cv_pipe_intersections[C:\\Users\\user\\Documents\\GitHub\\laser-cooler-control\\tests\\test_data\\schemes\\neg_unreachable.yaml] ===
+2026-05-12 16:27:50 [INFO] [PASSED] Пересечение труб и объектов (neg_unreachable.yaml): 0 (Ожидалось: 0)
+2026-05-12 16:27:50 [INFO] === END TEST: test_cv_pipe_intersections[C:\\Users\\user\\Documents\\GitHub\\laser-cooler-control\\tests\\test_data\\schemes\\neg_unreachable.yaml] ===
+
+2026-05-12 16:27:50 [INFO] === START TEST: test_cv_pipe_intersections[C:\\Users\\user\\Documents\\GitHub\\laser-cooler-control\\tests\\test_data\\schemes\\pos_avg_bypass.yaml] ===
+2026-05-12 16:27:50 [INFO] [PASSED] Пересечение труб и объектов (pos_avg_bypass.yaml): 0 (Ожидалось: 0)
+2026-05-12 16:27:50 [INFO] === END TEST: test_cv_pipe_intersections[C:\\Users\\user\\Documents\\GitHub\\laser-cooler-control\\tests\\test_data\\schemes\\pos_avg_bypass.yaml] ===
+
+2026-05-12 16:27:50 [INFO] === START TEST: test_cv_pipe_intersections[C:\\Users\\user\\Documents\\GitHub\\laser-cooler-control\\tests\\test_data\\schemes\\pos_avg_dual_pump.yaml] ===
+2026-05-12 16:27:51 [INFO] [PASSED] Пересечение труб и объектов (pos_avg_dual_pump.yaml): 0 (Ожидалось: 0)
+2026-05-12 16:27:51 [INFO] === END TEST: test_cv_pipe_intersections[C:\\Users\\user\\Documents\\GitHub\\laser-cooler-control\\tests\\test_data\\schemes\\pos_avg_dual_pump.yaml] ===
+
+2026-05-12 16:27:51 [INFO] === START TEST: test_cv_pipe_intersections[C:\\Users\\user\\Documents\\GitHub\\laser-cooler-control\\tests\\test_data\\schemes\\pos_avg_heating.yaml] ===
+2026-05-12 16:27:51 [INFO] [PASSED] Пересечение труб и объектов (pos_avg_heating.yaml): 0 (Ожидалось: 0)
+2026-05-12 16:27:51 [INFO] === END TEST: test_cv_pipe_intersections[C:\\Users\\user\\Documents\\GitHub\\laser-cooler-control\\tests\\test_data\\schemes\\pos_avg_heating.yaml] ===
+
+2026-05-12 16:27:51 [INFO] === START TEST: test_cv_pipe_intersections[C:\\Users\\user\\Documents\\GitHub\\laser-cooler-control\\tests\\test_data\\schemes\\pos_avg_large.yaml] ===
+2026-05-12 16:27:51 [INFO] [PASSED] Пересечение труб и объектов (pos_avg_large.yaml): 0 (Ожидалось: 0)
+2026-05-12 16:27:51 [INFO] === END TEST: test_cv_pipe_intersections[C:\\Users\\user\\Documents\\GitHub\\laser-cooler-control\\tests\\test_data\\schemes\\pos_avg_large.yaml] ===
+
+2026-05-12 16:27:51 [INFO] === START TEST: test_cv_pipe_intersections[C:\\Users\\user\\Documents\\GitHub\\laser-cooler-control\\tests\\test_data\\schemes\\pos_avg_standard.yaml] ===
+2026-05-12 16:27:51 [INFO] [PASSED] Пересечение труб и объектов (pos_avg_standard.yaml): 0 (Ожидалось: 0)
+2026-05-12 16:27:51 [INFO] === END TEST: test_cv_pipe_intersections[C:\\Users\\user\\Documents\\GitHub\\laser-cooler-control\\tests\\test_data\\schemes\\pos_avg_standard.yaml] ===
+
+2026-05-12 16:27:51 [INFO] === START TEST: test_cv_pipe_intersections[C:\\Users\\user\\Documents\\GitHub\\laser-cooler-control\\tests\\test_data\\schemes\\pos_bypass_valve.yaml] ===
+2026-05-12 16:27:51 [INFO] [PASSED] Пересечение труб и объектов (pos_bypass_valve.yaml): 0 (Ожидалось: 0)
+2026-05-12 16:27:51 [INFO] === END TEST: test_cv_pipe_intersections[C:\\Users\\user\\Documents\\GitHub\\laser-cooler-control\\tests\\test_data\\schemes\\pos_bypass_valve.yaml] ===
+
+2026-05-12 16:27:51 [INFO] === START TEST: test_cv_pipe_intersections[C:\\Users\\user\\Documents\\GitHub\\laser-cooler-control\\tests\\test_data\\schemes\\pos_drain_valve.yaml] ===
+2026-05-12 16:27:52 [INFO] [PASSED] Пересечение труб и объектов (pos_drain_valve.yaml): 0 (Ожидалось: 0)
+2026-05-12 16:27:52 [INFO] === END TEST: test_cv_pipe_intersections[C:\\Users\\user\\Documents\\GitHub\\laser-cooler-control\\tests\\test_data\\schemes\\pos_drain_valve.yaml] ===
+
+2026-05-12 16:27:52 [INFO] === START TEST: test_cv_pipe_intersections[C:\\Users\\user\\Documents\\GitHub\\laser-cooler-control\\tests\\test_data\\schemes\\pos_empty_names.yaml] ===
+2026-05-12 16:27:52 [INFO] [PASSED] Пересечение труб и объектов (pos_empty_names.yaml): 0 (Ожидалось: 0)
+2026-05-12 16:27:52 [INFO] === END TEST: test_cv_pipe_intersections[C:\\Users\\user\\Documents\\GitHub\\laser-cooler-control\\tests\\test_data\\schemes\\pos_empty_names.yaml] ===
+
+2026-05-12 16:27:52 [INFO] === START TEST: test_cv_pipe_intersections[C:\\Users\\user\\Documents\\GitHub\\laser-cooler-control\\tests\\test_data\\schemes\\pos_extreme_density.yaml] ===
+2026-05-12 16:27:52 [INFO] [PASSED] Пересечение труб и объектов (pos_extreme_density.yaml): 0 (Ожидалось: 0)
+2026-05-12 16:27:52 [INFO] === END TEST: test_cv_pipe_intersections[C:\\Users\\user\\Documents\\GitHub\\laser-cooler-control\\tests\\test_data\\schemes\\pos_extreme_density.yaml] ===
+
+2026-05-12 16:27:52 [INFO] === START TEST: test_cv_pipe_intersections[C:\\Users\\user\\Documents\\GitHub\\laser-cooler-control\\tests\\test_data\\schemes\\pos_freon_basic.yaml] ===
+2026-05-12 16:27:52 [INFO] [PASSED] Пересечение труб и объектов (pos_freon_basic.yaml): 0 (Ожидалось: 0)
+2026-05-12 16:27:52 [INFO] === END TEST: test_cv_pipe_intersections[C:\\Users\\user\\Documents\\GitHub\\laser-cooler-control\\tests\\test_data\\schemes\\pos_freon_basic.yaml] ===
+
+2026-05-12 16:27:52 [INFO] === START TEST: test_cv_pipe_intersections[C:\\Users\\user\\Documents\\GitHub\\laser-cooler-control\\tests\\test_data\\schemes\\pos_full_standard.yaml] ===
+2026-05-12 16:27:52 [INFO] [PASSED] Пересечение труб и объектов (pos_full_standard.yaml): 0 (Ожидалось: 0)
+2026-05-12 16:27:52 [INFO] === END TEST: test_cv_pipe_intersections[C:\\Users\\user\\Documents\\GitHub\\laser-cooler-control\\tests\\test_data\\schemes\\pos_full_standard.yaml] ===
+
+2026-05-12 16:27:52 [INFO] === START TEST: test_cv_pipe_intersections[C:\\Users\\user\\Documents\\GitHub\\laser-cooler-control\\tests\\test_data\\schemes\\pos_heating.yaml] ===
+2026-05-12 16:27:53 [INFO] [PASSED] Пересечение труб и объектов (pos_heating.yaml): 0 (Ожидалось: 0)
+2026-05-12 16:27:53 [INFO] === END TEST: test_cv_pipe_intersections[C:\\Users\\user\\Documents\\GitHub\\laser-cooler-control\\tests\\test_data\\schemes\\pos_heating.yaml] ===
+
+2026-05-12 16:27:53 [INFO] === START TEST: test_cv_pipe_intersections[C:\\Users\\user\\Documents\\GitHub\\laser-cooler-control\\tests\\test_data\\schemes\\pos_long_labels.yaml] ===
+2026-05-12 16:27:53 [INFO] [PASSED] Пересечение труб и объектов (pos_long_labels.yaml): 0 (Ожидалось: 0)
+2026-05-12 16:27:53 [INFO] === END TEST: test_cv_pipe_intersections[C:\\Users\\user\\Documents\\GitHub\\laser-cooler-control\\tests\\test_data\\schemes\\pos_long_labels.yaml] ===
+
+2026-05-12 16:27:53 [INFO] === START TEST: test_cv_pipe_intersections[C:\\Users\\user\\Documents\\GitHub\\laser-cooler-control\\tests\\test_data\\schemes\\pos_many_connections.yaml] ===
+2026-05-12 16:27:55 [INFO] [PASSED] Пересечение труб и объектов (pos_many_connections.yaml): 0 (Ожидалось: 0)
+2026-05-12 16:27:55 [INFO] === END TEST: test_cv_pipe_intersections[C:\\Users\\user\\Documents\\GitHub\\laser-cooler-control\\tests\\test_data\\schemes\\pos_many_connections.yaml] ===
+
+2026-05-12 16:27:55 [INFO] === START TEST: test_cv_pipe_intersections[C:\\Users\\user\\Documents\\GitHub\\laser-cooler-control\\tests\\test_data\\schemes\\pos_max_density.yaml] ===
+2026-05-12 16:27:55 [INFO] [PASSED] Пересечение труб и объектов (pos_max_density.yaml): 0 (Ожидалось: 0)
+2026-05-12 16:27:55 [INFO] === END TEST: test_cv_pipe_intersections[C:\\Users\\user\\Documents\\GitHub\\laser-cooler-control\\tests\\test_data\\schemes\\pos_max_density.yaml] ===
+
+2026-05-12 16:27:55 [INFO] === START TEST: test_cv_pipe_intersections[C:\\Users\\user\\Documents\\GitHub\\laser-cooler-control\\tests\\test_data\\schemes\\pos_mechanical_fan.yaml] ===
+2026-05-12 16:27:55 [INFO] [PASSED] Пересечение труб и объектов (pos_mechanical_fan.yaml): 0 (Ожидалось: 0)
+2026-05-12 16:27:55 [INFO] === END TEST: test_cv_pipe_intersections[C:\\Users\\user\\Documents\\GitHub\\laser-cooler-control\\tests\\test_data\\schemes\\pos_mechanical_fan.yaml] ===
+
+2026-05-12 16:27:55 [INFO] === START TEST: test_cv_pipe_intersections[C:\\Users\\user\\Documents\\GitHub\\laser-cooler-control\\tests\\test_data\\schemes\\pos_minimal.yaml] ===
+2026-05-12 16:27:56 [INFO] [PASSED] Пересечение труб и объектов (pos_minimal.yaml): 0 (Ожидалось: 0)
+2026-05-12 16:27:56 [INFO] === END TEST: test_cv_pipe_intersections[C:\\Users\\user\\Documents\\GitHub\\laser-cooler-control\\tests\\test_data\\schemes\\pos_minimal.yaml] ===
+
+2026-05-12 16:27:56 [INFO] === START TEST: test_cv_pipe_intersections[C:\\Users\\user\\Documents\\GitHub\\laser-cooler-control\\tests\\test_data\\schemes\\pos_multi_comp.yaml] ===
+2026-05-12 16:27:56 [INFO] [PASSED] Пересечение труб и объектов (pos_multi_comp.yaml): 0 (Ожидалось: 0)
+2026-05-12 16:27:56 [INFO] === END TEST: test_cv_pipe_intersections[C:\\Users\\user\\Documents\\GitHub\\laser-cooler-control\\tests\\test_data\\schemes\\pos_multi_comp.yaml] ===
+
+2026-05-12 16:27:56 [INFO] === START TEST: test_cv_pipe_intersections[C:\\Users\\user\\Documents\\GitHub\\laser-cooler-control\\tests\\test_data\\schemes\\pos_multi_cycles.yaml] ===
+2026-05-12 16:27:58 [INFO] [PASSED] Пересечение труб и объектов (pos_multi_cycles.yaml): 0 (Ожидалось: 0)
+2026-05-12 16:27:58 [INFO] === END TEST: test_cv_pipe_intersections[C:\\Users\\user\\Documents\\GitHub\\laser-cooler-control\\tests\\test_data\\schemes\\pos_multi_cycles.yaml] ===
+
+2026-05-12 16:27:58 [INFO] === START TEST: test_cv_pipe_intersections[C:\\Users\\user\\Documents\\GitHub\\laser-cooler-control\\tests\\test_data\\schemes\\pos_multi_ext_port.yaml] ===
+2026-05-12 16:27:58 [INFO] [PASSED] Пересечение труб и объектов (pos_multi_ext_port.yaml): 0 (Ожидалось: 0)
+2026-05-12 16:27:58 [INFO] === END TEST: test_cv_pipe_intersections[C:\\Users\\user\\Documents\\GitHub\\laser-cooler-control\\tests\\test_data\\schemes\\pos_multi_ext_port.yaml] ===
+
+2026-05-12 16:27:58 [INFO] === START TEST: test_cv_pipe_intersections[C:\\Users\\user\\Documents\\GitHub\\laser-cooler-control\\tests\\test_data\\schemes\\pos_multi_fan.yaml] ===
+2026-05-12 16:27:58 [INFO] [PASSED] Пересечение труб и объектов (pos_multi_fan.yaml): 0 (Ожидалось: 0)
+2026-05-12 16:27:58 [INFO] === END TEST: test_cv_pipe_intersections[C:\\Users\\user\\Documents\\GitHub\\laser-cooler-control\\tests\\test_data\\schemes\\pos_multi_fan.yaml] ===
+
+2026-05-12 16:27:58 [INFO] === START TEST: test_cv_pipe_intersections[C:\\Users\\user\\Documents\\GitHub\\laser-cooler-control\\tests\\test_data\\schemes\\pos_multi_pump.yaml] ===
+2026-05-12 16:28:01 [INFO] [PASSED] Пересечение труб и объектов (pos_multi_pump.yaml): 0 (Ожидалось: 0)
+2026-05-12 16:28:01 [INFO] === END TEST: test_cv_pipe_intersections[C:\\Users\\user\\Documents\\GitHub\\laser-cooler-control\\tests\\test_data\\schemes\\pos_multi_pump.yaml] ===
+
+2026-05-12 16:28:01 [INFO] === START TEST: test_cv_pipe_intersections[C:\\Users\\user\\Documents\\GitHub\\laser-cooler-control\\tests\\test_data\\schemes\\pos_no_tank.yaml] ===
+2026-05-12 16:28:01 [INFO] [PASSED] Пересечение труб и объектов (pos_no_tank.yaml): 0 (Ожидалось: 0)
+2026-05-12 16:28:01 [INFO] === END TEST: test_cv_pipe_intersections[C:\\Users\\user\\Documents\\GitHub\\laser-cooler-control\\tests\\test_data\\schemes\\pos_no_tank.yaml] ===
+
+2026-05-12 16:28:01 [INFO] === START TEST: test_cv_pipe_intersections[C:\\Users\\user\\Documents\\GitHub\\laser-cooler-control\\tests\\test_data\\schemes\\pos_no_throttle.yaml] ===
+2026-05-12 16:28:01 [INFO] [PASSED] Пересечение труб и объектов (pos_no_throttle.yaml): 0 (Ожидалось: 0)
+2026-05-12 16:28:01 [INFO] === END TEST: test_cv_pipe_intersections[C:\\Users\\user\\Documents\\GitHub\\laser-cooler-control\\tests\\test_data\\schemes\\pos_no_throttle.yaml] ===
+
+2026-05-12 16:28:01 [INFO] === START TEST: test_cv_pipe_intersections[C:\\Users\\user\\Documents\\GitHub\\laser-cooler-control\\tests\\test_data\\schemes\\pos_pipe_crossing.yaml] ===
+2026-05-12 16:28:03 [INFO] [PASSED] Пересечение труб и объектов (pos_pipe_crossing.yaml): 0 (Ожидалось: 0)
+2026-05-12 16:28:03 [INFO] === END TEST: test_cv_pipe_intersections[C:\\Users\\user\\Documents\\GitHub\\laser-cooler-control\\tests\\test_data\\schemes\\pos_pipe_crossing.yaml] ===
+
+2026-05-12 16:28:03 [INFO] === START TEST: test_cv_pipe_intersections[C:\\Users\\user\\Documents\\GitHub\\laser-cooler-control\\tests\\test_data\\schemes\\pos_shared_fan.yaml] ===
+2026-05-12 16:28:03 [INFO] [PASSED] Пересечение труб и объектов (pos_shared_fan.yaml): 0 (Ожидалось: 0)
+2026-05-12 16:28:03 [INFO] === END TEST: test_cv_pipe_intersections[C:\\Users\\user\\Documents\\GitHub\\laser-cooler-control\\tests\\test_data\\schemes\\pos_shared_fan.yaml] ===
+
+2026-05-12 16:28:03 [INFO] === START TEST: test_cv_pipe_intersections[C:\\Users\\user\\Documents\\GitHub\\laser-cooler-control\\tests\\test_data\\schemes\\pos_special_chars.yaml] ===
+2026-05-12 16:28:03 [INFO] [PASSED] Пересечение труб и объектов (pos_special_chars.yaml): 0 (Ожидалось: 0)
+2026-05-12 16:28:03 [INFO] === END TEST: test_cv_pipe_intersections[C:\\Users\\user\\Documents\\GitHub\\laser-cooler-control\\tests\\test_data\\schemes\\pos_special_chars.yaml] ===
+
+2026-05-12 16:28:03 [INFO] === START TEST: test_cv_pipe_intersections[C:\\Users\\user\\Documents\\GitHub\\laser-cooler-control\\tests\\test_data\\schemes\\pos_water_basic.yaml] ===
+2026-05-12 16:28:04 [INFO] [PASSED] Пересечение труб и объектов (pos_water_basic.yaml): 0 (Ожидалось: 0)
+2026-05-12 16:28:04 [INFO] === END TEST: test_cv_pipe_intersections[C:\\Users\\user\\Documents\\GitHub\\laser-cooler-control\\tests\\test_data\\schemes\\pos_water_basic.yaml] ===
+
+2026-05-12 16:28:04 [INFO] === START TEST: test_cv_pipe_intersections[C:\\Users\\user\\Documents\\GitHub\\laser-cooler-control\\tests\\test_data\\schemes\\pos_yaml_reversed.yaml] ===
+2026-05-12 16:28:04 [INFO] [PASSED] Пересечение труб и объектов (pos_yaml_reversed.yaml): 0 (Ожидалось: 0)
+2026-05-12 16:28:04 [INFO] === END TEST: test_cv_pipe_intersections[C:\\Users\\user\\Documents\\GitHub\\laser-cooler-control\\tests\\test_data\\schemes\\pos_yaml_reversed.yaml] ===
+
+2026-05-12 16:28:04 [INFO] === START TEST: test_cv_labels_ocr[C:\\Users\\user\\Documents\\GitHub\\laser-cooler-control\\tests\\test_data\\schemes\\neg_circular_water.yaml] ===
+2026-05-12 16:28:07 [INFO] [PASSED] Читаемость текста 'насос 1' (neg_circular_water.yaml): 83 (Ожидалось: > 60)
+2026-05-12 16:28:07 [INFO] [PASSED] Читаемость текста 'heater' (neg_circular_water.yaml): 100 (Ожидалось: > 60)
+2026-05-12 16:28:07 [INFO] === END TEST: test_cv_labels_ocr[C:\\Users\\user\\Documents\\GitHub\\laser-cooler-control\\tests\\test_data\\schemes\\neg_circular_water.yaml] ===
+
+2026-05-12 16:28:07 [INFO] === START TEST: test_cv_labels_ocr[C:\\Users\\user\\Documents\\GitHub\\laser-cooler-control\\tests\\test_data\\schemes\\neg_direction_error.yaml] ===
+2026-05-12 16:28:11 [INFO] [PASSED] Читаемость текста 'бак' (neg_direction_error.yaml): 100 (Ожидалось: > 60)
+2026-05-12 16:28:11 [INFO] [PASSED] Читаемость текста 'насос' (neg_direction_error.yaml): 100 (Ожидалось: > 60)
+2026-05-12 16:28:11 [INFO] === END TEST: test_cv_labels_ocr[C:\\Users\\user\\Documents\\GitHub\\laser-cooler-control\\tests\\test_data\\schemes\\neg_direction_error.yaml] ===
+
+2026-05-12 16:28:11 [INFO] === START TEST: test_cv_labels_ocr[C:\\Users\\user\\Documents\\GitHub\\laser-cooler-control\\tests\\test_data\\schemes\\neg_duplicate_ids.yaml] ===
+2026-05-12 16:28:13 [INFO] [PASSED] Читаемость текста 'насос' (neg_duplicate_ids.yaml): 100 (Ожидалось: > 60)
+2026-05-12 16:28:13 [INFO] === END TEST: test_cv_labels_ocr[C:\\Users\\user\\Documents\\GitHub\\laser-cooler-control\\tests\\test_data\\schemes\\neg_duplicate_ids.yaml] ===
+
+2026-05-12 16:28:13 [INFO] === START TEST: test_cv_labels_ocr[C:\\Users\\user\\Documents\\GitHub\\laser-cooler-control\\tests\\test_data\\schemes\\neg_empty.yaml] ===
+2026-05-12 16:28:14 [INFO] === END TEST: test_cv_labels_ocr[C:\\Users\\user\\Documents\\GitHub\\laser-cooler-control\\tests\\test_data\\schemes\\neg_empty.yaml] ===
+
+2026-05-12 16:28:14 [INFO] === START TEST: test_cv_labels_ocr[C:\\Users\\user\\Documents\\GitHub\\laser-cooler-control\\tests\\test_data\\schemes\\neg_ghost_comp.yaml] ===
+2026-05-12 16:28:16 [INFO] [PASSED] Читаемость текста 'бак' (neg_ghost_comp.yaml): 100 (Ожидалось: > 60)
+2026-05-12 16:28:16 [INFO] === END TEST: test_cv_labels_ocr[C:\\Users\\user\\Documents\\GitHub\\laser-cooler-control\\tests\\test_data\\schemes\\neg_ghost_comp.yaml] ===
+
+2026-05-12 16:28:16 [INFO] === START TEST: test_cv_labels_ocr[C:\\Users\\user\\Documents\\GitHub\\laser-cooler-control\\tests\\test_data\\schemes\\neg_invalid_syntax.yaml] ===
+2026-05-12 16:28:16 [INFO] === END TEST: test_cv_labels_ocr[C:\\Users\\user\\Documents\\GitHub\\laser-cooler-control\\tests\\test_data\\schemes\\neg_invalid_syntax.yaml] ===
+
+2026-05-12 16:28:16 [INFO] === START TEST: test_cv_labels_ocr[C:\\Users\\user\\Documents\\GitHub\\laser-cooler-control\\tests\\test_data\\schemes\\neg_many_to_one.yaml] ===
+2026-05-12 16:28:19 [INFO] [PASSED] Читаемость текста 'насос 1' (neg_many_to_one.yaml): 83 (Ожидалось: > 60)
+2026-05-12 16:28:19 [INFO] [PASSED] Читаемость текста 'насос 2' (neg_many_to_one.yaml): 100 (Ожидалось: > 60)
+2026-05-12 16:28:19 [INFO] [PASSED] Читаемость текста 'насос 3' (neg_many_to_one.yaml): 100 (Ожидалось: > 60)
+2026-05-12 16:28:19 [INFO] === END TEST: test_cv_labels_ocr[C:\\Users\\user\\Documents\\GitHub\\laser-cooler-control\\tests\\test_data\\schemes\\neg_many_to_one.yaml] ===
+
+2026-05-12 16:28:19 [INFO] === START TEST: test_cv_labels_ocr[C:\\Users\\user\\Documents\\GitHub\\laser-cooler-control\\tests\\test_data\\schemes\\neg_media_mismatch.yaml] ===
+2026-05-12 16:28:21 [INFO] [PASSED] Читаемость текста 'бак' (neg_media_mismatch.yaml): 100 (Ожидалось: > 60)
+2026-05-12 16:28:21 [INFO] [PASSED] Читаемость текста 'компрессор' (neg_media_mismatch.yaml): 100 (Ожидалось: > 60)
+2026-05-12 16:28:21 [INFO] === END TEST: test_cv_labels_ocr[C:\\Users\\user\\Documents\\GitHub\\laser-cooler-control\\tests\\test_data\\schemes\\neg_media_mismatch.yaml] ===
+
+2026-05-12 16:28:21 [INFO] === START TEST: test_cv_labels_ocr[C:\\Users\\user\\Documents\\GitHub\\laser-cooler-control\\tests\\test_data\\schemes\\neg_missing_fields.yaml] ===
+2026-05-12 16:28:21 [INFO] === END TEST: test_cv_labels_ocr[C:\\Users\\user\\Documents\\GitHub\\laser-cooler-control\\tests\\test_data\\schemes\\neg_missing_fields.yaml] ===
+
+2026-05-12 16:28:21 [INFO] === START TEST: test_cv_labels_ocr[C:\\Users\\user\\Documents\\GitHub\\laser-cooler-control\\tests\\test_data\\schemes\\neg_missing_target.yaml] ===
+2026-05-12 16:28:21 [INFO] === END TEST: test_cv_labels_ocr[C:\\Users\\user\\Documents\\GitHub\\laser-cooler-control\\tests\\test_data\\schemes\\neg_missing_target.yaml] ===
+
+2026-05-12 16:28:21 [INFO] === START TEST: test_cv_labels_ocr[C:\\Users\\user\\Documents\\GitHub\\laser-cooler-control\\tests\\test_data\\schemes\\neg_self_loop.yaml] ===
+2026-05-12 16:28:24 [INFO] [PASSED] Читаемость текста 'насос' (neg_self_loop.yaml): 100 (Ожидалось: > 60)
+2026-05-12 16:28:24 [INFO] === END TEST: test_cv_labels_ocr[C:\\Users\\user\\Documents\\GitHub\\laser-cooler-control\\tests\\test_data\\schemes\\neg_self_loop.yaml] ===
+
+2026-05-12 16:28:24 [INFO] === START TEST: test_cv_labels_ocr[C:\\Users\\user\\Documents\\GitHub\\laser-cooler-control\\tests\\test_data\\schemes\\neg_unreachable.yaml] ===
+2026-05-12 16:28:27 [INFO] [PASSED] Читаемость текста 'valve 0' (neg_unreachable.yaml): 100 (Ожидалось: > 60)
+2026-05-12 16:28:27 [INFO] [PASSED] Читаемость текста 'valve 1' (neg_unreachable.yaml): 83 (Ожидалось: > 60)
+2026-05-12 16:28:27 [INFO] [PASSED] Читаемость текста 'valve 2' (neg_unreachable.yaml): 100 (Ожидалось: > 60)
+2026-05-12 16:28:27 [INFO] [PASSED] Читаемость текста 'valve 3' (neg_unreachable.yaml): 100 (Ожидалось: > 60)
+2026-05-12 16:28:27 [INFO] [PASSED] Читаемость текста 'valve 4' (neg_unreachable.yaml): 83 (Ожидалось: > 60)
+2026-05-12 16:28:27 [INFO] [PASSED] Читаемость текста 'valve 5' (neg_unreachable.yaml): 100 (Ожидалось: > 60)
+2026-05-12 16:28:27 [INFO] [PASSED] Читаемость текста 'valve 6' (neg_unreachable.yaml): 100 (Ожидалось: > 60)
+2026-05-12 16:28:27 [INFO] [PASSED] Читаемость текста 'valve 7' (neg_unreachable.yaml): 83 (Ожидалось: > 60)
+2026-05-12 16:28:27 [INFO] [PASSED] Читаемость текста 'насос' (neg_unreachable.yaml): 100 (Ожидалось: > 60)
+2026-05-12 16:28:27 [INFO] === END TEST: test_cv_labels_ocr[C:\\Users\\user\\Documents\\GitHub\\laser-cooler-control\\tests\\test_data\\schemes\\neg_unreachable.yaml] ===
+
+2026-05-12 16:28:27 [INFO] === START TEST: test_cv_labels_ocr[C:\\Users\\user\\Documents\\GitHub\\laser-cooler-control\\tests\\test_data\\schemes\\pos_avg_bypass.yaml] ===
+2026-05-12 16:28:30 [INFO] [PASSED] Читаемость текста 'компрессор' (pos_avg_bypass.yaml): 100 (Ожидалось: > 60)
+2026-05-12 16:28:30 [ERROR] [FAILED] Читаемость текста 'конденсатор' (pos_avg_bypass.yaml): получено 38, ожидалось > 60
+2026-05-12 16:28:30 [INFO] === END TEST: test_cv_labels_ocr[C:\\Users\\user\\Documents\\GitHub\\laser-cooler-control\\tests\\test_data\\schemes\\pos_avg_bypass.yaml] ===
+
+2026-05-12 16:28:30 [INFO] === START TEST: test_cv_labels_ocr[C:\\Users\\user\\Documents\\GitHub\\laser-cooler-control\\tests\\test_data\\schemes\\pos_avg_dual_pump.yaml] ===
+2026-05-12 16:28:33 [INFO] [PASSED] Читаемость текста 'компрессор' (pos_avg_dual_pump.yaml): 100 (Ожидалось: > 60)
+2026-05-12 16:28:33 [ERROR] [FAILED] Читаемость текста 'конденсатор' (pos_avg_dual_pump.yaml): получено 39, ожидалось > 60
+2026-05-12 16:28:33 [INFO] === END TEST: test_cv_labels_ocr[C:\\Users\\user\\Documents\\GitHub\\laser-cooler-control\\tests\\test_data\\schemes\\pos_avg_dual_pump.yaml] ===
+
+2026-05-12 16:28:33 [INFO] === START TEST: test_cv_labels_ocr[C:\\Users\\user\\Documents\\GitHub\\laser-cooler-control\\tests\\test_data\\schemes\\pos_avg_heating.yaml] ===
+2026-05-12 16:28:35 [INFO] [PASSED] Читаемость текста 'компрессор' (pos_avg_heating.yaml): 100 (Ожидалось: > 60)
+2026-05-12 16:28:35 [ERROR] [FAILED] Читаемость текста 'конденсатор' (pos_avg_heating.yaml): получено 37, ожидалось > 60
+2026-05-12 16:28:35 [INFO] === END TEST: test_cv_labels_ocr[C:\\Users\\user\\Documents\\GitHub\\laser-cooler-control\\tests\\test_data\\schemes\\pos_avg_heating.yaml] ===
+
+2026-05-12 16:28:35 [INFO] === START TEST: test_cv_labels_ocr[C:\\Users\\user\\Documents\\GitHub\\laser-cooler-control\\tests\\test_data\\schemes\\pos_avg_large.yaml] ===
+2026-05-12 16:28:38 [INFO] [PASSED] Читаемость текста 'компрессор 1' (pos_avg_large.yaml): 100 (Ожидалось: > 60)
+2026-05-12 16:28:38 [INFO] [PASSED] Читаемость текста 'компрессор 2' (pos_avg_large.yaml): 100 (Ожидалось: > 60)
+2026-05-12 16:28:38 [INFO] [PASSED] Читаемость текста 'конденсатор' (pos_avg_large.yaml): 100 (Ожидалось: > 60)
+2026-05-12 16:28:38 [ERROR] [FAILED] Читаемость текста 'вентилятор 1' (pos_avg_large.yaml): получено 32, ожидалось > 60
+2026-05-12 16:28:38 [INFO] === END TEST: test_cv_labels_ocr[C:\\Users\\user\\Documents\\GitHub\\laser-cooler-control\\tests\\test_data\\schemes\\pos_avg_large.yaml] ===
+
+2026-05-12 16:28:38 [INFO] === START TEST: test_cv_labels_ocr[C:\\Users\\user\\Documents\\GitHub\\laser-cooler-control\\tests\\test_data\\schemes\\pos_avg_standard.yaml] ===
+2026-05-12 16:28:41 [INFO] [PASSED] Читаемость текста 'компрессор' (pos_avg_standard.yaml): 100 (Ожидалось: > 60)
+2026-05-12 16:28:41 [ERROR] [FAILED] Читаемость текста 'конденсатор' (pos_avg_standard.yaml): получено 35, ожидалось > 60
+2026-05-12 16:28:41 [INFO] === END TEST: test_cv_labels_ocr[C:\\Users\\user\\Documents\\GitHub\\laser-cooler-control\\tests\\test_data\\schemes\\pos_avg_standard.yaml] ===
+
+2026-05-12 16:28:41 [INFO] === START TEST: test_cv_labels_ocr[C:\\Users\\user\\Documents\\GitHub\\laser-cooler-control\\tests\\test_data\\schemes\\pos_bypass_valve.yaml] ===
+2026-05-12 16:28:44 [INFO] [PASSED] Читаемость текста 'компрессор' (pos_bypass_valve.yaml): 100 (Ожидалось: > 60)
+2026-05-12 16:28:44 [ERROR] [FAILED] Читаемость текста 'конденсатор' (pos_bypass_valve.yaml): получено 43, ожидалось > 60
+2026-05-12 16:28:44 [INFO] === END TEST: test_cv_labels_ocr[C:\\Users\\user\\Documents\\GitHub\\laser-cooler-control\\tests\\test_data\\schemes\\pos_bypass_valve.yaml] ===
+
+2026-05-12 16:28:44 [INFO] === START TEST: test_cv_labels_ocr[C:\\Users\\user\\Documents\\GitHub\\laser-cooler-control\\tests\\test_data\\schemes\\pos_drain_valve.yaml] ===
+2026-05-12 16:28:47 [INFO] [PASSED] Читаемость текста 'бак' (pos_drain_valve.yaml): 100 (Ожидалось: > 60)
+2026-05-12 16:28:47 [INFO] [PASSED] Читаемость текста 'valve' (pos_drain_valve.yaml): 100 (Ожидалось: > 60)
+2026-05-12 16:28:47 [INFO] === END TEST: test_cv_labels_ocr[C:\\Users\\user\\Documents\\GitHub\\laser-cooler-control\\tests\\test_data\\schemes\\pos_drain_valve.yaml] ===
+
+2026-05-12 16:28:47 [INFO] === START TEST: test_cv_labels_ocr[C:\\Users\\user\\Documents\\GitHub\\laser-cooler-control\\tests\\test_data\\schemes\\pos_empty_names.yaml] ===
+2026-05-12 16:28:49 [INFO] [PASSED] Читаемость текста 'бак' (pos_empty_names.yaml): 100 (Ожидалось: > 60)
+2026-05-12 16:28:49 [INFO] === END TEST: test_cv_labels_ocr[C:\\Users\\user\\Documents\\GitHub\\laser-cooler-control\\tests\\test_data\\schemes\\pos_empty_names.yaml] ===
+
+2026-05-12 16:28:49 [INFO] === START TEST: test_cv_labels_ocr[C:\\Users\\user\\Documents\\GitHub\\laser-cooler-control\\tests\\test_data\\schemes\\pos_extreme_density.yaml] ===
+2026-05-12 16:28:53 [INFO] [PASSED] Читаемость текста 'компрессор 0' (pos_extreme_density.yaml): 100 (Ожидалось: > 60)
+2026-05-12 16:28:53 [INFO] [PASSED] Читаемость текста 'компрессор 1' (pos_extreme_density.yaml): 91 (Ожидалось: > 60)
+2026-05-12 16:28:53 [INFO] [PASSED] Читаемость текста 'компрессор 2' (pos_extreme_density.yaml): 100 (Ожидалось: > 60)
+2026-05-12 16:28:53 [INFO] [PASSED] Читаемость текста 'компрессор 3' (pos_extreme_density.yaml): 100 (Ожидалось: > 60)
+2026-05-12 16:28:53 [INFO] [PASSED] Читаемость текста 'компрессор 4' (pos_extreme_density.yaml): 100 (Ожидалось: > 60)
+2026-05-12 16:28:53 [INFO] [PASSED] Читаемость текста 'бак 0' (pos_extreme_density.yaml): 100 (Ожидалось: > 60)
+2026-05-12 16:28:53 [INFO] [PASSED] Читаемость текста 'бак 1' (pos_extreme_density.yaml): 75 (Ожидалось: > 60)
+2026-05-12 16:28:53 [INFO] [PASSED] Читаемость текста 'бак 2' (pos_extreme_density.yaml): 100 (Ожидалось: > 60)
+2026-05-12 16:28:53 [INFO] [PASSED] Читаемость текста 'бак 3' (pos_extreme_density.yaml): 100 (Ожидалось: > 60)
+2026-05-12 16:28:53 [INFO] [PASSED] Читаемость текста 'бак 4' (pos_extreme_density.yaml): 100 (Ожидалось: > 60)
+2026-05-12 16:28:53 [INFO] [PASSED] Читаемость текста 'насос 0' (pos_extreme_density.yaml): 100 (Ожидалось: > 60)
+2026-05-12 16:28:53 [INFO] [PASSED] Читаемость текста 'насос 1' (pos_extreme_density.yaml): 83 (Ожидалось: > 60)
+2026-05-12 16:28:53 [INFO] [PASSED] Читаемость текста 'насос 2' (pos_extreme_density.yaml): 100 (Ожидалось: > 60)
+2026-05-12 16:28:53 [INFO] [PASSED] Читаемость текста 'насос 3' (pos_extreme_density.yaml): 100 (Ожидалось: > 60)
+2026-05-12 16:28:53 [INFO] [PASSED] Читаемость текста 'насос 4' (pos_extreme_density.yaml): 100 (Ожидалось: > 60)
+2026-05-12 16:28:53 [INFO] [PASSED] Читаемость текста 'насос 5' (pos_extreme_density.yaml): 83 (Ожидалось: > 60)
+2026-05-12 16:28:53 [INFO] [PASSED] Читаемость текста 'насос 6' (pos_extreme_density.yaml): 83 (Ожидалось: > 60)
+2026-05-12 16:28:53 [INFO] [PASSED] Читаемость текста 'насос 7' (pos_extreme_density.yaml): 100 (Ожидалось: > 60)
+2026-05-12 16:28:53 [INFO] [PASSED] Читаемость текста 'насос 8' (pos_extreme_density.yaml): 100 (Ожидалось: > 60)
+2026-05-12 16:28:53 [INFO] [PASSED] Читаемость текста 'насос 9' (pos_extreme_density.yaml): 100 (Ожидалось: > 60)
+2026-05-12 16:28:53 [INFO] [PASSED] Читаемость текста 'насос 10' (pos_extreme_density.yaml): 100 (Ожидалось: > 60)
+2026-05-12 16:28:53 [INFO] [PASSED] Читаемость текста 'насос 11' (pos_extreme_density.yaml): 77 (Ожидалось: > 60)
+2026-05-12 16:28:53 [INFO] [PASSED] Читаемость текста 'насос 12' (pos_extreme_density.yaml): 77 (Ожидалось: > 60)
+2026-05-12 16:28:53 [INFO] [PASSED] Читаемость текста 'насос 13' (pos_extreme_density.yaml): 77 (Ожидалось: > 60)
+2026-05-12 16:28:53 [INFO] [PASSED] Читаемость текста 'насос 14' (pos_extreme_density.yaml): 77 (Ожидалось: > 60)
+2026-05-12 16:28:53 [INFO] [PASSED] Читаемость текста 'насос 15' (pos_extreme_density.yaml): 77 (Ожидалось: > 60)
+2026-05-12 16:28:53 [INFO] [PASSED] Читаемость текста 'насос 16' (pos_extreme_density.yaml): 77 (Ожидалось: > 60)
+2026-05-12 16:28:53 [INFO] [PASSED] Читаемость текста 'насос 17' (pos_extreme_density.yaml): 77 (Ожидалось: > 60)
+2026-05-12 16:28:53 [INFO] [PASSED] Читаемость текста 'насос 18' (pos_extreme_density.yaml): 100 (Ожидалось: > 60)
+2026-05-12 16:28:53 [INFO] [PASSED] Читаемость текста 'насос 19' (pos_extreme_density.yaml): 77 (Ожидалось: > 60)
+2026-05-12 16:28:53 [INFO] === END TEST: test_cv_labels_ocr[C:\\Users\\user\\Documents\\GitHub\\laser-cooler-control\\tests\\test_data\\schemes\\pos_extreme_density.yaml] ===
+
+2026-05-12 16:28:53 [INFO] === START TEST: test_cv_labels_ocr[C:\\Users\\user\\Documents\\GitHub\\laser-cooler-control\\tests\\test_data\\schemes\\pos_freon_basic.yaml] ===
+2026-05-12 16:28:55 [INFO] [PASSED] Читаемость текста 'компрессор' (pos_freon_basic.yaml): 100 (Ожидалось: > 60)
+2026-05-12 16:28:55 [ERROR] [FAILED] Читаемость текста 'конденсатор' (pos_freon_basic.yaml): получено 49, ожидалось > 60
+2026-05-12 16:28:55 [INFO] === END TEST: test_cv_labels_ocr[C:\\Users\\user\\Documents\\GitHub\\laser-cooler-control\\tests\\test_data\\schemes\\pos_freon_basic.yaml] ===
+
+2026-05-12 16:28:55 [INFO] === START TEST: test_cv_labels_ocr[C:\\Users\\user\\Documents\\GitHub\\laser-cooler-control\\tests\\test_data\\schemes\\pos_full_standard.yaml] ===
+2026-05-12 16:28:58 [INFO] [PASSED] Читаемость текста 'компрессор' (pos_full_standard.yaml): 100 (Ожидалось: > 60)
+2026-05-12 16:28:58 [ERROR] [FAILED] Читаемость текста 'конденсатор' (pos_full_standard.yaml): получено 42, ожидалось > 60
+2026-05-12 16:28:58 [INFO] === END TEST: test_cv_labels_ocr[C:\\Users\\user\\Documents\\GitHub\\laser-cooler-control\\tests\\test_data\\schemes\\pos_full_standard.yaml] ===
+
+2026-05-12 16:28:58 [INFO] === START TEST: test_cv_labels_ocr[C:\\Users\\user\\Documents\\GitHub\\laser-cooler-control\\tests\\test_data\\schemes\\pos_heating.yaml] ===
+2026-05-12 16:29:01 [INFO] [PASSED] Читаемость текста 'бак' (pos_heating.yaml): 100 (Ожидалось: > 60)
+2026-05-12 16:29:01 [INFO] [PASSED] Читаемость текста 'насос' (pos_heating.yaml): 100 (Ожидалось: > 60)
+2026-05-12 16:29:01 [INFO] [PASSED] Читаемость текста 'heater' (pos_heating.yaml): 100 (Ожидалось: > 60)
+2026-05-12 16:29:01 [INFO] === END TEST: test_cv_labels_ocr[C:\\Users\\user\\Documents\\GitHub\\laser-cooler-control\\tests\\test_data\\schemes\\pos_heating.yaml] ===
+
+2026-05-12 16:29:01 [INFO] === START TEST: test_cv_labels_ocr[C:\\Users\\user\\Documents\\GitHub\\laser-cooler-control\\tests\\test_data\\schemes\\pos_long_labels.yaml] ===
+2026-05-12 16:29:03 [INFO] [PASSED] Читаемость текста 'бак для воды без тэна с четырмя выходами предназначенный для охладителя' (pos_long_labels.yaml): 85 (Ожидалось: > 60)
+2026-05-12 16:29:03 [INFO] [PASSED] Читаемость текста 'водяной насос для горячей и холодной воды с двумя входами подключенный к баку' (pos_long_labels.yaml): 65 (Ожидалось: > 60)
+2026-05-12 16:29:03 [INFO] === END TEST: test_cv_labels_ocr[C:\\Users\\user\\Documents\\GitHub\\laser-cooler-control\\tests\\test_data\\schemes\\pos_long_labels.yaml] ===
+
+2026-05-12 16:29:03 [INFO] === START TEST: test_cv_labels_ocr[C:\\Users\\user\\Documents\\GitHub\\laser-cooler-control\\tests\\test_data\\schemes\\pos_many_connections.yaml] ===
+2026-05-12 16:29:08 [INFO] [PASSED] Читаемость текста 'основной бак' (pos_many_connections.yaml): 100 (Ожидалось: > 60)
+2026-05-12 16:29:08 [INFO] [PASSED] Читаемость текста 'запасной бак' (pos_many_connections.yaml): 100 (Ожидалось: > 60)
+2026-05-12 16:29:08 [INFO] [PASSED] Читаемость текста 'насос 1' (pos_many_connections.yaml): 100 (Ожидалось: > 60)
+2026-05-12 16:29:08 [INFO] [PASSED] Читаемость текста 'насос 2' (pos_many_connections.yaml): 100 (Ожидалось: > 60)
+2026-05-12 16:29:08 [INFO] [PASSED] Читаемость текста 'насос 3' (pos_many_connections.yaml): 100 (Ожидалось: > 60)
+2026-05-12 16:29:08 [INFO] [PASSED] Читаемость текста 'компрессор 1' (pos_many_connections.yaml): 100 (Ожидалось: > 60)
+2026-05-12 16:29:08 [INFO] [PASSED] Читаемость текста 'конденсатор 1' (pos_many_connections.yaml): 100 (Ожидалось: > 60)
+2026-05-12 16:29:08 [ERROR] [FAILED] Читаемость текста 'трв 1' (pos_many_connections.yaml): получено 33, ожидалось > 60
+2026-05-12 16:29:08 [INFO] === END TEST: test_cv_labels_ocr[C:\\Users\\user\\Documents\\GitHub\\laser-cooler-control\\tests\\test_data\\schemes\\pos_many_connections.yaml] ===
+
+2026-05-12 16:29:08 [INFO] === START TEST: test_cv_labels_ocr[C:\\Users\\user\\Documents\\GitHub\\laser-cooler-control\\tests\\test_data\\schemes\\pos_max_density.yaml] ===
+2026-05-12 16:29:12 [INFO] [PASSED] Читаемость текста 'компрессор 0' (pos_max_density.yaml): 100 (Ожидалось: > 60)
+2026-05-12 16:29:12 [INFO] [PASSED] Читаемость текста 'компрессор 1' (pos_max_density.yaml): 100 (Ожидалось: > 60)
+2026-05-12 16:29:12 [INFO] [PASSED] Читаемость текста 'конденсатор' (pos_max_density.yaml): 100 (Ожидалось: > 60)
+2026-05-12 16:29:12 [ERROR] [FAILED] Читаемость текста 'трв' (pos_max_density.yaml): получено 7, ожидалось > 60
+2026-05-12 16:29:12 [INFO] === END TEST: test_cv_labels_ocr[C:\\Users\\user\\Documents\\GitHub\\laser-cooler-control\\tests\\test_data\\schemes\\pos_max_density.yaml] ===
+
+2026-05-12 16:29:12 [INFO] === START TEST: test_cv_labels_ocr[C:\\Users\\user\\Documents\\GitHub\\laser-cooler-control\\tests\\test_data\\schemes\\pos_mechanical_fan.yaml] ===
+2026-05-12 16:29:14 [INFO] [PASSED] Читаемость текста 'компрессор' (pos_mechanical_fan.yaml): 100 (Ожидалось: > 60)
+2026-05-12 16:29:14 [ERROR] [FAILED] Читаемость текста 'конденсатор' (pos_mechanical_fan.yaml): получено 38, ожидалось > 60
+2026-05-12 16:29:14 [INFO] === END TEST: test_cv_labels_ocr[C:\\Users\\user\\Documents\\GitHub\\laser-cooler-control\\tests\\test_data\\schemes\\pos_mechanical_fan.yaml] ===
+
+2026-05-12 16:29:14 [INFO] === START TEST: test_cv_labels_ocr[C:\\Users\\user\\Documents\\GitHub\\laser-cooler-control\\tests\\test_data\\schemes\\pos_minimal.yaml] ===
+2026-05-12 16:29:17 [INFO] [PASSED] Читаемость текста 'бак' (pos_minimal.yaml): 100 (Ожидалось: > 60)
+2026-05-12 16:29:17 [INFO] === END TEST: test_cv_labels_ocr[C:\\Users\\user\\Documents\\GitHub\\laser-cooler-control\\tests\\test_data\\schemes\\pos_minimal.yaml] ===
+
+2026-05-12 16:29:17 [INFO] === START TEST: test_cv_labels_ocr[C:\\Users\\user\\Documents\\GitHub\\laser-cooler-control\\tests\\test_data\\schemes\\pos_multi_comp.yaml] ===
+2026-05-12 16:29:20 [INFO] [PASSED] Читаемость текста 'компрессор 1' (pos_multi_comp.yaml): 91 (Ожидалось: > 60)
+2026-05-12 16:29:20 [INFO] [PASSED] Читаемость текста 'компрессор 2' (pos_multi_comp.yaml): 100 (Ожидалось: > 60)
+2026-05-12 16:29:20 [ERROR] [FAILED] Читаемость текста 'конденсатор' (pos_multi_comp.yaml): получено 47, ожидалось > 60
+2026-05-12 16:29:20 [INFO] === END TEST: test_cv_labels_ocr[C:\\Users\\user\\Documents\\GitHub\\laser-cooler-control\\tests\\test_data\\schemes\\pos_multi_comp.yaml] ===
+
+2026-05-12 16:29:20 [INFO] === START TEST: test_cv_labels_ocr[C:\\Users\\user\\Documents\\GitHub\\laser-cooler-control\\tests\\test_data\\schemes\\pos_multi_cycles.yaml] ===
+2026-05-12 16:29:24 [INFO] [PASSED] Читаемость текста 'компрессор 1' (pos_multi_cycles.yaml): 100 (Ожидалось: > 60)
+2026-05-12 16:29:24 [INFO] [PASSED] Читаемость текста 'конденсатор 1' (pos_multi_cycles.yaml): 100 (Ожидалось: > 60)
+2026-05-12 16:29:24 [INFO] [PASSED] Читаемость текста 'трв 1' (pos_multi_cycles.yaml): 100 (Ожидалось: > 60)
+2026-05-12 16:29:24 [INFO] [PASSED] Читаемость текста 'бак 1' (pos_multi_cycles.yaml): 100 (Ожидалось: > 60)
+2026-05-12 16:29:24 [INFO] [PASSED] Читаемость текста 'компрессор 2' (pos_multi_cycles.yaml): 100 (Ожидалось: > 60)
+2026-05-12 16:29:24 [INFO] [PASSED] Читаемость текста 'конденсатор 2' (pos_multi_cycles.yaml): 100 (Ожидалось: > 60)
+2026-05-12 16:29:24 [INFO] [PASSED] Читаемость текста 'трв 2' (pos_multi_cycles.yaml): 100 (Ожидалось: > 60)
+2026-05-12 16:29:24 [INFO] [PASSED] Читаемость текста 'бак 2' (pos_multi_cycles.yaml): 100 (Ожидалось: > 60)
+2026-05-12 16:29:24 [INFO] === END TEST: test_cv_labels_ocr[C:\\Users\\user\\Documents\\GitHub\\laser-cooler-control\\tests\\test_data\\schemes\\pos_multi_cycles.yaml] ===
+
+2026-05-12 16:29:24 [INFO] === START TEST: test_cv_labels_ocr[C:\\Users\\user\\Documents\\GitHub\\laser-cooler-control\\tests\\test_data\\schemes\\pos_multi_ext_port.yaml] ===
+2026-05-12 16:29:27 [INFO] [PASSED] Читаемость текста 'бак' (pos_multi_ext_port.yaml): 100 (Ожидалось: > 60)
+2026-05-12 16:29:27 [INFO] [PASSED] Читаемость текста 'насос' (pos_multi_ext_port.yaml): 100 (Ожидалось: > 60)
+2026-05-12 16:29:27 [INFO] === END TEST: test_cv_labels_ocr[C:\\Users\\user\\Documents\\GitHub\\laser-cooler-control\\tests\\test_data\\schemes\\pos_multi_ext_port.yaml] ===
+
+2026-05-12 16:29:27 [INFO] === START TEST: test_cv_labels_ocr[C:\\Users\\user\\Documents\\GitHub\\laser-cooler-control\\tests\\test_data\\schemes\\pos_multi_fan.yaml] ===
+2026-05-12 16:29:30 [INFO] [PASSED] Читаемость текста 'конденсатор' (pos_multi_fan.yaml): 100 (Ожидалось: > 60)
+2026-05-12 16:29:30 [INFO] [PASSED] Читаемость текста 'вентилятор 1' (pos_multi_fan.yaml): 91 (Ожидалось: > 60)
+2026-05-12 16:29:30 [INFO] [PASSED] Читаемость текста 'вентилятор 2' (pos_multi_fan.yaml): 91 (Ожидалось: > 60)
+2026-05-12 16:29:30 [INFO] === END TEST: test_cv_labels_ocr[C:\\Users\\user\\Documents\\GitHub\\laser-cooler-control\\tests\\test_data\\schemes\\pos_multi_fan.yaml] ===
+
+2026-05-12 16:29:30 [INFO] === START TEST: test_cv_labels_ocr[C:\\Users\\user\\Documents\\GitHub\\laser-cooler-control\\tests\\test_data\\schemes\\pos_multi_pump.yaml] ===
+2026-05-12 16:29:34 [INFO] [PASSED] Читаемость текста 'бак' (pos_multi_pump.yaml): 100 (Ожидалось: > 60)
+2026-05-12 16:29:34 [INFO] [PASSED] Читаемость текста 'насос 1' (pos_multi_pump.yaml): 83 (Ожидалось: > 60)
+2026-05-12 16:29:34 [INFO] [PASSED] Читаемость текста 'насос 2' (pos_multi_pump.yaml): 100 (Ожидалось: > 60)
+2026-05-12 16:29:34 [INFO] === END TEST: test_cv_labels_ocr[C:\\Users\\user\\Documents\\GitHub\\laser-cooler-control\\tests\\test_data\\schemes\\pos_multi_pump.yaml] ===
+
+2026-05-12 16:29:34 [INFO] === START TEST: test_cv_labels_ocr[C:\\Users\\user\\Documents\\GitHub\\laser-cooler-control\\tests\\test_data\\schemes\\pos_no_tank.yaml] ===
+2026-05-12 16:29:37 [INFO] [PASSED] Читаемость текста 'компрессор' (pos_no_tank.yaml): 100 (Ожидалось: > 60)
+2026-05-12 16:29:37 [ERROR] [FAILED] Читаемость текста 'конденсатор' (pos_no_tank.yaml): получено 54, ожидалось > 60
+2026-05-12 16:29:37 [INFO] === END TEST: test_cv_labels_ocr[C:\\Users\\user\\Documents\\GitHub\\laser-cooler-control\\tests\\test_data\\schemes\\pos_no_tank.yaml] ===
+
+2026-05-12 16:29:37 [INFO] === START TEST: test_cv_labels_ocr[C:\\Users\\user\\Documents\\GitHub\\laser-cooler-control\\tests\\test_data\\schemes\\pos_no_throttle.yaml] ===
+2026-05-12 16:29:40 [INFO] [PASSED] Читаемость текста 'компрессор' (pos_no_throttle.yaml): 100 (Ожидалось: > 60)
+2026-05-12 16:29:40 [ERROR] [FAILED] Читаемость текста 'конденсатор' (pos_no_throttle.yaml): получено 54, ожидалось > 60
+2026-05-12 16:29:40 [INFO] === END TEST: test_cv_labels_ocr[C:\\Users\\user\\Documents\\GitHub\\laser-cooler-control\\tests\\test_data\\schemes\\pos_no_throttle.yaml] ===
+
+2026-05-12 16:29:40 [INFO] === START TEST: test_cv_labels_ocr[C:\\Users\\user\\Documents\\GitHub\\laser-cooler-control\\tests\\test_data\\schemes\\pos_pipe_crossing.yaml] ===
+2026-05-12 16:29:44 [INFO] [PASSED] Читаемость текста 'бак' (pos_pipe_crossing.yaml): 100 (Ожидалось: > 60)
+2026-05-12 16:29:44 [INFO] [PASSED] Читаемость текста 'насос 1' (pos_pipe_crossing.yaml): 83 (Ожидалось: > 60)
+2026-05-12 16:29:44 [INFO] [PASSED] Читаемость текста 'насос 2' (pos_pipe_crossing.yaml): 100 (Ожидалось: > 60)
+2026-05-12 16:29:44 [INFO] === END TEST: test_cv_labels_ocr[C:\\Users\\user\\Documents\\GitHub\\laser-cooler-control\\tests\\test_data\\schemes\\pos_pipe_crossing.yaml] ===
+
+2026-05-12 16:29:44 [INFO] === START TEST: test_cv_labels_ocr[C:\\Users\\user\\Documents\\GitHub\\laser-cooler-control\\tests\\test_data\\schemes\\pos_shared_fan.yaml] ===
+2026-05-12 16:29:47 [INFO] [PASSED] Читаемость текста 'конденсатор 1' (pos_shared_fan.yaml): 92 (Ожидалось: > 60)
+2026-05-12 16:29:47 [INFO] [PASSED] Читаемость текста 'конденсатор 2' (pos_shared_fan.yaml): 100 (Ожидалось: > 60)
+2026-05-12 16:29:47 [INFO] [PASSED] Читаемость текста 'вентилятор' (pos_shared_fan.yaml): 100 (Ожидалось: > 60)
+2026-05-12 16:29:47 [INFO] === END TEST: test_cv_labels_ocr[C:\\Users\\user\\Documents\\GitHub\\laser-cooler-control\\tests\\test_data\\schemes\\pos_shared_fan.yaml] ===
+
+2026-05-12 16:29:47 [INFO] === START TEST: test_cv_labels_ocr[C:\\Users\\user\\Documents\\GitHub\\laser-cooler-control\\tests\\test_data\\schemes\\pos_special_chars.yaml] ===
+2026-05-12 16:29:49 [INFO] [PASSED] Читаемость текста 'бак' (pos_special_chars.yaml): 100 (Ожидалось: > 60)
+2026-05-12 16:29:49 [INFO] === END TEST: test_cv_labels_ocr[C:\\Users\\user\\Documents\\GitHub\\laser-cooler-control\\tests\\test_data\\schemes\\pos_special_chars.yaml] ===
+
+2026-05-12 16:29:49 [INFO] === START TEST: test_cv_labels_ocr[C:\\Users\\user\\Documents\\GitHub\\laser-cooler-control\\tests\\test_data\\schemes\\pos_water_basic.yaml] ===
+2026-05-12 16:29:52 [INFO] [PASSED] Читаемость текста 'бак' (pos_water_basic.yaml): 100 (Ожидалось: > 60)
+2026-05-12 16:29:52 [INFO] [PASSED] Читаемость текста 'насос' (pos_water_basic.yaml): 100 (Ожидалось: > 60)
+2026-05-12 16:29:52 [INFO] === END TEST: test_cv_labels_ocr[C:\\Users\\user\\Documents\\GitHub\\laser-cooler-control\\tests\\test_data\\schemes\\pos_water_basic.yaml] ===
+
+2026-05-12 16:29:52 [INFO] === START TEST: test_cv_labels_ocr[C:\\Users\\user\\Documents\\GitHub\\laser-cooler-control\\tests\\test_data\\schemes\\pos_yaml_reversed.yaml] ===
+2026-05-12 16:29:55 [INFO] [PASSED] Читаемость текста 'насос' (pos_yaml_reversed.yaml): 100 (Ожидалось: > 60)
+2026-05-12 16:29:55 [INFO] [PASSED] Читаемость текста 'бак' (pos_yaml_reversed.yaml): 100 (Ожидалось: > 60)
+2026-05-12 16:29:55 [INFO] === END TEST: test_cv_labels_ocr[C:\\Users\\user\\Documents\\GitHub\\laser-cooler-control\\tests\\test_data\\schemes\\pos_yaml_reversed.yaml] ===
 

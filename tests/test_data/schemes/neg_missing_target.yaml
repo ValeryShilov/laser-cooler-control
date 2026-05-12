@@ -1,0 +1,7 @@
+components:
+- id: t
+  type: Tank
+  name: Бак
+connections:
+- source: t.drain
+  type: drain

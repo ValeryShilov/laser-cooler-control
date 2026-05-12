@@ -1,0 +1,50 @@
+components:
+- id: cp
+  type: Compressor
+  name: Компрессор
+- id: cd
+  type: Condenser
+  name: Конденсатор
+- id: th
+  type: Throttle
+  name: ТРВ
+- id: t
+  type: Tank
+  name: Бак
+- id: p1
+  type: Pump
+  name: Насос 1
+- id: p2
+  type: Pump
+  name: Насос 2
+- id: e1
+  type: ExternalPort
+  name: Порт 1
+- id: e2
+  type: ExternalPort
+  name: Порт 2
+connections:
+- source: cp.out
+  target: cd.in
+  type: freon
+- source: cd.out
+  target: th.in
+  type: freon
+- source: th.out
+  target: t.freon_in
+  type: freon
+- source: t.freon_out
+  target: cp.in
+  type: freon
+- source: t.water_out
+  target: p1.in
+  type: water_lt
+- source: t.water_out
+  target: p2.in
+  type: water_lt
+- source: p1.out
+  target: e1.in
+  type: water_lt
+- source: p2.out
+  target: e2.in
+  type: water_lt

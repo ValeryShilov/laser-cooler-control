@@ -1,0 +1,32 @@
+components:
+- id: cp
+  type: Compressor
+  name: Компрессор
+- id: cd
+  type: Condenser
+  name: Конденсатор
+- id: th
+  type: Throttle
+  name: ТРВ
+- id: t
+  type: Tank
+  name: Бак
+- id: f
+  type: Fan
+  name: Вентилятор
+connections:
+- source: cp.out
+  target: cd.in
+  type: freon
+- source: cd.out
+  target: th.in
+  type: freon
+- source: th.out
+  target: t.freon_in
+  type: freon
+- source: t.freon_out
+  target: cp.in
+  type: freon
+- source: f
+  target: cd
+  type: mechanical

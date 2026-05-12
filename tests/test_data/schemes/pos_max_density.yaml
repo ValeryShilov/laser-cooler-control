@@ -1,0 +1,47 @@
+components:
+- id: c0
+  type: Compressor
+  name: Компрессор 0
+- id: c1
+  type: Compressor
+  name: Компрессор 1
+- id: cd
+  type: Condenser
+  name: Конденсатор
+- id: th
+  type: Throttle
+  name: ТРВ
+- id: t
+  type: Tank
+  name: Бак
+- id: f0
+  type: Fan
+  name: Вентилятор 0
+- id: f1
+  type: Fan
+  name: Вентилятор 1
+- id: p0
+  type: Pump
+  name: Насос 0
+- id: p1
+  type: Pump
+  name: Насос 1
+- id: v0
+  type: Valve
+  name: Valve 0
+- id: v1
+  type: Valve
+  name: Valve 1
+- id: v2
+  type: Valve
+  name: Valve 2
+- id: v3
+  type: Valve
+  name: Valve 3
+- id: e0
+  type: ExternalPort
+  name: Порт 0
+- id: e1
+  type: ExternalPort
+  name: Порт 1
+connections: []

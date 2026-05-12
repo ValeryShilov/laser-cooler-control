@@ -1,0 +1,5 @@
+components:
+- id: t
+  type: Tank
+  name: Бак
+connections: []

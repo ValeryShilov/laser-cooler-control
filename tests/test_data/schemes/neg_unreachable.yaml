@@ -1,0 +1,35 @@
+components:
+- id: e
+  type: ExternalPort
+  name: Порт
+- id: v0
+  type: Valve
+  name: Valve 0
+- id: v1
+  type: Valve
+  name: Valve 1
+- id: v2
+  type: Valve
+  name: Valve 2
+- id: v3
+  type: Valve
+  name: Valve 3
+- id: v4
+  type: Valve
+  name: Valve 4
+- id: v5
+  type: Valve
+  name: Valve 5
+- id: v6
+  type: Valve
+  name: Valve 6
+- id: v7
+  type: Valve
+  name: Valve 7
+- id: p
+  type: Pump
+  name: Насос
+connections:
+- source: p.out
+  target: e.in
+  type: water_lt

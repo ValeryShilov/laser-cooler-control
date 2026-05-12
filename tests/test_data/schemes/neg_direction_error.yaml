@@ -1,0 +1,11 @@
+components:
+- id: t
+  type: Tank
+  name: Бак
+- id: p
+  type: Pump
+  name: Насос
+connections:
+- source: t.water_out
+  target: p.out
+  type: water_lt

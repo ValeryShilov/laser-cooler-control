@@ -43,7 +43,7 @@ class BaseEquipment:
     def draw_label(self, painter: QPainter):
         """ Вынесенная логика отрисовки текста с автовыравниванием """
         painter.setPen(QPen(QColor(60, 60, 60), 2))
-        painter.setFont(QFont("Arial", 8, QFont.Bold))
+        painter.setFont(QFont("Arial", 10, QFont.Bold))
         
         align = Qt.AlignCenter | Qt.TextWordWrap
         if self.label_pos == "bottom":
@@ -233,5 +233,5 @@ class ExternalPort(BaseEquipment):
         painter.drawPath(path)
         
         painter.setPen(QPen(QColor(40, 40, 40), 1))
-        painter.setFont(QFont("Arial", 9, QFont.Bold))
+        painter.setFont(QFont("Arial", 11, QFont.Bold))
         painter.drawText(self.x + 25, self.y + 20, self.name)

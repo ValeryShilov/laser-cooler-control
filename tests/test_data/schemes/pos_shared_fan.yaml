@@ -1,0 +1,17 @@
+components:
+- id: cd1
+  type: Condenser
+  name: Конденсатор 1
+- id: cd2
+  type: Condenser
+  name: Конденсатор 2
+- id: f
+  type: Fan
+  name: Вентилятор
+connections:
+- source: f
+  target: cd1
+  type: mechanical
+- source: f
+  target: cd2
+  type: mechanical

@@ -1,0 +1,14 @@
+components:
+- id: p1
+  type: Pump
+  name: Насос 1
+- id: h
+  type: Heater
+  name: Heater
+connections:
+- source: p1.out
+  target: h.in
+  type: water_lt
+- source: h.out
+  target: p1.in
+  type: water_lt

@@ -1,0 +1,4 @@
+components:
+- id: tank
+  type: Tank
+    name: bad indent

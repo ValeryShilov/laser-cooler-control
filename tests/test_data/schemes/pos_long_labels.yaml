@@ -1,0 +1,11 @@
+components:
+- id: t
+  type: Tank
+  name: Бак для воды без ТЭНа с четырмя выходами предназначенный для охладителя
+- id: p
+  type: Pump
+  name: Водяной Насос для горячей и холодной воды с двумя входами подключенный к баку
+connections:
+- source: t.water_out
+  target: p.in
+  type: water_lt

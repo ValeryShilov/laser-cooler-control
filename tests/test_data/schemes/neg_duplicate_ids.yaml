@@ -1,0 +1,8 @@
+components:
+- id: t
+  type: Tank
+  name: Бак
+- id: t
+  type: Pump
+  name: Насос
+connections: []

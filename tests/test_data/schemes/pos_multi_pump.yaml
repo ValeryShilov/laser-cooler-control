@@ -1,0 +1,29 @@
+components:
+- id: t
+  type: Tank
+  name: Бак
+- id: p1
+  type: Pump
+  name: Насос 1
+- id: p2
+  type: Pump
+  name: Насос 2
+- id: e
+  type: ExternalPort
+  name: Порт
+connections:
+- source: t.water_out
+  target: p1.in
+  type: water_lt
+- source: t.water_out
+  target: p2.in
+  type: water_lt
+- source: p1.out
+  target: e.in
+  type: water_lt
+- source: p2.out
+  target: e.in
+  type: water_lt
+- source: e.out
+  target: t.water_lt_in
+  type: water_lt

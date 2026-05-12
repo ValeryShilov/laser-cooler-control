@@ -1,0 +1,68 @@
+components:
+- id: t1
+  type: Tank
+  name: Основной бак
+- id: t2
+  type: Tank
+  name: Запасной бак
+- id: p1
+  type: Pump
+  name: Насос 1
+- id: p2
+  type: Pump
+  name: Насос 2
+- id: p3
+  type: Pump
+  name: Насос 3
+- id: cp1
+  type: Compressor
+  name: Компрессор 1
+- id: cd1
+  type: Condenser
+  name: Конденсатор 1
+- id: th1
+  type: Throttle
+  name: ТРВ 1
+- id: e1
+  type: ExternalPort
+  name: Вход 1
+- id: e2
+  type: ExternalPort
+  name: Выход 1
+connections:
+- source: t1.water_out
+  target: p1.in
+  type: water_ht
+- source: t1.water_out
+  target: p2.in
+  type: water_ht
+- source: t2.water_out
+  target: p3.in
+  type: water_lt
+- source: p1.out
+  target: t2.water_in
+  type: water_ht
+- source: p2.out
+  target: e2.in
+  type: water_ht
+- source: e1.out
+  target: t1.water_in
+  type: water_ht
+- source: p3.out
+  target: t1.water_in
+  type: water_lt
+- source: t2.freon_out
+  target: cp1.in
+  type: freon
+- source: cp1.out
+  target: cd1.in
+  type: freon
+- source: cd1.out
+  target: th1.in
+  type: freon
+- source: th1.out
+  target: t2.freon_in
+  type: freon
+- source: cp1.out
+  target: th1.in
+  type: freon_bypass

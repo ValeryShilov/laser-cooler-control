@@ -14,11 +14,18 @@ except ImportError:
 
 try:
     import pytesseract
-    # На Windows tesseract часто устанавливается сюда:
     if os.path.exists(r'C:\Program Files\Tesseract-OCR\tesseract.exe'):
         pytesseract.pytesseract.tesseract_cmd = r'C:\Program Files\Tesseract-OCR\tesseract.exe'
 except ImportError:
     pytesseract = None
+
+try:
+    import easyocr
+    import warnings
+    warnings.filterwarnings('ignore', category=UserWarning)
+    OCR_READER = easyocr.Reader(['en', 'ru'], gpu=False)
+except ImportError:
+    OCR_READER = None
 
 try:
     from fuzzywuzzy import fuzz
@@ -56,6 +63,9 @@ def get_rendered_data(scheme_path):
     mnemonic.parser.__init__(scheme_path)
     mnemonic.components, mnemonic.connections = mnemonic.parser.parse()
     
+    # Принудительно вызываем layout, чтобы у компонентов появились x, y, w, h
+    mnemonic.layout_engine.layout(mnemonic.components, mnemonic.connections)
+    
     window.show()
     mnemonic._request_recompute()
     
@@ -86,6 +96,9 @@ def get_rendered_data(scheme_path):
     basename = os.path.basename(scheme_path)
     cv2.imwrite(os.path.join(RENDERED_DIR, f"{basename}.png"), img_bgr)
     
+    # Учитываем масштабирование на High DPI мониторах (например, 1.25)
+    dpr = mnemonic.devicePixelRatio()
+    
     # Собираем данные для тестов
     expected_comps = []
     for cid, comp in mnemonic.components.items():
@@ -94,7 +107,12 @@ def get_rendered_data(scheme_path):
             expected_comps.append({
                 "id": cid,
                 "name": getattr(comp, 'name', ''),
-                "class_name": class_name
+                "class_name": class_name,
+                "x": int(comp.x * dpr),
+                "y": int(comp.y * dpr),
+                "w": int(comp.width * dpr),
+                "h": int(comp.height * dpr),
+                "label_pos": getattr(comp, 'label_pos', 'bottom')
             })
             
     return img_bgr, expected_comps
@@ -108,46 +126,61 @@ def check_deps():
 
 @pytest.mark.parametrize("scheme_path", SCHEME_FILES)
 def test_cv_components_presence(check_deps, scheme_path, test_log):
-    """Проверка того, что все компоненты были отрисованы в виде рамок."""
     img, expected_comps = get_rendered_data(scheme_path)
     basename = os.path.basename(scheme_path)
     
-    # Ищем темно-серые рамки оборудования (40-100 для сглаживания)
-    lower_gray = np.array([40, 40, 40])
-    upper_gray = np.array([100, 100, 100])
-    mask_gray = cv2.inRange(img, lower_gray, upper_gray)
-    kernel = np.ones((5,5), np.uint8)
-    mask_gray = cv2.dilate(mask_gray, kernel, iterations=1)
+    gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
     
-    contours, _ = cv2.findContours(mask_gray, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+    # Находим все контуры на всем изображении (вне зависимости от цвета, ищем просто линии)
+    edges = cv2.Canny(gray, 30, 150)
     
-    boxes_count = sum(1 for cnt in contours if cv2.boundingRect(cnt)[2] > 30 and cv2.boundingRect(cnt)[3] > 30)
+    found_count = 0
+    for comp in expected_comps:
+        x, y, w, h = comp['x'], comp['y'], comp['w'], comp['h']
+        
+        # Защита от выхода за границы изображения
+        if x < 0 or y < 0 or x+w > edges.shape[1] or y+h > edges.shape[0]:
+            continue
+            
+        # Берем кусок (ROI) из карты граней Кенни, где должен быть расположен компонент
+        roi_edges = edges[y:y+h, x:x+w]
+        
+        # Если в этой зоне есть хотя бы несколько пикселей граней (контуров)
+        # значит компонент (его SVG графика) был физически нарисован на холсте!
+        edge_pixels = cv2.countNonZero(roi_edges)
+        print(f"DEBUG: {basename} | Comp {comp['id']} ({comp['class_name']}) at x={x}, y={y}, w={w}, h={h} | Edge Pixels: {edge_pixels}")
+        
+        if edge_pixels > 20: # 20 пикселей это надежный минимум для SVG иконки
+            found_count += 1
+            
+    # Проверяем, что компоненты физически не накладываются друг на друга
+    overlap_count = 0
+    for i in range(len(expected_comps)):
+        for j in range(i + 1, len(expected_comps)):
+            c1, c2 = expected_comps[i], expected_comps[j]
+            x_left = max(c1['x'], c2['x'])
+            y_top = max(c1['y'], c2['y'])
+            x_right = min(c1['x'] + c1['w'], c2['x'] + c2['w'])
+            y_bottom = min(c1['y'] + c1['h'], c2['y'] + c2['h'])
+            
+            if x_right > x_left and y_bottom > y_top:
+                overlap_count += 1
+                
+    test_log.check(f"Наложение компонентов ({basename})", overlap_count, 0, op="eq")
     
-    # Не все классы имеют рамку, но мы просто проверяем что мы нашли хоть какие-то рамки
-    # Более точная проверка может считать конкретные классы. Для начала проверим базовое наличие.
-    test_log.check(f"Наличие рамок компонентов ({basename})", boxes_count, 1, op="ge")
+    # Проверяем, что количество найденных графических блоков совпадает с количеством в YAML
+    test_log.check(f"Все компоненты отрисованы ({basename})", found_count, len(expected_comps), op="eq")
 
 
 @pytest.mark.parametrize("scheme_path", SCHEME_FILES)
 def test_cv_pipe_intersections(check_deps, scheme_path, test_log):
-    """Проверка того, что трубы не пересекают оборудование."""
+    """Проверка того, что трубы не пересекают оборудование (внутреннюю часть)."""
     img, expected_comps = get_rendered_data(scheme_path)
     basename = os.path.basename(scheme_path)
     
-    # Получаем рамки
-    lower_gray = np.array([40, 40, 40])
-    upper_gray = np.array([100, 100, 100])
-    mask_gray = cv2.inRange(img, lower_gray, upper_gray)
-    kernel = np.ones((5,5), np.uint8)
-    mask_gray = cv2.dilate(mask_gray, kernel, iterations=1)
-    
-    contours, _ = cv2.findContours(mask_gray, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
-    boxes = [cv2.boundingRect(cnt) for cnt in contours if cv2.boundingRect(cnt)[2] > 30 and cv2.boundingRect(cnt)[3] > 30]
-    
+    # Так как мы не запускаем систему (is_running=False), все трубы рисуются серым цветом
     pipe_colors = [
-        np.array([212, 188, 0]),  # freon/freon_bypass
-        np.array([243, 150, 33]), # water_lt
-        np.array([0, 152, 255])   # water_ht
+        np.array([180, 180, 180]) # idle_c
     ]
     
     pipes_mask = np.zeros(img.shape[:2], dtype=np.uint8)
@@ -158,26 +191,39 @@ def test_cv_pipe_intersections(check_deps, scheme_path, test_log):
         pipes_mask = cv2.bitwise_or(pipes_mask, mask)
         
     total_intersections = 0
-    for x, y, w, h in boxes:
-        shrink = 5
+    for comp in expected_comps:
+        x, y, w, h = comp['x'], comp['y'], comp['w'], comp['h']
+        
+        # Сужаем рамку на 5 пикселей со всех сторон (или 6 с учетом DPR), 
+        # чтобы игнорировать трубы, которые легально подходят к портам по краям.
+        shrink = int(5 * getattr(img, 'dpr', 1.25)) # Приблизительное сужение
         cx, cy, cw, ch = x + shrink, y + shrink, w - 2*shrink, h - 2*shrink
-        if cw > 0 and ch > 0:
+        
+        if cw > 0 and ch > 0 and cx >= 0 and cy >= 0 and cx+cw <= img.shape[1] and cy+ch <= img.shape[0]:
             roi = pipes_mask[cy:cy+ch, cx:cx+cw]
-            total_intersections += cv2.countNonZero(roi)
+            intersecting_pixels = cv2.countNonZero(roi)
+            if intersecting_pixels > 10: # Допуск на мелкие артефакты сглаживания
+                total_intersections += intersecting_pixels
             
     test_log.check(f"Пересечение труб и объектов ({basename})", total_intersections, 0)
 
 
 @pytest.mark.parametrize("scheme_path", SCHEME_FILES)
 def test_cv_labels_ocr(check_deps, scheme_path, test_log):
-    """Проверка читаемости всех названий компонентов (OCR)."""
+    """Проверка читаемости текста (названия компонентов) через EasyOCR."""
+    if OCR_READER is None:
+        pytest.skip("EasyOCR не установлен")
+        
     img, expected_comps = get_rendered_data(scheme_path)
     basename = os.path.basename(scheme_path)
     
-    gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
-    _, thresh = cv2.threshold(gray, 150, 255, cv2.THRESH_BINARY)
-    text_data = pytesseract.image_to_string(thresh, lang='rus+eng')
-    text_data_lower = text_data.lower()
+    # EasyOCR лучше работает с контрастными изображениями, 
+    # но он и сам неплохо справляется с цветным текстом.
+    # Мы можем просто передать ему весь BGR-кадр.
+    results = OCR_READER.readtext(img)
+    
+    # Собираем весь найденный текст в единую строку для нечеткого поиска
+    text_data_lower = " ".join([text.lower() for (bbox, text, prob) in results])
     
     for comp in expected_comps:
         expected_name = comp["name"].lower()
@@ -186,6 +232,6 @@ def test_cv_labels_ocr(check_deps, scheme_path, test_log):
             test_log.check(
                 f"Читаемость текста '{expected_name}' ({basename})", 
                 match_score, 
-                55, 
+                60, 
                 op="gt"
             )

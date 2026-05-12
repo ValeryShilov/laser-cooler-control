@@ -1,0 +1,8 @@
+components:
+- id: p
+  type: Pump
+  name: Насос
+connections:
+- source: p.out
+  target: p.in
+  type: water_lt
