@@ -1,0 +1,48 @@
+# Схема с максимальным количеством внешних портов — 6 штук
+components:
+- id: tank_central
+  type: Tank
+  name: Центральный бак
+- id: pump_main
+  type: Pump
+  name: Главный насос
+- id: port_laser_supply
+  type: ExternalPort
+  name: Подача лазер
+- id: port_laser_return
+  type: ExternalPort
+  name: Возврат лазер
+- id: port_optics_supply
+  type: ExternalPort
+  name: Подача оптика
+- id: port_optics_return
+  type: ExternalPort
+  name: Возврат оптика
+- id: port_chiller_supply
+  type: ExternalPort
+  name: Подача чиллер
+- id: port_drain_emergency
+  type: ExternalPort
+  name: Аварийный слив
+connections:
+- source: tank_central.water_out
+  target: pump_main.in
+  type: water_lt
+- source: pump_main.out
+  target: port_laser_supply.in
+  type: water_lt
+- source: port_laser_return.out
+  target: tank_central.water_lt_in
+  type: water_lt
+- source: pump_main.out
+  target: port_optics_supply.in
+  type: water_ht
+- source: port_optics_return.out
+  target: tank_central.water_ht_in
+  type: water_ht
+- source: port_chiller_supply.out
+  target: tank_central.water_lt_in
+  type: water_lt
+- source: tank_central.drain
+  target: port_drain_emergency.in
+  type: drain

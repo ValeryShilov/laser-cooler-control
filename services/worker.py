@@ -165,6 +165,20 @@ def _route_single_pipe(router, comp_snapshot, conn):
 
 
 def _compute_labels(comp_snapshot, drawn_cells, width, height):
+    if len(adjustments) > 1:
+        sorted_ports = sorted(adjustments.items(), key=lambda x: x[1])
+        for i in range(1, len(sorted_ports)):
+            prev_id, prev_y = sorted_ports[i - 1]
+            curr_id, curr_y = sorted_ports[i]
+            if curr_y < prev_y + min_spacing:
+                new_y = prev_y + min_spacing
+                adjustments[curr_id] = new_y
+                sorted_ports[i] = (curr_id, new_y)
+    
+    return adjustments
+
+
+def _compute_labels(comp_snapshot, drawn_cells, width, height):
     """Вычисляет оптимальные позиции надписей."""
     placer = LabelPlacer(comp_snapshot, drawn_cells, width, height)
     return placer.compute()

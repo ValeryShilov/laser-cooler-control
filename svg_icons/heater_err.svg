@@ -1,5 +1,5 @@
-<svg viewBox="0 0 40 80" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
-    <rect x="2" y="25" width="36" height="30" fill="none" stroke="#F44336" stroke-width="3"/>
-    <line x1="12" y1="25" x2="12" y2="55" stroke="#F44336" stroke-width="3"/>
-    <line x1="20" y1="25" x2="20" y2="55" stroke="#F44336" stroke-width="3"/>
-    <line x1="28" y1="25" x2="28" y2="55" stroke="#F44336" stroke-width="3"/></svg>
+<svg viewBox="0 0 40 40" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+    <rect x="2" y="5" width="36" height="30" fill="none" stroke="#F44336" stroke-width="3"/>
+    <line x1="12" y1="5" x2="12" y2="35" stroke="#F44336" stroke-width="3"/>
+    <line x1="20" y1="5" x2="20" y2="35" stroke="#F44336" stroke-width="3"/>
+    <line x1="28" y1="5" x2="28" y2="35" stroke="#F44336" stroke-width="3"/></svg>

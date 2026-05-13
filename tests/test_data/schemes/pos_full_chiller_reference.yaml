@@ -1,0 +1,92 @@
+# Полная схема чиллера с двумя водяными контурами (LT и HT), байпасом, вентилятором, нагревателем и сливом
+components:
+- id: compressor_main
+  type: Compressor
+  name: Компрессор
+- id: condenser_main
+  type: Condenser
+  name: Конденсатор
+- id: fan_condenser
+  type: Fan
+  name: Вентилятор
+- id: throttle_main
+  type: Throttle
+  name: Дроссель
+- id: valve_bypass
+  type: Valve
+  name: Клапан Байпаса
+- id: tank_evaporator
+  type: Tank
+  name: Бак и Испаритель
+- id: pump_lt
+  type: Pump
+  name: Насос LT
+- id: pump_ht
+  type: Pump
+  name: Насос HT
+- id: heater_tank
+  type: Heater
+  name: ТЭН
+- id: port_lt_in
+  type: ExternalPort
+  name: Вход L (Лазер)
+- id: port_lt_out
+  type: ExternalPort
+  name: Выход L (Лазер)
+- id: port_ht_in
+  type: ExternalPort
+  name: Вход H (Оптика)
+- id: port_ht_out
+  type: ExternalPort
+  name: Выход H (Оптика)
+- id: port_drain
+  type: ExternalPort
+  name: Слив
+connections:
+# Фреоновый контур
+- source: compressor_main.out
+  target: condenser_main.in
+  type: freon
+- source: condenser_main.out
+  target: throttle_main.in
+  type: freon
+- source: throttle_main.out
+  target: tank_evaporator.freon_in
+  type: freon
+- source: tank_evaporator.freon_out
+  target: compressor_main.in
+  type: freon
+# Байпас фреона
+- source: compressor_main.out
+  target: valve_bypass.in
+  type: freon_bypass
+- source: valve_bypass.out
+  target: tank_evaporator.freon_in
+  type: freon_bypass
+# Водяной контур LT (лазер)
+- source: tank_evaporator.water_out
+  target: pump_lt.in
+  type: water_lt
+- source: pump_lt.out
+  target: port_lt_out.in
+  type: water_lt
+- source: port_lt_in.out
+  target: tank_evaporator.water_lt_in
+  type: water_lt
+# Водяной контур HT (оптика) через ТЭН
+- source: tank_evaporator.water_out
+  target: heater_tank.in
+  type: water_ht
+- source: heater_tank.out
+  target: pump_ht.in
+  type: water_ht
+- source: pump_ht.out
+  target: port_ht_out.in
+  type: water_ht
+- source: port_ht_in.out
+  target: tank_evaporator.water_ht_in
+  type: water_ht
+# Слив
+- source: tank_evaporator.drain
+  target: port_drain.in
+  type: drain

@@ -1,0 +1,69 @@
+# Два независимых контура охлаждения, подключенных к одному баку
+components:
+- id: compressor_primary
+  type: Compressor
+  name: Компрессор основной
+- id: compressor_backup
+  type: Compressor
+  name: Компрессор резервный
+- id: condenser_primary
+  type: Condenser
+  name: Конденсатор основной
+- id: condenser_backup
+  type: Condenser
+  name: Конденсатор резервный
+- id: throttle_primary
+  type: Throttle
+  name: Дроссель основной
+- id: throttle_backup
+  type: Throttle
+  name: Дроссель резервный
+- id: tank_main
+  type: Tank
+  name: Общий бак
+- id: pump_circulation
+  type: Pump
+  name: Насос циркуляции
+- id: port_supply
+  type: ExternalPort
+  name: Подача воды
+- id: port_return
+  type: ExternalPort
+  name: Возврат воды
+connections:
+# Основной фреоновый контур
+- source: compressor_primary.out
+  target: condenser_primary.in
+  type: freon
+- source: condenser_primary.out
+  target: throttle_primary.in
+  type: freon
+- source: throttle_primary.out
+  target: tank_main.freon_in
+  type: freon
+- source: tank_main.freon_out
+  target: compressor_primary.in
+  type: freon
+# Резервный фреоновый контур
+- source: compressor_backup.out
+  target: condenser_backup.in
+  type: freon
+- source: condenser_backup.out
+  target: throttle_backup.in
+  type: freon
+- source: throttle_backup.out
+  target: tank_main.freon_in
+  type: freon
+- source: tank_main.freon_out
+  target: compressor_backup.in
+  type: freon
+# Водяной контур
+- source: tank_main.water_out
+  target: pump_circulation.in
+  type: water_lt
+- source: pump_circulation.out
+  target: port_supply.in
+  type: water_lt
+- source: port_return.out
+  target: tank_main.water_lt_in
+  type: water_lt

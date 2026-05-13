@@ -1,0 +1,27 @@
+# Только изолированные компоненты без связей — тестирует размещение без маршрутизации
+components:
+- id: compressor_idle
+  type: Compressor
+  name: Компрессор
+- id: condenser_idle
+  type: Condenser
+  name: Конденсатор
+- id: tank_idle
+  type: Tank
+  name: Бак
+- id: pump_idle
+  type: Pump
+  name: Насос
+- id: heater_idle
+  type: Heater
+  name: ТЭН
+- id: throttle_idle
+  type: Throttle
+  name: Дроссель
+- id: fan_idle
+  type: Fan
+  name: Вентилятор
+- id: valve_idle
+  type: Valve
+  name: Клапан
+connections: []

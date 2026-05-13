@@ -21,7 +21,7 @@ class ChillerMnemonic(QWidget):
         self.setMinimumHeight(500)
 
         # 1. Читаем YAML
-        #self.parser = SchemeParser(r"tests\test_data\schemes\pos_multi_cycles.yaml")
+        #self.parser = SchemeParser(r"tests\test_data\schemes\pos_dual_loop_cooling.yaml")
         self.parser = SchemeParser("scheme.yaml")
         self.components, self.connections = self.parser.parse()
 

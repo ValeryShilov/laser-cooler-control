@@ -37,9 +37,9 @@ from ui.main_window import ChillerPanel
 from hardware.mock_adapter import MockAdapter
 from PySide6.QtCore import QSize, QEventLoop, QTimer
 
-# Ищем только позитивные файлы схем для визуальных тестов
+# Ищем все файлы схем для визуальных тестов
 SCHEMES_DIR = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))), "tests", "test_data", "schemes")
-SCHEME_FILES = glob.glob(os.path.join(SCHEMES_DIR, "pos_*.yaml"))
+SCHEME_FILES = glob.glob(os.path.join(SCHEMES_DIR, "*.yaml"))
 RENDERED_DIR = os.path.join(os.path.dirname(SCHEMES_DIR), "rendered_schemes")
 
 @lru_cache(maxsize=30)
@@ -205,8 +205,7 @@ def test_cv_pipe_intersections(check_deps, scheme_path, test_log):
             if intersecting_pixels > 10: # Допуск на мелкие артефакты сглаживания
                 total_intersections += intersecting_pixels
                 
-    if total_intersections > 0:
-        cv2.imwrite(os.path.join(RENDERED_DIR, f"FAIL_INTERSECT_{basename}.png"), pipes_mask)
+
             
     test_log.check(f"Пересечение труб и объектов ({basename})", total_intersections, 0)
 

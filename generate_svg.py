@@ -4,11 +4,11 @@ from PySide6.QtWidgets import QApplication
 
 # 1. Шаблоны
 
-svg_heater = """<svg viewBox="0 0 40 80" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
-    <rect x="2" y="25" width="36" height="30" fill="none" stroke="{color}" stroke-width="3"/>
-    <line x1="12" y1="25" x2="12" y2="55" stroke="{color}" stroke-width="3"/>
-    <line x1="20" y1="25" x2="20" y2="55" stroke="{color}" stroke-width="3"/>
-    <line x1="28" y1="25" x2="28" y2="55" stroke="{color}" stroke-width="3"/></svg>"""
+svg_heater = """<svg viewBox="0 0 40 40" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+    <rect x="2" y="5" width="36" height="30" fill="none" stroke="{color}" stroke-width="3"/>
+    <line x1="12" y1="5" x2="12" y2="35" stroke="{color}" stroke-width="3"/>
+    <line x1="20" y1="5" x2="20" y2="35" stroke="{color}" stroke-width="3"/>
+    <line x1="28" y1="5" x2="28" y2="35" stroke="{color}" stroke-width="3"/></svg>"""
 
 svg_condenser = """<svg viewBox="0 0 60 160" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
     <polygon points="30,2 58,80 30,158 2,80" fill="none" stroke="{color}" stroke-width="2"/>
@@ -26,9 +26,9 @@ svg_throttle = """<svg viewBox="0 0 60 40" preserveAspectRatio="none" xmlns="htt
     <line x1="15" y1="35" x2="45" y2="5" stroke="#37474F" stroke-width="2"/>
     <polygon points="45,5 38,6 41,13" fill="#37474F"/></svg>"""
 
-svg_pump = """<svg viewBox="0 0 50 50" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
-    <circle cx="25" cy="25" r="23" stroke="#37474F" stroke-width="3" fill="none"/>
-    <polygon points="12,13 12,37 40,25" fill="{color}"/></svg>"""
+svg_pump = """<svg viewBox="0 0 60 60" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+    <circle cx="30" cy="30" r="27" stroke="#37474F" stroke-width="3" fill="none"/>
+    <polygon points="15,15 15,45 48,30" fill="{color}"/></svg>"""
 
 svg_compressor = """<svg viewBox="0 0 60 60" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
     <circle cx="30" cy="30" r="26" stroke="{color}" stroke-width="3" fill="none"/>

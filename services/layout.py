@@ -1,6 +1,6 @@
 import logging
 from collections import defaultdict
-from rules import PORT_ORDER
+
 
 
 logger = logging.getLogger(__name__)
@@ -240,7 +240,13 @@ class TopologyLayoutEngine:
     # ── Фаза 6: Внешние порты ──
 
     def _place_external_ports(self, ext_ports, connections, main_comps):
-        """Оркестратор размещения внешних портов."""
+        """Оркестратор размещения внешних портов.
+        
+        Алгоритм:
+        1. Для каждого порта вычисляем ideal_y по позиции связанного компонента
+        2. Сортируем по ideal_y (drain всегда в конце)
+        3. Размещаем сверху вниз, разрешая наложения минимальным сдвигом
+        """
         if not ext_ports:
             logger.debug("Step: place_external_ports", extra={"journal_entry": {
                 "step": "place_external_ports",
@@ -250,106 +256,124 @@ class TopologyLayoutEngine:
                 "decision": {"skipped": True, "reason": "no external ports"},
             }})
             return
-        ext_ports.sort(key=lambda p: PORT_ORDER.index(p.id) if p.id in PORT_ORDER else 99)
 
+        # X-позиция: правее всех основных компонентов
         max_comp_x = max([c.x + c.width for c in main_comps.values()]) if main_comps else 700
         x_pos = max_comp_x + 120
-        min_spacing = 70
+        min_spacing = 40  # ExternalPort.height=30 + 10px отступ
 
-        desired_y = self._align_ports_y(ext_ports, connections, main_comps)
-        desired_y = self._resolve_port_overlaps(ext_ports, desired_y, min_spacing)
-        self._finalize_port_positions(ext_ports, x_pos, desired_y, min_spacing)
+        # Шаг 1: Вычисляем роль и ideal_y для каждого порта
+        port_info = self._compute_port_info(ext_ports, connections, main_comps)
 
-        final_positions = {p.id: {"x": p.x, "y": p.y} for p in ext_ports}
-        logger.debug("Step: place_external_ports", extra={"journal_entry": {
-            "step": "place_external_ports",
-            "context": {},
-            "input": {"ext_port_count": len(ext_ports),
-                      "x_pos": x_pos},
-            "output": {"desired_y": dict(desired_y),
-                       "final_positions": final_positions},
-            "decision": None,
-        }})
+        # Шаг 2: Сортируем по ideal_y, drain всегда последний
+        sorted_ports = sorted(ext_ports, key=lambda p: (
+            1 if port_info.get(p.id, {}).get('role') == 'drain' else 0,
+            port_info.get(p.id, {}).get('ideal_y') or 9999
+        ))
 
-    def _align_ports_y(self, ext_ports, connections, main_comps):
-        """Вычисляет желаемую Y-координату для каждого внешнего порта."""
-        aligned_y = {}
-        for conn in connections:
-            src, tgt = conn['source_id'], conn['target_id']
-            src_port = conn.get('source_port', 'out')
-            tgt_port = conn.get('target_port', 'in')
-
-            if tgt in [p.id for p in ext_ports] and src in main_comps:
-                if tgt not in aligned_y:
-                    comp = main_comps[src]
-                    if src_port in comp.ports:
-                        y_pos = comp.ports[src_port][1]
-                        if src_port == 'drain':
-                            y_pos += 30
-                        aligned_y[tgt] = y_pos
-
-            if src in [p.id for p in ext_ports] and tgt in main_comps:
-                if src not in aligned_y:
-                    comp = main_comps[tgt]
-                    if tgt_port in comp.ports:
-                        aligned_y[src] = comp.ports[tgt_port][1]
-
-        desired_y = {}
-        for port in ext_ports:
-            if port.id in aligned_y:
-                desired_y[port.id] = round((aligned_y[port.id] - 20) / 10) * 10
-        return desired_y
-
-    def _resolve_port_overlaps(self, ext_ports, desired_y, min_spacing):
-        """Разрешает наложения внешних портов по Y-координате."""
+        # Шаг 2.5: Разносим порты с одинаковым ideal_y симметрично
+        # Если 2 порта хотят ideal_y=120, ставим их на 100 и 140 (±20)
+        # Порт, подключённый к более дальнему (левому) компоненту — сверху,
+        # чтобы его труба шла поверх остальных без пересечений
+        spread_y = {}
         y_groups = defaultdict(list)
-        for port in ext_ports:
-            if port.id in desired_y:
-                y_groups[desired_y[port.id]].append(port)
-
-        for shared_y, group in y_groups.items():
-            if len(group) <= 1:
-                continue
-            n = len(group)
-            group_ids = {p.id for p in group}
-
-            y_above = self.pad_top
-            for p in ext_ports:
-                if p.id in group_ids:
-                    break
-                if p.id in desired_y:
-                    y_above = max(y_above, desired_y[p.id] + min_spacing)
-
-            space_above = max(shared_y - y_above, 0)
-
-            if space_above > 0:
-                actual_spacing = min(min_spacing, space_above / max(n - 1, 1))
-                actual_spacing = max(actual_spacing, 40)
-                for i, port in enumerate(group):
-                    offset = (n - 1 - i) * actual_spacing
-                    desired_y[port.id] = round(max(y_above, shared_y - offset) / 10) * 10
+        for port in sorted_ports:
+            iy = port_info.get(port.id, {}).get('ideal_y')
+            if iy is not None:
+                y_groups[iy].append(port.id)
+        for iy, group_ids in y_groups.items():
+            if len(group_ids) == 1:
+                spread_y[group_ids[0]] = iy
             else:
-                for i, port in enumerate(group):
-                    desired_y[port.id] = shared_y + i * min_spacing
+                # Сортируем внутри группы: ближний (больший X) — сверху,
+                # чтобы его труба ушла горизонтально раньше и не мешала дальним
+                group_ids.sort(key=lambda pid: port_info.get(pid, {}).get('target_x', 0), reverse=True)
+                n = len(group_ids)
+                half = (n - 1) * min_spacing / 2
+                for i, pid in enumerate(group_ids):
+                    spread_y[pid] = round((iy - half + i * min_spacing) / 10) * 10
 
-        return desired_y
+        # Шаг 2.9: Пересортировка с учётом spread_y
+        sorted_ports = sorted(sorted_ports, key=lambda p: (
+            1 if port_info.get(p.id, {}).get('role') == 'drain' else 0,
+            spread_y.get(p.id) or port_info.get(p.id, {}).get('ideal_y') or 9999
+        ))
 
-    def _finalize_port_positions(self, ext_ports, x_pos, desired_y, min_spacing):
-        """Финальное размещение портов с гарантией порядка и отсутствия наложений."""
+        # Шаг 3: Размещаем сверху вниз
         prev_bottom = self.pad_top
-        for port in ext_ports:
+        for port in sorted_ports:
+            info = port_info.get(port.id, {})
+            ideal_y = spread_y.get(port.id, info.get('ideal_y'))
+
             port.x = round((x_pos - port.width / 2) / 10) * 10
 
-            if port.id in desired_y:
-                port.y = desired_y[port.id]
+            if ideal_y is not None:
+                # Ставим на ideal_y, но не ближе чем min_spacing к предыдущему
+                port.y = round(max(ideal_y, prev_bottom) / 10) * 10
             else:
-                port.y = round(prev_bottom / 10) * 10
-
-            if port.y < prev_bottom:
                 port.y = round(prev_bottom / 10) * 10
 
             prev_bottom = port.y + min_spacing
             port.update_ports()
+
+        final_positions = {p.id: {"x": p.x, "y": p.y, "role": port_info.get(p.id, {}).get('role')} for p in sorted_ports}
+        logger.debug("Step: place_external_ports", extra={"journal_entry": {
+            "step": "place_external_ports",
+            "context": {},
+            "input": {"ext_port_count": len(ext_ports), "x_pos": x_pos},
+            "output": {"final_positions": final_positions},
+            "decision": None,
+        }})
+
+    def _compute_port_info(self, ext_ports, connections, main_comps):
+        """Для каждого внешнего порта вычисляет роль (input/output/drain) и ideal_y.
+        
+        Роли определяются по направлению связи:
+        - Порт является SOURCE (от порта к компоненту) → это VXOD в чиллер (стрелка ←)
+        - Порт является TARGET (от компонента к порту) → это ВЫХОД из чиллера (стрелка →)
+        - Тип связи 'drain' → СЛИВ
+        
+        ideal_y вычисляется как Y порта связанного компонента - 20 (центрирование).
+        """
+        ext_ids = {p.id for p in ext_ports}
+        port_info = {}  # {port_id: {'role': str, 'ideal_y': int|None, 'target_x': int}}
+
+        for conn in connections:
+            src, tgt = conn['source_id'], conn['target_id']
+            conn_type = conn.get('type', '')
+            src_port = conn.get('source_port', 'out')
+            tgt_port = conn.get('target_port', 'in')
+
+            # Порт — цель трубы (output из чиллера или drain)
+            if tgt in ext_ids and src in main_comps:
+                comp = main_comps[src]
+                role = 'drain' if conn_type == 'drain' else 'output'
+                ideal_y = None
+                target_x = comp.x
+                if src_port in comp.ports:
+                    y_val = comp.ports[src_port][1]
+                    target_x = comp.ports[src_port][0]
+                    ideal_y = round((y_val - 20) / 10) * 10
+                if tgt not in port_info:  # первая связь побеждает
+                    port_info[tgt] = {'role': role, 'ideal_y': ideal_y, 'target_x': target_x}
+
+            # Порт — источник трубы (input в чиллер)
+            if src in ext_ids and tgt in main_comps:
+                comp = main_comps[tgt]
+                ideal_y = None
+                target_x = comp.x
+                if tgt_port in comp.ports:
+                    target_x = comp.ports[tgt_port][0]
+                    ideal_y = round((comp.ports[tgt_port][1] - 20) / 10) * 10
+                if src not in port_info:
+                    port_info[src] = {'role': 'input', 'ideal_y': ideal_y, 'target_x': target_x}
+
+        # Порты без связей — unknown
+        for port in ext_ports:
+            if port.id not in port_info:
+                port_info[port.id] = {'role': 'unknown', 'ideal_y': None, 'target_x': 9999}
+
+        return port_info
 
     # ══════════════════════════════════════════
     #  Вспомогательные методы (без изменений)

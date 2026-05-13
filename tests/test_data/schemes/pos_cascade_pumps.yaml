@@ -1,0 +1,30 @@
+# Каскадная схема: три насоса последовательно, один за другим
+components:
+- id: tank_source
+  type: Tank
+  name: Исходный бак
+- id: pump_stage_1
+  type: Pump
+  name: Насос 1 ступень
+- id: pump_stage_2
+  type: Pump
+  name: Насос 2 ступень
+- id: pump_stage_3
+  type: Pump
+  name: Насос 3 ступень
+- id: port_output
+  type: ExternalPort
+  name: Высокое давление
+connections:
+- source: tank_source.water_out
+  target: pump_stage_1.in
+  type: water_ht
+- source: pump_stage_1.out
+  target: pump_stage_2.in
+  type: water_ht
+- source: pump_stage_2.out
+  target: pump_stage_3.in
+  type: water_ht
+- source: pump_stage_3.out
+  target: port_output.in
+  type: water_ht

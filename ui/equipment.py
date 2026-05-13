@@ -5,7 +5,7 @@ from PySide6.QtSvg import QSvgRenderer
 
 
 _THIS_DIR = os.path.dirname(os.path.abspath(__file__))
-BASE_DIR = os.path.dirname(_THIS_DIR)  # Корень проекта (ui/ → ../)
+BASE_DIR = os.path.dirname(_THIS_DIR)
 ICONS_DIR = os.path.join(BASE_DIR, "svg_icons")
 
 class BaseEquipment:
@@ -137,34 +137,34 @@ class Valve(BaseEquipment):
         self.renderer.load(os.path.join(ICONS_DIR, f"valve_{self.state}.svg"))
 
     def update_ports(self):
-        self.ports['in'] = (self.x, self.y + 20)            # Вход слева
-        self.ports['out'] = (self.x + 60, self.y + 20)      # Выход справа
+        self.ports['in'] = (self.x, self.y + 30)            # Вход слева (смещен вниз к центру клапана)
+        self.ports['out'] = (self.x + 60, self.y + 30)      # Выход справа
 
 
 class Pump(BaseEquipment):
     def __init__(self, x, y):
-        super().__init__(x, y, 50, 50, "Насос")
+        super().__init__(x, y, 60, 60, "Насос")
         self.load_svg()
 
     def load_svg(self):
         self.renderer.load(os.path.join(ICONS_DIR, f"pump_{self.state}.svg"))
 
     def update_ports(self):
-        self.ports['in'] = (self.x, self.y + 25)            # Вход слева (ровно по центру 50/2)
-        self.ports['out'] = (self.x + 50, self.y + 25)      # Выход справа
+        self.ports['in'] = (self.x, self.y + 30)            # Вход слева (по центру)
+        self.ports['out'] = (self.x + 60, self.y + 30)      # Выход справа
 
 
 class Heater(BaseEquipment):
     def __init__(self, x, y):
-        super().__init__(x, y, 40, 80, "ТЭН")
+        super().__init__(x, y, 40, 40, "ТЭН")
         self.load_svg()
 
     def load_svg(self):
         self.renderer.load(os.path.join(ICONS_DIR, f"heater_{self.state}.svg"))
 
     def update_ports(self):
-        self.ports['in'] = (self.x, self.y + 40)            # Вход слева
-        self.ports['out'] = (self.x + 40, self.y + 40)      # Выход справа
+        self.ports['in'] = (self.x, self.y + 20)            # Вход слева
+        self.ports['out'] = (self.x + 40, self.y + 20)      # Выход справа
 
     def draw(self, painter: QPainter):
         super().draw(painter)
@@ -207,18 +207,11 @@ class ExternalPort(BaseEquipment):
 
     def update_ports(self):
         """ 
-        Штуцер находится там, где начинается плоская часть стрелки.
-        Если стрелка указывает влево (внутрь схемы) - труба исходит из нее вправо, 
-        следовательно, труба должна начинаться у основания стрелки (x + 15).
-        Если стрелка указывает вправо - труба входит слева, заканчиваясь на x.
+        Штуцер всегда находится на левом краю блока (self.x), 
+        так как порты стоят справа на экране, и трубы подходят к ним слева.
         """
-        is_input = "in" in self.id and "drain" not in self.id
-        if is_input:
-            self.ports['in'] = (self.x + 15, self.y + 20)
-            self.ports['out'] = (self.x + 15, self.y + 20)
-        else:
-            self.ports['in'] = (self.x, self.y + 20)
-            self.ports['out'] = (self.x, self.y + 20)
+        self.ports['in'] = (self.x, self.y + 20)
+        self.ports['out'] = (self.x, self.y + 20)
 
     def draw(self, painter: QPainter):
         """ Переопределяем отрисовку: рисуем стрелку и текст сбоку """
@@ -248,5 +241,5 @@ class ExternalPort(BaseEquipment):
         painter.drawPath(path)
         
         painter.setPen(QPen(QColor(40, 40, 40), 1))
-        painter.setFont(QFont("Arial", 11, QFont.Bold))
+        painter.setFont(QFont("Arial", 10, QFont.Bold))
         painter.drawText(self.x + 25, self.y + 20, self.name)

@@ -1,0 +1,36 @@
+# Только водяной контур без фреона — тестирует схемы без компрессора/конденсатора
+components:
+- id: tank_storage
+  type: Tank
+  name: Накопительный бак
+- id: pump_feed
+  type: Pump
+  name: Подающий насос
+- id: pump_return
+  type: Pump
+  name: Обратный насос
+- id: heater_inline
+  type: Heater
+  name: Проточный ТЭН
+- id: port_consumer_out
+  type: ExternalPort
+  name: К потребителю
+- id: port_consumer_in
+  type: ExternalPort
+  name: От потребителя
+connections:
+- source: tank_storage.water_out
+  target: pump_feed.in
+  type: water_lt
+- source: pump_feed.out
+  target: heater_inline.in
+  type: water_lt
+- source: heater_inline.out
+  target: port_consumer_out.in
+  type: water_lt
+- source: port_consumer_in.out
+  target: pump_return.in
+  type: water_lt
+- source: pump_return.out
+  target: tank_storage.water_lt_in
+  type: water_lt

@@ -1,0 +1,15 @@
+# Один компрессор, один бак, ничего больше — минимально возможный фреоновый цикл
+components:
+- id: compressor_solo
+  type: Compressor
+  name: Единственный компрессор
+- id: tank_solo
+  type: Tank
+  name: Единственный бак
+connections:
+- source: compressor_solo.out
+  target: tank_solo.freon_in
+  type: freon
+- source: tank_solo.freon_out
+  target: compressor_solo.in
+  type: freon
