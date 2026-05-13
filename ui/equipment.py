@@ -45,16 +45,24 @@ class BaseEquipment:
         painter.setPen(QPen(QColor(60, 60, 60), 2))
         painter.setFont(QFont("Arial", 10, QFont.Bold))
         
+        # Динамически вычисляем ширину и высоту текста
+        metrics = painter.fontMetrics()
+        # Даем тексту запас по ширине, чтобы он мог переноситься (например, ширина + 80), 
+        # но boundingRect сам вычислит необходимую высоту.
+        max_width = max(150, self.width + 80)
+        bounding_rect = metrics.boundingRect(0, 0, int(max_width), 1000, Qt.AlignCenter | Qt.TextWordWrap, self.name)
+        text_w, text_h = bounding_rect.width(), bounding_rect.height()
+        
         align = Qt.AlignCenter | Qt.TextWordWrap
         if self.label_pos == "bottom":
-            text_rect = QRectF(self.x - 20, self.y + self.height + 2, self.width + 40, 30)
+            text_rect = QRectF(self.x + self.width/2 - text_w/2, self.y + self.height + 5, text_w, text_h)
         elif self.label_pos == "top":
-            text_rect = QRectF(self.x - 20, self.y - 28, self.width + 40, 26)
+            text_rect = QRectF(self.x + self.width/2 - text_w/2, self.y - text_h - 5, text_w, text_h)
         elif self.label_pos == "left":
-            text_rect = QRectF(self.x - 85, self.y + self.height/2 - 15, 80, 30)
+            text_rect = QRectF(self.x - text_w - 5, self.y + self.height/2 - text_h/2, text_w, text_h)
             align = Qt.AlignRight | Qt.AlignVCenter | Qt.TextWordWrap
         elif self.label_pos == "right":
-            text_rect = QRectF(self.x + self.width + 3, self.y + self.height/2 - 15, 80, 30)
+            text_rect = QRectF(self.x + self.width + 5, self.y + self.height/2 - text_h/2, text_w, text_h)
             align = Qt.AlignLeft | Qt.AlignVCenter | Qt.TextWordWrap
             
         painter.drawText(text_rect, align, self.name)
@@ -142,8 +150,8 @@ class Pump(BaseEquipment):
         self.renderer.load(os.path.join(ICONS_DIR, f"pump_{self.state}.svg"))
 
     def update_ports(self):
-        self.ports['in'] = (self.x, self.y + 30)            # Вход слева
-        self.ports['out'] = (self.x + 50, self.y + 30)      # Выход справа
+        self.ports['in'] = (self.x, self.y + 25)            # Вход слева (ровно по центру 50/2)
+        self.ports['out'] = (self.x + 50, self.y + 25)      # Выход справа
 
 
 class Heater(BaseEquipment):
@@ -199,11 +207,18 @@ class ExternalPort(BaseEquipment):
 
     def update_ports(self):
         """ 
-        Штуцер всегда находится на левом краю блока (self.x), 
-        так как порты стоят справа на экране, и трубы подходят к ним слева.
+        Штуцер находится там, где начинается плоская часть стрелки.
+        Если стрелка указывает влево (внутрь схемы) - труба исходит из нее вправо, 
+        следовательно, труба должна начинаться у основания стрелки (x + 15).
+        Если стрелка указывает вправо - труба входит слева, заканчиваясь на x.
         """
-        self.ports['in'] = (self.x, self.y + 20)
-        self.ports['out'] = (self.x, self.y + 20)
+        is_input = "in" in self.id and "drain" not in self.id
+        if is_input:
+            self.ports['in'] = (self.x + 15, self.y + 20)
+            self.ports['out'] = (self.x + 15, self.y + 20)
+        else:
+            self.ports['in'] = (self.x, self.y + 20)
+            self.ports['out'] = (self.x, self.y + 20)
 
     def draw(self, painter: QPainter):
         """ Переопределяем отрисовку: рисуем стрелку и текст сбоку """

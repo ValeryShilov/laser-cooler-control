@@ -108,7 +108,11 @@ def compute_routes_and_labels(comp_snapshot, connections, width, height):
         "decision": None,
     }})
 
-    result = RenderData(pipe_paths=pipe_paths, label_positions=label_positions)
+    result = RenderData(
+        pipe_paths=pipe_paths, 
+        label_positions=label_positions,
+        obstacles=list(router.obstacles)
+    )
     return result
 
 

@@ -7,13 +7,13 @@ logger = logging.getLogger(__name__)
 
 
 class TopologyLayoutEngine:
-    def __init__(self, padding=50):
+    def __init__(self, padding=100):
         self.width = 1000
         self.height = 600
         self.padding = padding
         self.pad_left = padding
         self.pad_right = padding
-        self.pad_top = 70
+        self.pad_top = padding
         self.pad_bottom = padding
 
     def layout(self, components, connections):
@@ -363,7 +363,7 @@ class TopologyLayoutEngine:
 
     # ── Обнаружение и разрешение коллизий ──
 
-    def _rects_overlap(self, r1, r2, padding=15):
+    def _rects_overlap(self, r1, r2, padding=35):
         """Проверяет пересечение двух прямоугольников (x, y, w, h) с отступом."""
         x1, y1, w1, h1 = r1
         x2, y2, w2, h2 = r2
@@ -386,34 +386,55 @@ class TopologyLayoutEngine:
         """
         Сдвигает компонент в ближайшую свободную позицию, если он
         перекрывается с уже размещёнными компонентами.
-        Поиск идёт спиралью вокруг исходной позиции.
+        Поиск идёт по периметрам квадратов вокруг исходной позиции.
         """
         if not self._overlaps_any(comp, main_comps, positioned, comp_id):
             return
 
         orig_x, orig_y = comp.x, comp.y
-        step = 10
+        step = 20
 
-        for dist in range(step, 300, step):
-            offsets = [
-                (0, dist), (0, -dist),
-                (dist, 0), (-dist, 0),
-                (dist, dist), (-dist, dist),
-                (dist, -dist), (-dist, -dist),
-            ]
-            for dx, dy in offsets:
-                comp.x = round((orig_x + dx) / 10) * 10
-                comp.y = round((orig_y + dy) / 10) * 10
+        for dist in range(step, 800, step):
+            # Проверяем верхнюю и нижнюю грани квадрата (радиус dist)
+            for dx in range(-dist, dist + 1, step):
+                for dy in [-dist, dist]:
+                    comp.x = round((orig_x + dx) / 10) * 10
+                    comp.y = round((orig_y + dy) / 10) * 10
+                    if not self._overlaps_any(comp, main_comps, positioned, comp_id):
+                        if self.pad_left <= comp.x <= self.width - self.pad_right - comp.width:
+                            if self.pad_top <= comp.y <= self.height - self.pad_bottom - comp.height:
+                                comp.update_ports()
+                                return
 
-                if comp.x < self.pad_left or comp.x + comp.width > self.width - self.pad_right:
-                    continue
-                if comp.y < self.pad_top or comp.y + comp.height > self.height - self.pad_bottom:
-                    continue
+            # Проверяем левую и правую грани квадрата (без углов)
+            for dy in range(-dist + step, dist, step):
+                for dx in [-dist, dist]:
+                    comp.x = round((orig_x + dx) / 10) * 10
+                    comp.y = round((orig_y + dy) / 10) * 10
+                    if not self._overlaps_any(comp, main_comps, positioned, comp_id):
+                        if self.pad_left <= comp.x <= self.width - self.pad_right - comp.width:
+                            if self.pad_top <= comp.y <= self.height - self.pad_bottom - comp.height:
+                                comp.update_ports()
+                                return
 
-                if not self._overlaps_any(comp, main_comps, positioned, comp_id):
-                    comp.update_ports()
-                    return
+        # Fallback: игнорируем границы экрана, лишь бы не было наложений
+        for dist in range(step, 1500, step):
+            for dx in range(-dist, dist + 1, step):
+                for dy in [-dist, dist]:
+                    comp.x = round((orig_x + dx) / 10) * 10
+                    comp.y = round((orig_y + dy) / 10) * 10
+                    if not self._overlaps_any(comp, main_comps, positioned, comp_id):
+                        comp.update_ports()
+                        return
+            for dy in range(-dist + step, dist, step):
+                for dx in [-dist, dist]:
+                    comp.x = round((orig_x + dx) / 10) * 10
+                    comp.y = round((orig_y + dy) / 10) * 10
+                    if not self._overlaps_any(comp, main_comps, positioned, comp_id):
+                        comp.update_ports()
+                        return
 
+        # Если совсем ничего не помогло (невозможно), оставляем как есть
         comp.x, comp.y = orig_x, orig_y
         comp.update_ports()
 

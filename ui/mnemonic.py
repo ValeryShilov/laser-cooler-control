@@ -21,6 +21,7 @@ class ChillerMnemonic(QWidget):
         self.setMinimumHeight(500)
 
         # 1. Читаем YAML
+        #self.parser = SchemeParser(r"tests\test_data\schemes\pos_multi_cycles.yaml")
         self.parser = SchemeParser("scheme.yaml")
         self.components, self.connections = self.parser.parse()
 
@@ -35,6 +36,9 @@ class ChillerMnemonic(QWidget):
         self._render_data = None
         self._render_generation = 0
         self._worker = None
+        
+        # Режим отладки (включается по Ctrl+D)
+        self._show_debug_grid = False
 
         # 4. Debounce-таймер для resize (150мс)
         self._resize_timer = QTimer(self)
@@ -59,6 +63,11 @@ class ChillerMnemonic(QWidget):
             else:
                 comp.set_state(state_str)
         self.update()  # Перерисовка без перерасчёта труб (меняются только цвета)
+
+    def toggle_debug(self):
+        """Переключает отображение отладочной сетки и зон коллизий."""
+        self._show_debug_grid = not self._show_debug_grid
+        self.update()
 
     #  Resize → debounce → фоновый пересчёт
 
@@ -143,6 +152,15 @@ class ChillerMnemonic(QWidget):
         painter.fillRect(self.rect(), QColor(245, 247, 250))
         painter.setPen(QPen(QColor(200, 200, 200), 1))
         painter.drawRoundedRect(self.rect().adjusted(1, 1, -2, -2), 6, 6)
+        
+        # 1. Отладочная сетка (Grid)
+        if self._show_debug_grid:
+            painter.setPen(QPen(QColor(0, 0, 0, 15), 1, Qt.DotLine))
+            # Шаг 10 пикселей (AStarRouter.grid_size)
+            for x in range(0, self.width(), 10):
+                painter.drawLine(x, 0, x, self.height())
+            for y in range(0, self.height(), 10):
+                painter.drawLine(0, y, self.width(), y)
 
         if self._render_data:
             for path_pts, pipe_type in self._render_data.pipe_paths:
@@ -155,5 +173,25 @@ class ChillerMnemonic(QWidget):
 
         for comp in self.components.values():
             comp.draw(painter)
+
+        # 2. Отладочные зоны поверх всего
+        if self._show_debug_grid:
+            # А) Зоны коллизий A* (препятствия) - Красные
+            if self._render_data and hasattr(self._render_data, 'obstacles'):
+                painter.setPen(Qt.NoPen)
+                painter.setBrush(QColor(255, 0, 0, 30))
+                for (ox1, oy1, ox2, oy2) in self._render_data.obstacles:
+                    painter.drawRect(ox1, oy1, ox2 - ox1, oy2 - oy1)
+            
+            # Б) Зоны Layout Engine (padding 35px) - Синий пунктир
+            painter.setBrush(Qt.NoBrush)
+            painter.setPen(QPen(QColor(0, 0, 255, 100), 1, Qt.DashLine))
+            for comp in self.components.values():
+                painter.drawRect(comp.x - 35, comp.y - 35, comp.width + 70, comp.height + 70)
+                
+            # В) Истинный Rendering Bounding Box объектов - Зеленый
+            painter.setPen(QPen(QColor(0, 255, 0, 200), 1, Qt.SolidLine))
+            for comp in self.components.values():
+                painter.drawRect(comp.x, comp.y, comp.width, comp.height)
 
         painter.end()

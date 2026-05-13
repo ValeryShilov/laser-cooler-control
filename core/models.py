@@ -40,4 +40,5 @@ class RenderData:
     """
     pipe_paths: list = field(default_factory=list)      # [(points_list, conn_type), ...]
     label_positions: dict = field(default_factory=dict)  # {comp_id: "bottom"|"top"|...}
+    obstacles: list = field(default_factory=list)        # [(x1, y1, x2, y2), ...] для debug отрисовки
     generation: int = 0                                  # Для отсеивания устаревших результатов

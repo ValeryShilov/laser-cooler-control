@@ -4,6 +4,7 @@ from PySide6.QtWidgets import (
     QGridLayout, QTabWidget, QComboBox, QCheckBox
 )
 from PySide6.QtCore import Qt
+from PySide6.QtGui import QKeySequence, QShortcut
 
 from ui.mnemonic import ChillerMnemonic
 from ui.styles import MAIN_STYLE, STOP_BUTTON_STYLE
@@ -27,6 +28,10 @@ class ChillerPanel(QMainWindow):
         
         # Подписываемся на изменения состояния
         self.controller.state_changed.connect(self._on_state_changed)
+        
+        # Горячая клавиша для режима отладки
+        self.debug_shortcut = QShortcut(QKeySequence("Ctrl+D"), self)
+        self.debug_shortcut.activated.connect(self.mnemonic.toggle_debug)
         
         # Инициализируем состояния полей ввода
         self.toggle_mode_settings(0)
