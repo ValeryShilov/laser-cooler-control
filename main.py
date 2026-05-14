@@ -9,7 +9,7 @@ def main():
     
     adapter = MockAdapter()
     window = ChillerPanel(adapter)
-    window.show()
+    window.showMaximized()
     
     sys.exit(app.exec())
 

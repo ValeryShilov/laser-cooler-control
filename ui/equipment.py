@@ -45,27 +45,36 @@ class BaseEquipment:
         painter.setPen(QPen(QColor(60, 60, 60), 2))
         painter.setFont(QFont("Arial", 10, QFont.Bold))
         
-        # Динамически вычисляем ширину и высоту текста
-        metrics = painter.fontMetrics()
-        # Даем тексту запас по ширине, чтобы он мог переноситься (например, ширина + 40), 
-        # но boundingRect сам вычислит необходимую высоту.
-        max_width = max(110, self.width + 40)
-        bounding_rect = metrics.boundingRect(0, 0, int(max_width), 1000, Qt.AlignCenter | Qt.TextWordWrap, self.name)
-        text_w, text_h = bounding_rect.width(), bounding_rect.height()
-        
-        align = Qt.AlignCenter | Qt.TextWordWrap
-        if self.label_pos == "bottom":
-            text_rect = QRectF(self.x + self.width/2 - text_w/2, self.y + self.height + 5, text_w, text_h)
-        elif self.label_pos == "top":
-            text_rect = QRectF(self.x + self.width/2 - text_w/2, self.y - text_h - 5, text_w, text_h)
-        elif self.label_pos == "left":
-            text_rect = QRectF(self.x - text_w - 5, self.y + self.height/2 - text_h/2, text_w, text_h)
-            align = Qt.AlignRight | Qt.AlignVCenter | Qt.TextWordWrap
-        elif self.label_pos == "right":
-            text_rect = QRectF(self.x + self.width + 5, self.y + self.height/2 - text_h/2, text_w, text_h)
-            align = Qt.AlignLeft | Qt.AlignVCenter | Qt.TextWordWrap
+        if isinstance(self.label_pos, dict):
+            # Используем точные координаты от LabelPlacer
+            info = self.label_pos
+            rect = QRectF(
+                self.x + info['dx'],
+                self.y + info['dy'],
+                info['w'],
+                info['h']
+            )
+            painter.drawText(rect, info['align'], self.name)
+        else:
+            # Fallback для совместимости
+            metrics = painter.fontMetrics()
+            max_width = max(110, self.width + 40)
+            bounding_rect = metrics.boundingRect(0, 0, int(max_width), 1000, Qt.AlignCenter | Qt.TextWordWrap, self.name)
+            text_w, text_h = bounding_rect.width(), bounding_rect.height()
             
-        painter.drawText(text_rect, align, self.name)
+            align = Qt.AlignCenter | Qt.TextWordWrap
+            if self.label_pos == "bottom":
+                text_rect = QRectF(self.x + self.width/2 - text_w/2, self.y + self.height + 5, text_w, text_h)
+            elif self.label_pos == "top":
+                text_rect = QRectF(self.x + self.width/2 - text_w/2, self.y - text_h - 5, text_w, text_h)
+            elif self.label_pos == "left":
+                text_rect = QRectF(self.x - text_w - 5, self.y + self.height/2 - text_h/2, text_w, text_h)
+                align = Qt.AlignRight | Qt.AlignVCenter | Qt.TextWordWrap
+            elif self.label_pos == "right":
+                text_rect = QRectF(self.x + self.width + 5, self.y + self.height/2 - text_h/2, text_w, text_h)
+                align = Qt.AlignLeft | Qt.AlignVCenter | Qt.TextWordWrap
+                
+            painter.drawText(text_rect, align, self.name)
 
     def draw(self, painter: QPainter):
         """ Стандартная отрисовка: SVG + Текст """

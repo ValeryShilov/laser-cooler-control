@@ -41,12 +41,15 @@ def render_scheme(app, adapter, yaml_path: Path, output_path: Path, debug: bool)
 
     try:
         mnemonic.components, mnemonic.connections = mnemonic.parser.parse()
+        # Важно! Обновляем размеры движка ДО расстановки, чтобы они соответствовали окну
+        mnemonic.layout_engine.width = 1500
+        mnemonic.layout_engine.height = 700
+        mnemonic.layout_engine.layout(mnemonic.components, mnemonic.connections)
     except Exception as e:
         print(f"  WARN SKIP (parse error): {e}")
         window.close()
         return False
 
-    mnemonic.layout_engine.layout(mnemonic.components, mnemonic.connections)
     window.show()
     mnemonic._compute_sync()
 

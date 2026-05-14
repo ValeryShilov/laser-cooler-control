@@ -223,17 +223,27 @@ class AStarRouter:
             "decision": None,
         }})
 
-        full_path = [exact_start] + raw_path + [exact_end]
-        clean_path = self._cleanup_path(full_path)
+        # Очищаем и сглаживаем только участок между безопасными точками
+        clean_raw = self._cleanup_path(raw_path)
         exempt = self._build_exempt_set(exact_start, exact_end, safe_start, safe_end)
-        smooth_path = self._smooth_path(clean_path, exempt)
+        smooth_raw = self._smooth_path(clean_raw, exempt)
+
+        # Собираем финальный путь, гарантируя ортогональный вход в компонент
+        smooth_path = []
+        if exact_start != smooth_raw[0]:
+            smooth_path.append(exact_start)
+        smooth_path.extend(smooth_raw)
+        if exact_end != smooth_raw[-1]:
+            smooth_path.append(exact_end)
+
+        smooth_path = self._cleanup_path(smooth_path)
 
         logger.debug("Step: smooth_path", extra={"journal_entry": {
             "step": "smooth_path",
             "context": {},
-            "input": {"clean_path_points": len(clean_path)},
+            "input": {"raw_path_points": len(raw_path)},
             "output": {"smooth_path_points": len(smooth_path)},
-            "decision": {"points_removed": len(clean_path) - len(smooth_path)},
+            "decision": {"points_removed": len(raw_path) - len(smooth_raw)},
         }})
 
         self.register_path(smooth_path)

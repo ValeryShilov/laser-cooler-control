@@ -203,6 +203,7 @@ def make_comp_snapshot(components):
             'ports': dict(comp.ports),
             'id': comp.id,
             'class_name': type(comp).__name__,
+            'name': comp.name,
         }
     return snapshot
 
