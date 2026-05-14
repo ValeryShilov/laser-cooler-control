@@ -42,7 +42,7 @@ def render_scheme(app, adapter, yaml_path: Path, output_path: Path, debug: bool)
     try:
         mnemonic.components, mnemonic.connections = mnemonic.parser.parse()
     except Exception as e:
-        print(f"  ⚠ SKIP (parse error): {e}")
+        print(f"  WARN SKIP (parse error): {e}")
         window.close()
         return False
 
@@ -90,7 +90,7 @@ def main():
     app = QApplication(sys.argv)
     adapter = MockAdapter()
 
-    print(f"Обработка {len(yaml_files)} схем → {OUTPUT_DIR}/")
+    print(f"Обработка {len(yaml_files)} схем -> {OUTPUT_DIR}/")
     print(f"Режим отладки: {'ВКЛ (сетка + bounding box)' if debug else 'ВЫКЛ'}")
     print("=" * 60)
 
@@ -106,12 +106,12 @@ def main():
         success = render_scheme(app, adapter, yaml_path, output_path, debug)
         if success:
             ok_count += 1
-            print(f"✓ → {output_path.name}")
+            print(f"OK -> {output_path.name}")
         else:
             fail_count += 1
 
     print("=" * 60)
-    print(f"Готово: {ok_count} ✓, {fail_count} ⚠")
+    print(f"Готово: {ok_count} OK, {fail_count} WARN")
     print(f"Скриншоты: {OUTPUT_DIR.resolve()}")
 
     app.quit()

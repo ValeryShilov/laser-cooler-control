@@ -204,13 +204,16 @@ class TopologyLayoutEngine:
     def _place_remaining(self, main_comps, positioned, safe_w, safe_h):
         """Размещает оставшиеся компоненты рядом с однотипными или в свободной зоне."""
         placed = []
+        
         for cid in main_comps:
             if cid in positioned:
                 continue
             comp = main_comps[cid]
             placed_near = self._place_near_buddy(comp, cid, main_comps, positioned)
             if not placed_near:
-                self._place(comp, 0.60, 0.50, safe_w, safe_h)
+                # Все несвязанные компоненты начинают поиск места с центра, 
+                # формируя плотную группу благодаря спиральному поиску _nudge_to_free
+                self._place(comp, 0.50, 0.50, safe_w, safe_h)
                 self._nudge_to_free(comp, main_comps, positioned, cid)
             positioned.add(cid)
             placed.append({"comp_id": cid, "method": "buddy" if placed_near else "fallback",

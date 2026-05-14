@@ -47,9 +47,9 @@ class BaseEquipment:
         
         # Динамически вычисляем ширину и высоту текста
         metrics = painter.fontMetrics()
-        # Даем тексту запас по ширине, чтобы он мог переноситься (например, ширина + 80), 
+        # Даем тексту запас по ширине, чтобы он мог переноситься (например, ширина + 40), 
         # но boundingRect сам вычислит необходимую высоту.
-        max_width = max(150, self.width + 80)
+        max_width = max(110, self.width + 40)
         bounding_rect = metrics.boundingRect(0, 0, int(max_width), 1000, Qt.AlignCenter | Qt.TextWordWrap, self.name)
         text_w, text_h = bounding_rect.width(), bounding_rect.height()
         
